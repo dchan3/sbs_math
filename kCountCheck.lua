@@ -26,7 +26,6 @@ function scene:create( event )
 
     matchBalls = event.params.matchBalls
     count = event.params.count
-
     for i=1,event.params.count do 
         --[[
         --matchBalls[i]:insert( matchBalls[i].ball )
@@ -35,7 +34,7 @@ function scene:create( event )
         --local oldY = matchBalls[i].y
         --matchBalls[i].x, matchBalls[i].y = oldX, oldY
         --physics.addBody( matchBalls[i], { radius=ballR*2 } )]]
-
+        numberLine.num[i] = i
         sceneGroup:insert(matchBalls[i])
     end
 --[[
@@ -61,12 +60,12 @@ function scene:show( event )
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
 
-        for i=1, count do 
+        for i=1, event.params.count do 
 
 
             local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  ) 
             local time = distance/maxSpeed*1000
-            print( numberLine.num[i].text .. " : ".. distance .. " : ".. time) 
+            --print( numberLine.num[i].text .. " : ".. distance .. " : ".. time) 
             --transition.moveTo( matchBalls[i], {x = numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y, time=1000} )
             transition.matTrans( matchBalls[i], numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
             
