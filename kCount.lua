@@ -153,12 +153,12 @@ function scene:create( event )
 
     physics.setGravity(0,0)
 
-    --local coordinates = 
-    numberLine =  numLine:new( 0, max , _H*.9,  90) 
-    numberLine.x , numberLine.y = _W*.6, _H*.05
+     --local coordinates = 
+    numberLine =  numLine:new( 0, max , _W*.9, 0) 
+    numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine)
 
-    decText  = display.newText( 0, 0, 0, native.systemFont, _W*.1 )
+ --[[   decText  = display.newText( 0, 0, 0, native.systemFont, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
     decText:setFillColor(Blue.R, Blue.G, Blue.B)
     sceneGroup:insert( decText )
@@ -166,7 +166,7 @@ function scene:create( event )
     latText = display.newText( "Zero", 0, 0, native.systemFont, _W*.1 )
     latText.x, latText.y = _W*.833, _H*.75
     latText:setFillColor(Blue.R, Blue.G, Blue.B)
-    sceneGroup:insert( latText )
+    sceneGroup:insert( latText ) ]]--
 
 
     for i=1,count do 
@@ -177,7 +177,8 @@ function scene:create( event )
         countBalls[i]:insert( countBalls[i].text )
 
 
-        countBalls[i].x, countBalls[i].y = numberLine.x - _W*.05 , numberLine.num[i].y + numberLine.y
+        --countBalls[i].x, countBalls[i].y = numberLine.x - _W*.05 , numberLine.num[i].y + numberLine.y
+        countBalls[i].x, countBalls[i].y = i*_H*.165, _W*.2 -- .165 determined by trial and error
 
         physics.addBody( countBalls[i], { radius=ballR } )
         countBalls[i].isSensor = true
@@ -200,7 +201,13 @@ function scene:create( event )
             local randomLocation = math.random(1, 15)
 
             if map[randomLocation] == false then
-                matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
+                --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
+                
+                -- first part sets horizontal spread and number of columns
+                -- second part sets vertical spread
+                matchBalls[i].x, matchBalls[i].y = _W*.9 /5 +  _W*.9 /5 * (randomLocation % 5),
+                _H*.55 + _H*.15*math.floor((randomLocation-1) / 5)
+                
                 map[randomLocation] = true
 
             end
