@@ -32,6 +32,8 @@ _G.Blue300 =  { R = 100/255,  G = 181/255,  B = 246/255 }
 _G.Blue700 =  { R = 025/255,  G = 118/255,  B = 210/255 }
 _G.Purple =   { R = 156/255,  G = 039/255,  B = 176/255 }
 _G.BlueGrey = { R = 096/255,  G = 125/255,  B = 139/255 }
+_G.Black =    { R = 000/255,  G = 000/255,  B = 000/255 }
+_G.White =    { R = 255/255,  G = 255/255,  B = 255/255 }
 
 _G.outlineColor = { highlight = { r= 0, g=0, b=0 }, shadow = { r=0, g=0, b=0 } }
 
@@ -225,15 +227,6 @@ local function convertDecToLat( number )
 end
 _G.convertDecToLat = convertDecToLat
 
-
-
-local line = display.newLine(_W*.666, 0, _W*.666, _H)
-line.strokeWidth = _H*.005
-line:setStrokeColor( BlueGrey.R , BlueGrey.G, BlueGrey.B )
-
-local line = display.newLine(_W*.666, _H*.333, _W,  _H*.333)
-line.strokeWidth = _H*.005
-line:setStrokeColor( BlueGrey.R , BlueGrey.G, BlueGrey.B )
 
 local composer = require( "composer" )
 
