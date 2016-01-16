@@ -20,16 +20,16 @@ function scene:create( event )
 
     local sceneGroup = self.view
 
-    numberLine =  numLine:new( 0, 10, _W*.9, 0 ) 
+    numberLine =  numLine:new( 0, 10, _W*.9, 0 )
     numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine)
 
     matchBalls = event.params.matchBalls
     count = event.params.count
-    for i=1,event.params.count do 
+    for i=1,event.params.count do
         --[[
         --matchBalls[i]:insert( matchBalls[i].ball )
-        --matchBalls[i]:insert( matchBalls[i].text ) 
+        --matchBalls[i]:insert( matchBalls[i].text )
         --local oldX = matchBalls[i].x
         --local oldY = matchBalls[i].y
         --matchBalls[i].x, matchBalls[i].y = oldX, oldY
@@ -60,15 +60,15 @@ function scene:show( event )
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
 
-        for i=1, event.params.count do 
+        for i=1, event.params.count do
 
 
-            local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  ) 
+            local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
             local time = distance/maxSpeed*1000
-            --print( numberLine.num[i].text .. " : ".. distance .. " : ".. time) 
-            --transition.moveTo( matchBalls[i], {x = numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y, time=1000} )
-            transition.matTrans( matchBalls[i], numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
-            
+            --print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
+            transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y, time=1000} )
+						--transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
+
         end
 
 
