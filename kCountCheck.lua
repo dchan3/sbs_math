@@ -20,8 +20,8 @@ function scene:create( event )
 
     local sceneGroup = self.view
 
-    numberLine =  numLine:new( 0, 10, _H*.9,  90 ) 
-    numberLine.x , numberLine.y = _W*.6, _H*.05
+    numberLine =  numLine:new( 0, 10, _W*.9, 0 ) 
+    numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine)
 
     matchBalls = event.params.matchBalls
