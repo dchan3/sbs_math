@@ -14,19 +14,26 @@ local scene = composer.newScene()
 
 local matchBalls = {}
 local count = 0
+local text = "";
+local displayText = {};
 
 -- "scene:create()"
 function scene:create( event )
 
     local sceneGroup = self.view
 
-    numberLine =  numLine:new( 0, 10, _W*.9, 0 )
+    numberLine =  numLine:new(1, 10, _W*.9, 0 )
     numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine)
+		displayText = display.newText(text, _W * .5, _H * .125, native.systemFont, _W*.1)
+    displayText:setFillColor(Blue.R, Blue.G, Blue.B)
 
-    matchBalls = event.params.matchBalls
+		matchBalls = event.params.matchBalls
+    table.sort(matchBalls, function(a,b) return a.num < b.num end)
+
+		--matchBalls = event.params.matchBalls
     count = event.params.count
-    for i=1,event.params.count do
+    for i=1,count do
         --[[
         --matchBalls[i]:insert( matchBalls[i].ball )
         --matchBalls[i]:insert( matchBalls[i].text )
@@ -66,12 +73,14 @@ function scene:show( event )
             local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
             local time = distance/maxSpeed*1000
             --print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
-            transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y, time=1000} )
+            transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y, time=1000})
 						--transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
 
         end
 
-
+				for j=1,count do
+					timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j) end)
+        end
     end
 end
 

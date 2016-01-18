@@ -26,7 +26,7 @@ local countBalls = {}
 local matchBalls = {}
 local numberLine
 
-local decText 
+local decText
 local latText
 
 local selText = display
@@ -47,8 +47,8 @@ local function drag( event )
 
         decText.text = t.num
         local text = convertDecToLat( t.num )
-        latText.text = text 
-        -- Spurious events can be sent to the target, e.g. the user presses 
+        latText.text = text
+        -- Spurious events can be sent to the target, e.g. the user presses
         -- elsewhere on the screen and then moves the finger over the target.
         -- To prevent this, we add this flag. Only when it's true will "move"
         -- events be sent to the target.
@@ -67,7 +67,7 @@ local function drag( event )
 
 
                 if(t.collidedWith ~= nil) then
-                        
+
                     local function listener( event )
                         display.remove(t)
                     end
@@ -76,10 +76,10 @@ local function drag( event )
                     local transitionTime = 100
 
 
-                    transition.to(t, 
+                    transition.to(t,
                     {
-                        time=transitionTime, 
-                        x = t.collidedWith.x, 
+                        time=transitionTime,
+                        x = t.collidedWith.x,
                         y= t.collidedWith.y,
                         onComplete = listener
                     })
@@ -88,14 +88,14 @@ local function drag( event )
                     t.collidedWith.text:setFillColor(0,0,0)
                     t.collidedWith.text.alpha = 0
                     t.collidedWith.num = t.num
-                    t.collidedWith:insert( t.collidedWith.text ) 
+                    t.collidedWith:insert( t.collidedWith.text )
                     t.collidedWith.matched = true
-                    
+
 
                     local function listener( event )
-                        transition.to(t.collidedWith.text, 
+                        transition.to(t.collidedWith.text,
                         {
-                        time=500, 
+                        time=500,
                         alpha =.75
                         })
                     end
@@ -153,9 +153,9 @@ function scene:create( event )
 
     physics.setGravity(0,0)
 
-    --local coordinates = 
-    numberLine =  numLine:new( 0, max , _H*.9,  90) 
-    numberLine.x , numberLine.y = _W*.6, _H*.05
+    --local coordinates =
+    numberLine =  numLine:new(1, 10, _W*.9, 0 )
+    numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine)
 
     decText  = display.newText( 0, 0, 0, native.systemFont, _W*.1 )
@@ -169,7 +169,7 @@ function scene:create( event )
     sceneGroup:insert( latText )
 
 
-    for i=1,count do 
+    for i=1,count do
         countBalls[i] = AnimalBall:new(0,0, ballR, i)
         countBalls[i]:addEventListener( "touch", drag )
 
@@ -177,7 +177,7 @@ function scene:create( event )
         countBalls[i]:insert( countBalls[i].text )
 
 
-        countBalls[i].x, countBalls[i].y = numberLine.x - _W*.05 , numberLine.num[i].y + numberLine.y
+        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y + _H*0.09375
 
         physics.addBody( countBalls[i], { radius=ballR } )
         countBalls[i].isSensor = true
@@ -189,19 +189,20 @@ function scene:create( event )
 
 
 
-    for i=1,count do 
+    for i=1,count do
         matchBalls[i] = Animal:new("dog.png",  ballR*3, ballR*3, ballR*2)
         matchBalls[i]:addEventListener( "touch", drag )
         matchBalls[i]:insert( matchBalls[i].ball )
 
         --places balls in grid
-        while  matchBalls[i].x == 0 and  matchBalls[i].y == 0 do 
+        while  matchBalls[i].x == 0 and  matchBalls[i].y == 0 do
 
             local randomLocation = math.random(1, 15)
 
             if map[randomLocation] == false then
-                matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-                map[randomLocation] = true
+                --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
+									matchBalls[i].x, matchBalls[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.5
+									map[randomLocation] = true
 
             end
 
