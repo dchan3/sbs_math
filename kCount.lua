@@ -70,51 +70,7 @@ local function drag( event )
                 print(t.cooldedWith)
 
                 if(t.collidedWith ~= nil) then
-<<<<<<< HEAD
-
-                    local function listener( event )
-                        display.remove(t)
-                    end
-
-
-                    local transitionTime = 100
-
-
-                    transition.to(t,
-                    {
-                        time=transitionTime,
-                        x = t.collidedWith.x,
-                        y= t.collidedWith.y,
-                        onComplete = listener
-                    })
-
-                    t.collidedWith.text = display.newText( t.num, 0, 0, native.systemFont, ballR*2 )
-                    t.collidedWith.text:setFillColor(0,0,0)
-                    t.collidedWith.text.alpha = 0
-                    t.collidedWith.num = t.num
-                    t.collidedWith:insert( t.collidedWith.text )
-                    t.collidedWith.matched = true
-
-
-                    local function listener( event )
-                        transition.to(t.collidedWith.text,
-                        {
-                        time=500,
-                        alpha =.75
-                        })
-                    end
-                    timer.performWithDelay( transitionTime, listener )
-
-                    matchCount = matchCount - 1
-
-                    if matchCount <= 0 then
-                        local options = { effect = "crossFade", time = 500, params = { count = count , map = map, matchBalls = matchBalls } }
-                        composer.gotoScene( "kCountCheck", options )
-                    end
-
-=======
                     hasCollidedCircle(t, t.collidedWith )
->>>>>>> 54de98bd160a7d1c034a9afee34beef48bf1e057
                 end
 
             display.getCurrentStage():setFocus( nil )
