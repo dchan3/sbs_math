@@ -184,7 +184,7 @@ function hasCollidedCircle(obj1, obj2)
                         onComplete = listener
                     })
 
-                   obj2.text = display.newText( obj1.num, 0, 0, native.systemFont, ballR*2 )
+                   obj2.text = display.newText( obj1.num, 0, 0, font, ballR*2 )
                     obj2.text:setFillColor(0,0,0)
                     obj2.text.alpha = 0
                     obj2.num = obj1.num
@@ -229,12 +229,12 @@ function scene:create( event )
     numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine)
 
-    decText  = display.newText( 0, 0, 0, native.systemFont, _W*.1 )
+    decText  = display.newText( 0, 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
     decText:setFillColor(Blue.R, Blue.G, Blue.B)
     sceneGroup:insert( decText )
 
-    latText = display.newText( "Zero", 0, 0, native.systemFont, _W*.1 )
+    latText = display.newText( "Zero", 0, 0, font, _W*.1 )
     latText.x, latText.y = _W*.833, _H*.75
     latText:setFillColor(Blue.R, Blue.G, Blue.B)
     sceneGroup:insert( latText )
