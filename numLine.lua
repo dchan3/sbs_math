@@ -28,7 +28,7 @@ function NumLine:new( min, max, length, angle )
 
     line.hash[i] = display.newLine(   step*i*math.cos(math.rad(angle)) - hashW*math.cos(anglePerp), step*i*math.sin(math.rad(angle)) - hashW*math.sin(anglePerp),
                step*i*math.cos(math.rad(angle)) + hashW*math.cos(anglePerp), step*i*math.sin(math.rad(angle)) + hashW*math.sin(anglePerp)    )
-    line.hash[i].strokeWidth = _H*.005
+    line.hash[i].strokeWidth = _H*.01
     line.hash[i]:setStrokeColor(0,0,0)
 
     
