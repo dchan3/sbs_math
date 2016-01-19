@@ -18,7 +18,7 @@ _G.ballR = width*.375
 
 _G.maxSpeed  = _W*.25
 
-
+_G.font = "Dyslexie Regular"
 
 --Colors    { R = ,   G = ,     B = }
 _G.Red =      { R = 244/255,  G = 067/255,  B = 054/255 }
