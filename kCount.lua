@@ -71,47 +71,6 @@ local function drag( event )
                 
                 if(t.collidedWith ~= nil) then
                     hasCollidedCircle(t, t.collidedWith )
-                    --[[
-                    local function listener( event )
-                        display.remove(t)
-                    end
-
-
-                    local transitionTime = 100
-
-
-                    transition.to(t,
-                    {
-                        time=transitionTime,
-                        x = t.collidedWith.x,
-                        y= t.collidedWith.y,
-                        onComplete = listener
-                    })
-
-                    t.collidedWith.text = display.newText( t.num, 0, 0, native.systemFont, ballR*2 )
-                    t.collidedWith.text:setFillColor(0,0,0)
-                    t.collidedWith.text.alpha = 0
-                    t.collidedWith.num = t.num
-                    t.collidedWith:insert( t.collidedWith.text )
-                    t.collidedWith.matched = true
-
-
-                    local function listener( event )
-                        transition.to(t.collidedWith.text,
-                        {
-                        time=500,
-                        alpha =.75
-                        })
-                    end
-                    timer.performWithDelay( transitionTime, listener )
-
-                    matchCount = matchCount - 1
-
-                    if matchCount <= 0 then
-                        local options = { effect = "crossFade", time = 500, params = { count = count , map = map, matchBalls = matchBalls } }
-                        composer.gotoScene( "kCountCheck", options )
-                    end
-                ]]
                 end
 
             display.getCurrentStage():setFocus( nil )
@@ -164,6 +123,46 @@ function hasCollidedCircle(obj1, obj2)
     local objectSize = (obj2.contentWidth/2) + (obj1.contentWidth/2)
 
     if distance < objectSize then
+
+                    local function listener( event )
+                        display.remove(obj1)
+                    end
+
+
+                    local transitionTime = 100
+
+
+                    transition.to(obj1,
+                    {
+                        time=transitionTime,
+                        x = obj2.x,
+                        y= obj2.y,
+                        onComplete = listener
+                    })
+
+                   obj2.text = display.newText( obj1.num, 0, 0, native.systemFont, ballR*2 )
+                    obj2.text:setFillColor(0,0,0)
+                    obj2.text.alpha = 0
+                    obj2.num = obj1.num
+                    obj2:insert( obj2.text )
+                    obj2.matched = true
+
+
+                    local function listener( event )
+                        transition.to(obj2.text,
+                        {
+                        time=500,
+                        alpha =.75
+                        })
+                    end
+                    timer.performWithDelay( transitionTime, listener )
+
+                    matchCount = matchCount - 1
+
+                    if matchCount <= 0 then
+                        local options = { effect = "crossFade", time = 500, params = { count = count , map = map, matchBalls = matchBalls } }
+                        composer.gotoScene( "kCountCheck", options )
+                    end
         print("true")
         return true
     end
