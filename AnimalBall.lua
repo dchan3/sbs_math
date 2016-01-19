@@ -8,7 +8,7 @@ function AnimalBall:new(x,y,r,i)
     ball.ball.strokeWidth = _H*.01
     ball.ball:setStrokeColor(Black.R, Black.G, Black.B)
     -- need to change font to dyslexia
-    ball.text = display.newText(i, 0, 0, "FROSTY", ballR*1.5 )
+    ball.text = display.newText(i, 0, 0, font, ballR*1.5 )
     ball.text:setFillColor(Black.R, Black.G, Black.B) --text color
     ball.num = i
 	return ball
