@@ -16,6 +16,7 @@ local scene = composer.newScene()
 -- local forward references should go here
 
 -- -------------------------------------------------------------------------------
+local hasCollidedCircle
 
 local max = 10
 local count = max -- math.random( 1, max)
@@ -63,10 +64,13 @@ local function drag( event )
             -- relative to initial grab point, rather than object "snapping").
             t.x = event.x - t.x0
             t.y = event.y - t.y0
+
         elseif "ended" == phase or "cancelled" == phase then
 
+                print(t.cooldedWith)
 
                 if(t.collidedWith ~= nil) then
+<<<<<<< HEAD
 
                     local function listener( event )
                         display.remove(t)
@@ -108,6 +112,9 @@ local function drag( event )
                         composer.gotoScene( "kCountCheck", options )
                     end
 
+=======
+                    hasCollidedCircle(t, t.collidedWith )
+>>>>>>> 54de98bd160a7d1c034a9afee34beef48bf1e057
                 end
 
             display.getCurrentStage():setFocus( nil )
@@ -140,6 +147,70 @@ local function onLocalCollision( self, event )
         end
 
     end
+end
+
+
+function hasCollidedCircle(obj1, obj2)
+
+    if obj1 == nil then
+        return false
+    end
+
+    if obj2 == nil then
+        return false
+    end
+
+    local sqrt = math.sqrt
+    local dx =  obj1.x - obj2.x;
+    local dy =  obj1.y - obj2.y;
+    local distance = sqrt(dx*dx + dy*dy);
+    local objectSize = (obj2.contentWidth/2) + (obj1.contentWidth/2)
+
+    if distance < objectSize then
+
+                    local function listener( event )
+                        display.remove(obj1)
+                    end
+
+
+                    local transitionTime = 100
+
+
+                    transition.to(obj1,
+                    {
+                        time=transitionTime,
+                        x = obj2.x,
+                        y= obj2.y,
+                        onComplete = listener
+                    })
+
+                   obj2.text = display.newText( obj1.num, 0, 0, native.systemFont, ballR*2 )
+                    obj2.text:setFillColor(0,0,0)
+                    obj2.text.alpha = 0
+                    obj2.num = obj1.num
+                    obj2:insert( obj2.text )
+                    obj2.matched = true
+
+
+                    local function listener( event )
+                        transition.to(obj2.text,
+                        {
+                        time=500,
+                        alpha =.75
+                        })
+                    end
+                    timer.performWithDelay( transitionTime, listener )
+
+                    matchCount = matchCount - 1
+
+                    if matchCount <= 0 then
+                        local options = { effect = "crossFade", time = 500, params = { count = count , map = map, matchBalls = matchBalls } }
+                        composer.gotoScene( "kCountCheck", options )
+                    end
+        print("true")
+        return true
+    end
+    return false
 end
 
 
@@ -190,7 +261,8 @@ function scene:create( event )
 
 
     for i=1,count do
-        matchBalls[i] = Animal:new("dog.png",  ballR*3, ballR*3, ballR*2)
+        --matchBalls[i] = Animal:new("dog.png",  ballR*3, ballR*3, ballR*2)
+        matchBalls[i] = Animal:new("puppy.png",  ballR*3, ballR*3, ballR*2)
         matchBalls[i]:addEventListener( "touch", drag )
         matchBalls[i]:insert( matchBalls[i].ball )
 

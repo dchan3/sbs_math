@@ -1,6 +1,6 @@
 AnimalBall = {}
 
-function AnimalBall:new(x,y,r,i) 
+function AnimalBall:new(x,y,r,i)
     local ball = display.newGroup()
     ball.ball = display.newCircle( 0, 0, r*1.5) -- ball slightly enlarged
     ball.ball:setFillColor(White.R, White.G, White.B) --ball fill color set to white
