@@ -2,7 +2,8 @@ local composer = require( "composer" )
 --local numLine = require( "numLine" )
 local numLine = require( "tenNumLine" )
 local animal = require("animal")
-local animalball = require("animalball")
+--local animalball = require("animalball")
+local tenball = require("tenball")
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
@@ -162,7 +163,7 @@ function hasCollidedCircle(obj1, obj2)
 
                     if matchCount <= 0 then
                         local options = { effect = "crossFade", time = 500, params = { count = count , map = map, matchBalls = matchBalls } }
-                        composer.gotoScene( "kCountCheck", options )
+                        composer.gotoScene( "tenCountCheck", options )
                     end
         print("true")
         return true
@@ -198,7 +199,7 @@ function scene:create( event )
 
 
     for i=1,count do
-        countBalls[i] = AnimalBall:new(0,0, ballR, i)
+        countBalls[i] = TenBall:new(0,0, ballR, i)
         countBalls[i]:addEventListener( "touch", drag )
 
         countBalls[i]:insert( countBalls[i].ball )
