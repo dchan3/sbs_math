@@ -82,9 +82,9 @@ function scene:show( event )
 			timer.performWithDelay(j * 1000, 
                 function (event)  
                     displayText.text = convertDecToLat(j) 
-                    matchBalls[j].outline.alpha = 1 
+                    matchBalls[j].outline:setFillColor(Blue.R, Blue.G, Blue.B)
                     if j > 1 then
-                    matchBalls[j-1].outline.alpha = 0 
+                    matchBalls[j-1].outline:setFillColor(225/225,193/225,102/225)
                     end
                 end)
 
