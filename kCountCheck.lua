@@ -22,10 +22,10 @@ function scene:create( event )
 
     local sceneGroup = self.view
 
-    numberLine =  numLine:new(1, 10, _W*.9, 0 )
+    numberLine =  numLine:new(0, 10, _W*.9, 0 )
     numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine)
-		displayText = display.newText(text, _W * .5, _H * .125, font, _W*.1)
+		displayText = display.newText(text, _W * .5, _H * .125, native.systemFont, _W*.1)
     displayText:setFillColor(Blue.R, Blue.G, Blue.B)
 
 		matchBalls = event.params.matchBalls
@@ -78,8 +78,16 @@ function scene:show( event )
 
         end
 
-				for j=1,count do
-					timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j) end)
+		for j=1,count do
+			timer.performWithDelay(j * 1000, 
+                function (event)  
+                    displayText.text = convertDecToLat(j) 
+                    matchBalls[j].outline.alpha = 1 
+                    if j > 1 then
+                    matchBalls[j-1].outline.alpha = 0 
+                    end
+                end)
+
         end
     end
 end
