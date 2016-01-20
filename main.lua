@@ -255,6 +255,6 @@ local composer = require( "composer" )
 
 -- CHANGE TO TEST DIFFERENT SCENES
 
---composer.gotoScene( "kCount" )
-composer.gotoScene( "tenCount")
+composer.gotoScene( "kCount" )
+--composer.gotoScene( "tenCount")
 
