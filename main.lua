@@ -1,4 +1,4 @@
----------------------------------------------------------------------------------
+require "CiderDebugger";---------------------------------------------------------------------------------
 --
 -- main.lua
 --
@@ -227,10 +227,34 @@ local function convertDecToLat( number )
 end
 _G.convertDecToLat = convertDecToLat
 
+local function convertDecToTens( number )
+
+    local text = "zero"
+
+    if     number == 10 then text = "Ten"
+    elseif number == 20 then text = "Twenty"
+    elseif number == 30 then text = "Thirty"
+    elseif number == 40 then text = "Forty"
+    elseif number == 50 then text = "Fifty"
+    elseif number == 60 then text = "Sixty"
+    elseif number == 70 then text = "Seventy"
+    elseif number == 80 then text = "Eighty"
+    elseif number == 90 then text = "Ninety"
+    elseif number == 100 then text = "One Hundred"
+    elseif number == 0 then text = "Zero"
+    else                    text = " "
+    end
+
+    return text
+
+end
+_G.convertDecToTens = convertDecToTens
 
 local composer = require( "composer" )
 
 
+-- CHANGE TO TEST DIFFERENT SCENES
 
-composer.gotoScene( "kCount" )
+--composer.gotoScene( "kCount" )
+composer.gotoScene( "tenCount")
 
