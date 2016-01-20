@@ -18,7 +18,7 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 local hasCollidedCircle
 
-local max = 10
+local max = 4
 local count = max -- math.random( 1, max)
 local matchCount = count
 local map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
@@ -70,7 +70,9 @@ local function drag( event )
                 print(t.cooldedWith)
 
                 if(t.collidedWith ~= nil) then
+
                     hasCollidedCircle(t, t.collidedWith )
+
                 end
 
             display.getCurrentStage():setFocus( nil )
@@ -181,32 +183,32 @@ function scene:create( event )
     physics.setGravity(0,0)
 
     --local coordinates =
-    numberLine =  numLine:new(1, 10, _W*.9, 0 )
+    numberLine =  numLine:new(0, 10, _W*.9, 0 )
     numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine)
 
-    decText  = display.newText( 0, 0, 0, font, _W*.1 )
+    decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
     decText:setFillColor(Blue.R, Blue.G, Blue.B)
     sceneGroup:insert( decText )
 
-    latText = display.newText( "Zero", 0, 0, font, _W*.1 )
+    latText = display.newText( "", 0, 0, font, _W*.1 )
     latText.x, latText.y = _W*.833, _H*.75
     latText:setFillColor(Blue.R, Blue.G, Blue.B)
     sceneGroup:insert( latText )
 
 
     for i=1,count do
-        countBalls[i] = AnimalBall:new(0,0, ballR, i)
+        countBalls[i] = AnimalBall:new(0,0, ballR*1.5, i)
         countBalls[i]:addEventListener( "touch", drag )
 
         countBalls[i]:insert( countBalls[i].ball )
         countBalls[i]:insert( countBalls[i].text )
 
 
-        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y + _H*0.09375
+        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y - _H*0.030
 
-        physics.addBody( countBalls[i], { radius=ballR } )
+        physics.addBody( countBalls[i], { radius=ballR*1.5 } )
         countBalls[i].isSensor = true
         countBalls[i].collision = onLocalCollision
         countBalls[i]:addEventListener( "collision", countBalls[i] )
