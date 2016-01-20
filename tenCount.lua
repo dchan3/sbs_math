@@ -142,7 +142,7 @@ function hasCollidedCircle(obj1, obj2)
                         onComplete = listener
                     })
 
-                   obj2.text = display.newText( obj1.num, 0, 0, font, ballR*2 )
+                   obj2.text = display.newText( obj1.num*10, 0, 0, font, ballR*2 )
                     obj2.text:setFillColor(0,0,0)
                     obj2.text.alpha = 0
                     obj2.num = obj1.num
@@ -220,7 +220,7 @@ function scene:create( event )
 
     for i=1,count do
         --matchBalls[i] = Animal:new("dog.png",  ballR*3, ballR*3, ballR*2)
-        matchBalls[i] = Animal:new("puppy.png",  ballR*3, ballR*3, ballR*2)
+        matchBalls[i] = Animal:new("tenDogs.png",  ballR*5, ballR*5, ballR*4)
         matchBalls[i]:addEventListener( "touch", drag )
         matchBalls[i]:insert( matchBalls[i].ball )
 
