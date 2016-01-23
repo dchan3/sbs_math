@@ -9,13 +9,6 @@ physics.setDrawMode( "hybrid" )
 
 local scene = composer.newScene()
 
--- -----------------------------------------------------------------------------------------------------------------
--- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
--- -----------------------------------------------------------------------------------------------------------------
-
--- local forward references should go here
-
--- -------------------------------------------------------------------------------
 local hasCollidedCircle
 
 local max = 4
@@ -26,6 +19,9 @@ local map = { false, false, false, false, false, false, false, false, false, fal
 local countBalls = {}
 local matchBalls = {}
 local numberLine
+local displayText = {}
+
+local sceneGroup
 
 local decText
 local latText
@@ -162,8 +158,10 @@ function hasCollidedCircle(obj1, obj2)
                     matchCount = matchCount - 1
 
                     if matchCount <= 0 then
-                        local options = { effect = "crossFade", time = 500, params = { count = count , map = map, matchBalls = matchBalls } }
-                        composer.gotoScene( "kCountCheck", options )
+											decText.text = ""
+											latText.text = ""
+                      check()
+											matchCount = count
                     end
         print("true")
         return true
@@ -171,15 +169,87 @@ function hasCollidedCircle(obj1, obj2)
     return false
 end
 
+function reset()
+	displayText.text = ""
+	clearBalls()
+  initBalls()
+end
+
+function check()
+	for i=1, count do
+			local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
+			local time = distance/maxSpeed*1000
+			--print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
+			transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y, time=1000})
+			--transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
+	end
+
+	for j=1,count do
+		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j) end)
+	end
+	local currScene = composer.getSceneName( "current" )
+	print(currScene)
+	timer.performWithDelay((count + 1) * 1000, function (event) reset() end)
+end
+
+function initBalls()
+	    for i=1,count do
+	        countBalls[i] = AnimalBall:new(0,0, ballR*1.5, i)
+	        countBalls[i]:addEventListener( "touch", drag )
+
+	        countBalls[i]:insert( countBalls[i].ball )
+	        countBalls[i]:insert( countBalls[i].text )
 
 
+	        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y - _H*0.030
 
+	        physics.addBody( countBalls[i], { radius=ballR*1.5 } )
+	        countBalls[i].isSensor = true
+	        countBalls[i].collision = onLocalCollision
+	        countBalls[i]:addEventListener( "collision", countBalls[i] )
 
+	        sceneGroup:insert(countBalls[i])
+	    end
+
+			map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
+
+	    for i=1,count do
+	        matchBalls[i] = Animal:new("puppy.png",  ballR*3, ballR*3, ballR*2)
+	        matchBalls[i]:addEventListener( "touch", drag )
+	        matchBalls[i]:insert( matchBalls[i].ball )
+
+	        --places balls in grid
+	        while  matchBalls[i].x == 0 and  matchBalls[i].y == 0 do
+
+	            local randomLocation = math.random(1, 15)
+
+	            if map[randomLocation] == false then
+	                --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
+										matchBalls[i].x, matchBalls[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.5
+										map[randomLocation] = true
+
+	            end
+
+	        end
+
+	        physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
+
+	        sceneGroup:insert( matchBalls[i] )
+	    end
+end
+
+function clearBalls()
+	for i=1, count do
+		sceneGroup:remove(matchBalls[i])
+		matchBalls[i] = nil
+	end
+end
 -- "scene:create()"
 function scene:create( event )
 
-    local sceneGroup = self.view
-
+    sceneGroup = self.view
+		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
+		displayText:setFillColor(Blue.R, Blue.G, Blue.B)
     physics.setGravity(0,0)
 
     --local coordinates =
@@ -196,64 +266,15 @@ function scene:create( event )
     latText.x, latText.y = _W*.833, _H*.75
     latText:setFillColor(Blue.R, Blue.G, Blue.B)
     sceneGroup:insert( latText )
-
-
-    for i=1,count do
-        countBalls[i] = AnimalBall:new(0,0, ballR*1.5, i)
-        countBalls[i]:addEventListener( "touch", drag )
-
-        countBalls[i]:insert( countBalls[i].ball )
-        countBalls[i]:insert( countBalls[i].text )
-
-
-        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y - _H*0.030
-
-        physics.addBody( countBalls[i], { radius=ballR*1.5 } )
-        countBalls[i].isSensor = true
-        countBalls[i].collision = onLocalCollision
-        countBalls[i]:addEventListener( "collision", countBalls[i] )
-
-        sceneGroup:insert(countBalls[i])
-    end
-
-
-
-    for i=1,count do
-        --matchBalls[i] = Animal:new("dog.png",  ballR*3, ballR*3, ballR*2)
-        matchBalls[i] = Animal:new("puppy.png",  ballR*3, ballR*3, ballR*2)
-        matchBalls[i]:addEventListener( "touch", drag )
-        matchBalls[i]:insert( matchBalls[i].ball )
-
-        --places balls in grid
-        while  matchBalls[i].x == 0 and  matchBalls[i].y == 0 do
-
-            local randomLocation = math.random(1, 15)
-
-            if map[randomLocation] == false then
-                --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-									matchBalls[i].x, matchBalls[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.5
-									map[randomLocation] = true
-
-            end
-
-        end
-
-        physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
-
-        sceneGroup:insert( matchBalls[i] )
-    end
-
-
-
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
+ 		initBalls()
 end
 
 
 -- "scene:show()"
 function scene:show( event )
 
-    local sceneGroup = self.view
     local phase = event.phase
 
     if ( phase == "will" ) then
@@ -268,8 +289,6 @@ end
 
 -- "scene:hide()"
 function scene:hide( event )
-
-    local sceneGroup = self.view
     local phase = event.phase
 
     if ( phase == "will" ) then
@@ -284,8 +303,6 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
-
-    local sceneGroup = self.view
 
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
