@@ -1,4 +1,4 @@
----------------------------------------------------------------------------------
+require "CiderDebugger";---------------------------------------------------------------------------------
 --
 -- main.lua
 --
@@ -255,5 +255,5 @@ local composer = require( "composer" )
 
 -- CHANGE TO TEST DIFFERENT SCENES
 
-composer.gotoScene( "lessons.kCount_01" )
---composer.gotoScene( "tenCount")
+--composer.gotoScene( "lessons.kCount_01" )
+composer.gotoScene( "lessons.kCount_02")
