@@ -1,6 +1,6 @@
 local composer = require( "composer" )
-local numLine = require( "tenNumLine" )
-local animal = require("animal")
+local numLine = require( "objects.tenNumLine" )
+local animal = require("objects.animal")
 
 local scene = composer.newScene()
 
@@ -123,5 +123,3 @@ scene:addEventListener( "destroy", scene )
 -- -------------------------------------------------------------------------------
 
 return scene
-
-
