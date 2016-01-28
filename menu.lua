@@ -1,26 +1,31 @@
 -- reference: https://coronalabs.com/blog/2015/04/14/tutorial-the-basic-game-template/
------------------------------------------------------------------------------------------
---
+
 -- menu.lua
---
------------------------------------------------------------------------------------------
 
 local composer = require( "composer" )
 local scene = composer.newScene()
 
--- include Corona's "widget" library
 local widget = require "widget"
 
 --------------------------------------------
 
--- forward declarations and other locals
-local playBtn
+local lesson1Btn
+local lesson2Btn
 
--- 'onRelease' event listener for playBtn
+-- 'onRelease' event listener for lesson1Btn
 local function onPlayBtnRelease()
 	
-	-- go to level1.lua scene
-	composer.gotoScene( "kCount_01", "fade", 500 )
+	-- go to kCount_01 scene
+	composer.gotoScene( "lessons.kCount_01", "fade", 500 )
+	
+	return true	-- indicates successful touch
+end
+
+-- 'onRelease' event listener for lesson2Btn
+local function onPlayBtnRelease2()
+	
+	-- go to kCount_02 scene
+	composer.gotoScene( "lessons.kCount_02", "fade", 500 )
 	
 	return true	-- indicates successful touch
 end
@@ -28,38 +33,53 @@ end
 function scene:create( event )
 	local sceneGroup = self.view
 
-	-- Called when the scene's view does not exist.
-	-- 
-	-- INSERT code here to initialize the scene
-	-- e.g. add display objects to 'sceneGroup', add touch listeners, etc.
-
 	-- display a background image
-	local background = display.newImageRect( "testBackground.png", display.contentWidth, display.contentHeight )
+	local background = display.newImageRect( "images/testBackground.png", 
+            display.contentWidth, display.contentHeight )
 	background.anchorX = 0
 	background.anchorY = 0
 	background.x, background.y = 0, 0
 	
-	-- create/position logo/title image on upper-half of the screen
-	local titleLogo = display.newImageRect( "cat.png", 264, 42 )
+	-- create logo/title image (currently cat)
+	local titleLogo = display.newImageRect( "images/cat.png", 220, 220 )
 	titleLogo.x = display.contentWidth * 0.5
 	titleLogo.y = 100
 	
-	-- create a widget button (which will loads level1.lua on release)
+	-- create a widget button (which will loads kCount_01.lua on release)
 	lesson1Btn = widget.newButton{
 		label="Lesson 1",
-		labelColor = { default={255}, over={128} },
-		default="bunny.png",
-		over="puppy.png",
-		width=154, height=40,
+		labelColor = { default={0}, over={128} },
+                labelYOffset = 80,
+                font = font,
+                fontSize = 80,
+		defaultFile="images/bunny.png",
+		overFile="images/puppy.png",
+		width=200, height=200,
 		onRelease = onPlayBtnRelease	-- event listener function
 	}
 	lesson1Btn.x = display.contentWidth*0.5
-	lesson1Btn.y = display.contentHeight - 125
+	lesson1Btn.y = display.contentHeight - 400
+        
+        -- create a widget button (which will loads kCount_02.lua on release)
+	lesson2Btn = widget.newButton{
+		label="Lesson 2",
+		labelColor = { default={0}, over={128} },
+                labelYOffset = 80,
+                font = font,
+                fontSize = 80,
+		defaultFile="images/dog.png",
+		overFile="images/tenDogs.png",
+		width=200, height=200,
+		onRelease = onPlayBtnRelease2	-- event listener function
+	}
+	lesson2Btn.x = display.contentWidth*0.5
+	lesson2Btn.y = display.contentHeight - 150
 	
 	-- all display objects must be inserted into group
 	sceneGroup:insert( background )
 	sceneGroup:insert( titleLogo )
-	sceneGroup:insert( playBtn )
+	sceneGroup:insert( lesson1Btn )
+        sceneGroup:insert( lesson2Btn )
 end
 
 function scene:show( event )
@@ -101,6 +121,11 @@ function scene:destroy( event )
 	if lesson1Btn then
 		lesson1Btn:removeSelf()	-- widgets must be manually removed
 		lesson1Btn = nil
+	end
+        
+        if lesson2Btn then
+		lesson2Btn:removeSelf()	-- widgets must be manually removed
+		lesson2Btn = nil
 	end
 end
 
