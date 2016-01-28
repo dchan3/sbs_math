@@ -172,7 +172,9 @@ end
 function reset()
 	displayText.text = ""
 	clearBalls()
-  initBalls()
+	count = math.random(1,max)
+    	matchCount = count
+  	initBalls()
 end
 
 function check()
