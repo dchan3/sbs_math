@@ -19,6 +19,8 @@ _G.ballR = width*.375
 _G.maxSpeed  = _W*.25
 
 _G.font = "Dyslexie Regular"
+--attempting to get font to work
+--_G.font = "data\Dyslexie Regular LP129383 (1)"
 
 --Colors    { R = ,   G = ,     B = }
 _G.Red =      { R = 244/255,  G = 067/255,  B = 054/255 }
@@ -251,9 +253,4 @@ end
 _G.convertDecToTens = convertDecToTens
 
 local composer = require( "composer" )
-
-
--- CHANGE TO TEST DIFFERENT SCENES
-
---composer.gotoScene( "lessons.kCount_01" )
-composer.gotoScene( "lessons.kCount_02")
+composer.gotoScene( "menu" )
