@@ -256,4 +256,7 @@ local composer = require( "composer" )
 -- CHANGE TO TEST DIFFERENT SCENES
 
 --composer.gotoScene( "lessons.kCount_01" )
-composer.gotoScene( "lessons.kCount_02")
+--composer.gotoScene( "lessons.kCount_02")
+
+-- load menu screen
+composer.gotoScene( "menu" )
