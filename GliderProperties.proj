@@ -3,7 +3,6 @@
     "config_name" : "default",
     "autolibs" : [ ],
     "fileAlias" : {
-      "\\images\\testBackground.PNG" : "testBackground.png"
     },
     "plugin_props" : {
       "corona" : {
