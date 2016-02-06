@@ -2,7 +2,7 @@
 -- two digit number box for allowing user to select a number
 -- max of leftmost digit, x, and y can be set during instanciation
 -- example:
--- local numInput = require( "numInput" )
+-- local numInput = require( "objects.numInput" )
 -- local boxTest = numInput.new( 6, -190, 40 )
 ------------------------------------------------------------
 local widget = require( "widget" )
