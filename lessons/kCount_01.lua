@@ -188,6 +188,14 @@ function check()
 
 	for j=1,count do
 		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j) end)
+        	for i = 1, count do
+            		if matchBalls[i].num == j then
+                		timer.performWithDelay(j * 1000, 
+                    			function (event)  
+                    			matchBalls[i].outline:setFillColor(Blue.R, Blue.G, Blue.B)
+                		end)
+            		end
+        	end
 	end
 	local currScene = composer.getSceneName( "current" )
 	print(currScene)
