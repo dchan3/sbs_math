@@ -4,7 +4,7 @@ local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local physics = require "physics"
 physics.start()
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 
 
 local scene = composer.newScene()
@@ -172,10 +172,13 @@ end
 function reset()
 	displayText.text = ""
 	clearBalls()
-  initBalls()
+	count = math.random(1,max)
+    	matchCount = count
+  	initBalls()
 end
 
 function check()
+
 	for i=1, count do
 			local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
 			local time = distance/maxSpeed*1000
@@ -186,10 +189,21 @@ function check()
 
 	for j=1,count do
 		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j) end)
+
+        for i = 1, count do
+            if matchBalls[i].num == j then
+                timer.performWithDelay(j * 1000, 
+                    function (event)  
+                    matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
+                end)
+            end
+        end
 	end
+
 	local currScene = composer.getSceneName( "current" )
 	print(currScene)
 	timer.performWithDelay((count + 1) * 1000, function (event) reset() end)
+
 end
 
 function initBalls()
@@ -249,8 +263,15 @@ function scene:create( event )
 
     sceneGroup = self.view
 		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
-		displayText:setFillColor(Blue.R, Blue.G, Blue.B)
+		displayText:setFillColor(priColor.R, priColor.G, priColor.B)
     physics.setGravity(0,0)
+
+    local background = display.newImageRect( "images/bg_blue_zig.png", 
+            display.contentWidth, display.contentHeight )
+    background.anchorX = 0
+    background.anchorY = 0
+    background.x, background.y = 0, 0
+    sceneGroup:insert( background )
 
     --local coordinates =
     numberLine =  numLine:new(0, 10, _W*.9, 0 )
@@ -259,12 +280,12 @@ function scene:create( event )
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
-    decText:setFillColor(Blue.R, Blue.G, Blue.B)
+    decText:setFillColor(priColor.R, priColor.G, priColor.B)
     sceneGroup:insert( decText )
 
     latText = display.newText( "", 0, 0, font, _W*.1 )
     latText.x, latText.y = _W*.833, _H*.75
-    latText:setFillColor(Blue.R, Blue.G, Blue.B)
+    latText:setFillColor(priColor.R, priColor.G, priColor.B)
     sceneGroup:insert( latText )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
