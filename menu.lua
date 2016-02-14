@@ -34,7 +34,7 @@ function scene:create( event )
 	local sceneGroup = self.view
 
 	-- display a background image
-	local background = display.newImageRect( "images/testBackground.png", 
+	local background = display.newImageRect( "images/bg_blue_rays.png", 
             display.contentWidth, display.contentHeight )
 	background.anchorX = 0
 	background.anchorY = 0
