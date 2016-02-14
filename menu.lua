@@ -35,7 +35,7 @@ end
 local function onPlayBtnReleaseL1intro()
 	
 	-- go to kCount_02 scene
-	composer.gotoScene( "lessons.testIntro", "fade", 500 )
+	composer.gotoScene( "lessons.intro1", "fade", 500 )
 	
 	return true	-- indicates successful touch
 end
@@ -61,13 +61,13 @@ function scene:create( event )
 		labelColor = { default={0}, over={128} },
                 labelYOffset = 80,
                 font = font,
-                fontSize = 80,
+                fontSize = 50,
 		defaultFile="images/bunny.png",
 		overFile="images/puppy.png",
-		width=200, height=200,
+		width=150, height=150,
 		onRelease = onPlayBtnRelease	-- event listener function
 	}
-	lesson1Btn.x = display.contentWidth*0.5
+	lesson1Btn.x = display.contentWidth*0.2
 	lesson1Btn.y = display.contentHeight - 400
         
         -- create a widget button (which will loads kCount_02.lua on release)
@@ -76,14 +76,14 @@ function scene:create( event )
 		labelColor = { default={0}, over={128} },
                 labelYOffset = 80,
                 font = font,
-                fontSize = 80,
+                fontSize = 50,
 		defaultFile="images/dog.png",
 		overFile="images/tenDogs.png",
-		width=200, height=200,
+		width=150, height=150,
 		onRelease = onPlayBtnRelease2	-- event listener function
 	}
-	lesson2Btn.x = display.contentWidth*0.5
-	lesson2Btn.y = display.contentHeight - 150
+	lesson2Btn.x = display.contentWidth*0.8
+	lesson2Btn.y = display.contentHeight - 400
         
         -- create a widget button (which will loads testIntro.lua on release)
 	l1introBtn = widget.newButton{
@@ -91,13 +91,13 @@ function scene:create( event )
 		labelColor = { default={0}, over={128} },
                 labelYOffset = 80,
                 font = font,
-                fontSize = 80,
+                fontSize = 50,
 		defaultFile="images/dog.png",
 		overFile="images/bunny.png",
-		width=200, height=200,
-		onRelease = onPlayBtnRelease2	-- event listener function
+		width=150, height=150,
+		onRelease = onPlayBtnReleaseL1intro	-- event listener function
 	}
-	l1introBtn.x = display.contentWidth*0.3
+	l1introBtn.x = display.contentWidth*0.2
 	l1introBtn.y = display.contentHeight - 150
 	
 	-- all display objects must be inserted into group

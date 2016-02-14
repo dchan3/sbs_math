@@ -22,7 +22,56 @@ local profilerPeriod = 1
 local profilerTimer,reporter,systemTime,removeHook,debugloop,socketRecieveLoop,handleError
 local socket = require "socket"
 local tcpSocket,master,resolveName, tableToID, idToTable, lastKnownPC
-local CiderRunMode = {};CiderRunMode.runmode = 'RUN';CiderRunMode.assertImage = true;CiderRunMode.userdir = "/Users/cdmm/Library/Application Support/NetBeans/8.0.2";local SOCKET_PORT=48380;local GLIDER_MAIN_FOLDER= "/Users/cdmm/Desktop/OneDrive/Documents/UROP/MathApp/sbs_math";local useNativePrint= false;local snapshotInterval= -1;local snapshotInterval= -1;local fileFilters= {"CiderDebugger.lua",};local startupMode= "require";--DEBUG HEADERS HERE--
+local CiderRunMode = {};CiderRunMode.runmode = 'RUN';CiderRunMode.assertImage = true;CiderRunMode.userdir = "/Users/cdmm/Library/Application Support/luaglider2/dev";local SOCKET_PORT=40637;local GLIDER_MAIN_FOLDER= "/Users/cdmm/Desktop/OneDrive/Documents/UROP/MathApp/sbs_math";local useNativePrint= false;local snapshotInterval= -1;local snapshotInterval= -1;local fileFilters= {"CiderDebugger.lua",};local startupMode= "require";local function shouldDebug()
+    local env = system.getInfo( "environment" )
+    if(env~="simulator") then
+        native.showAlert(
+        "Glider Debugger Warning!", "Glider debugger libraries are "
+        .."still included on the device! You probably meant to click "
+        .."build instead of debug/run. Please click the hammer icon when you "
+        .."wish to deploy on the device. ", {"OK"} )        
+        return false
+    end    
+    return true
+end
+local function gliderDebuggerErrorListener( event )
+    handleError(2, event.errorMessage )
+    return false
+end
+Runtime:addEventListener("unhandledError", gliderDebuggerErrorListener)
+
+--in order for the profiler to work properly it must be synced to your the 
+--frame timer of your sdk.
+local function setEnterframeCallback(func)
+    Runtime:addEventListener( "enterFrame" , func)
+end
+
+--this function will be called when an event is recieved from the IDE
+local function ultimoteEventRecieved(evt)
+    Runtime:dispatchEvent(evt)
+end
+
+local function initializeUltimote()
+    local supportedEvents = {
+        orientation = true,
+        accelerometer = true,
+        gyroscope = true,
+        heading = true,
+        collision = true,
+        preCollision = true,
+        postCollision = true,
+    }
+   system.hasEventSource = function(evt)
+        return supportedEvents[evt]
+    end
+end
+
+local function setEnterframeCallback(func)
+    Runtime:addEventListener( "enterFrame" , func)
+end
+
+
+--DEBUG HEADERS HERE--
 
 if(shouldDebug and not shouldDebug()) then
     return;
