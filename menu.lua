@@ -11,6 +11,7 @@ local widget = require "widget"
 
 local lesson1Btn
 local lesson2Btn
+local l1introBtn
 
 -- 'onRelease' event listener for lesson1Btn
 local function onPlayBtnRelease()
@@ -26,6 +27,15 @@ local function onPlayBtnRelease2()
 	
 	-- go to kCount_02 scene
 	composer.gotoScene( "lessons.kCount_02", "fade", 500 )
+	
+	return true	-- indicates successful touch
+end
+
+-- 'onRelease' event listener for lesson2Btn
+local function onPlayBtnReleaseL1intro()
+	
+	-- go to kCount_02 scene
+	composer.gotoScene( "lessons.testIntro", "fade", 500 )
 	
 	return true	-- indicates successful touch
 end
@@ -74,12 +84,28 @@ function scene:create( event )
 	}
 	lesson2Btn.x = display.contentWidth*0.5
 	lesson2Btn.y = display.contentHeight - 150
+        
+        -- create a widget button (which will loads testIntro.lua on release)
+	l1introBtn = widget.newButton{
+		label="L1 Intro",
+		labelColor = { default={0}, over={128} },
+                labelYOffset = 80,
+                font = font,
+                fontSize = 80,
+		defaultFile="images/dog.png",
+		overFile="images/bunny.png",
+		width=200, height=200,
+		onRelease = onPlayBtnRelease2	-- event listener function
+	}
+	l1introBtn.x = display.contentWidth*0.3
+	l1introBtn.y = display.contentHeight - 150
 	
 	-- all display objects must be inserted into group
 	sceneGroup:insert( background )
 	sceneGroup:insert( titleLogo )
 	sceneGroup:insert( lesson1Btn )
         sceneGroup:insert( lesson2Btn )
+        sceneGroup:insert( l1introBtn )
 end
 
 function scene:show( event )

@@ -22,7 +22,7 @@ local profilerPeriod = 1
 local profilerTimer,reporter,systemTime,removeHook,debugloop,socketRecieveLoop,handleError
 local socket = require "socket"
 local tcpSocket,master,resolveName, tableToID, idToTable, lastKnownPC
-local CiderRunMode = {};CiderRunMode.runmode = 'RUN';CiderRunMode.assertImage = true;CiderRunMode.userdir = "C:/Users/Chad/AppData/Roaming/NetBeans/8.0.2";local SOCKET_PORT=37369;local GLIDER_MAIN_FOLDER= "C:/Users/Chad/OneDrive/Documents/UROP/MathApp/sbs_math";local useNativePrint= false;local snapshotInterval= -1;local snapshotInterval= -1;local fileFilters= {"CiderDebugger.lua",};local startupMode= "require";--DEBUG HEADERS HERE--
+local CiderRunMode = {};CiderRunMode.runmode = 'RUN';CiderRunMode.assertImage = true;CiderRunMode.userdir = "/Users/cdmm/Library/Application Support/NetBeans/8.0.2";local SOCKET_PORT=48380;local GLIDER_MAIN_FOLDER= "/Users/cdmm/Desktop/OneDrive/Documents/UROP/MathApp/sbs_math";local useNativePrint= false;local snapshotInterval= -1;local snapshotInterval= -1;local fileFilters= {"CiderDebugger.lua",};local startupMode= "require";--DEBUG HEADERS HERE--
 
 if(shouldDebug and not shouldDebug()) then
     return;
