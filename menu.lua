@@ -11,6 +11,7 @@ local widget = require "widget"
 
 local lesson1Btn
 local lesson2Btn
+local l1introBtn
 
 -- 'onRelease' event listener for lesson1Btn
 local function onPlayBtnRelease()
@@ -30,11 +31,20 @@ local function onPlayBtnRelease2()
 	return true	-- indicates successful touch
 end
 
+-- 'onRelease' event listener for lesson2Btn
+local function onPlayBtnReleaseL1intro()
+	
+	-- go to kCount_02 scene
+	composer.gotoScene( "lessons.intro1", "fade", 500 )
+	
+	return true	-- indicates successful touch
+end
+
 function scene:create( event )
 	local sceneGroup = self.view
 
 	-- display a background image
-	local background = display.newImageRect( "images/testBackground.png", 
+	local background = display.newImageRect( "images/bg_blue_rays.png", 
             display.contentWidth, display.contentHeight )
 	background.anchorX = 0
 	background.anchorY = 0
@@ -51,13 +61,13 @@ function scene:create( event )
 		labelColor = { default={0}, over={128} },
                 labelYOffset = 80,
                 font = font,
-                fontSize = 80,
+                fontSize = 50,
 		defaultFile="images/bunny.png",
 		overFile="images/puppy.png",
-		width=200, height=200,
+		width=150, height=150,
 		onRelease = onPlayBtnRelease	-- event listener function
 	}
-	lesson1Btn.x = display.contentWidth*0.5
+	lesson1Btn.x = display.contentWidth*0.2
 	lesson1Btn.y = display.contentHeight - 400
         
         -- create a widget button (which will loads kCount_02.lua on release)
@@ -66,20 +76,36 @@ function scene:create( event )
 		labelColor = { default={0}, over={128} },
                 labelYOffset = 80,
                 font = font,
-                fontSize = 80,
+                fontSize = 50,
 		defaultFile="images/dog.png",
 		overFile="images/tenDogs.png",
-		width=200, height=200,
+		width=150, height=150,
 		onRelease = onPlayBtnRelease2	-- event listener function
 	}
-	lesson2Btn.x = display.contentWidth*0.5
-	lesson2Btn.y = display.contentHeight - 150
+	lesson2Btn.x = display.contentWidth*0.8
+	lesson2Btn.y = display.contentHeight - 400
+        
+        -- create a widget button (which will loads testIntro.lua on release)
+	l1introBtn = widget.newButton{
+		label="L1 Intro",
+		labelColor = { default={0}, over={128} },
+                labelYOffset = 80,
+                font = font,
+                fontSize = 50,
+		defaultFile="images/dog.png",
+		overFile="images/bunny.png",
+		width=150, height=150,
+		onRelease = onPlayBtnReleaseL1intro	-- event listener function
+	}
+	l1introBtn.x = display.contentWidth*0.2
+	l1introBtn.y = display.contentHeight - 150
 	
 	-- all display objects must be inserted into group
 	sceneGroup:insert( background )
 	sceneGroup:insert( titleLogo )
 	sceneGroup:insert( lesson1Btn )
         sceneGroup:insert( lesson2Btn )
+        sceneGroup:insert( l1introBtn )
 end
 
 function scene:show( event )

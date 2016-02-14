@@ -8,6 +8,10 @@
       "corona" : {
         "panelStorage" : {
         }
+      },
+      "lua" : {
+        "panelStorage" : {
+        }
       }
     },
     "excludedFiles" : [ ],
