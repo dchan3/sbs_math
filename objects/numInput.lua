@@ -14,8 +14,8 @@ local leftNum = 0
 local rightNum = 0
 local strokeC = { 1, 0, 0.5 } --RGB, change or remove for final draft
 
-function numInput.new( leftMax, x, y ) -- constructor
-      
+function numInput:new( leftMax, x, y ) -- constructor
+
     leftMax = leftMax or 9
     x = x or 0
     y = y or 0
@@ -26,36 +26,36 @@ function numInput.new( leftMax, x, y ) -- constructor
 
         --increments on left plus press
         if id == "LeftPlus" and leftNum < leftMax then
-            leftNum = leftNum + 1   
-            numTxtL.text = leftNum	
+            leftNum = leftNum + 1
+            numTxtL.text = leftNum
             print( leftNum ) -- can remove this line
         end
 
         --increments on right plus press
         if id == "RightPlus" and rightNum < 9 then
-            rightNum = rightNum + 1   
-            numTxtR.text = rightNum	
+            rightNum = rightNum + 1
+            numTxtR.text = rightNum
             print( rightNum ) -- can remove this line
         end
 
         --increments on left plus press
         if id == "LeftMinus" and leftNum > 0 then
-            leftNum = leftNum - 1   
-            numTxtL.text = leftNum	
+            leftNum = leftNum - 1
+            numTxtL.text = leftNum
             print( leftNum ) -- can remove this line
         end
 
         --increments on right plus press
         if id == "RightMinus" and rightNum > 0 then
-            rightNum = rightNum - 1   
-            numTxtR.text = rightNum	
+            rightNum = rightNum - 1
+            numTxtR.text = rightNum
             print( rightNum ) -- can remove this line
         end
 
-        return true       
+        return true
     end
 
-    
+
     -- NEED TO MAKE finalNumber ACCESSIBLE BY OTHER OBJECTS
     function onCheck ( event )
 
@@ -143,7 +143,7 @@ function numInput.new( leftMax, x, y ) -- constructor
         checkButton.y = display.contentHeight*0.65
 
     countBox:insert( plusButtonL )
-    countBox:insert( plusButtonR ) 
+    countBox:insert( plusButtonR )
     countBox:insert( minusButtonL )
     countBox:insert( minusButtonR )
     countBox:insert( checkButton )
@@ -151,12 +151,12 @@ function numInput.new( leftMax, x, y ) -- constructor
     numTxtL = display.newText( leftNum, 0, 0, default, 55 )
             numTxtL:setFillColor( 0 )
             numTxtL.x = display.contentWidth*0.45
-            numTxtL.y = display.contentHeight*0.38 
+            numTxtL.y = display.contentHeight*0.38
 
     numTxtR = display.newText( rightNum, 0, 0, default, 55 )
             numTxtR:setFillColor( 0 )
             numTxtR.x = display.contentWidth*0.55
-            numTxtR.y = display.contentHeight*0.38 
+            numTxtR.y = display.contentHeight*0.38
 
     countBox:insert ( numTxtL )
     countBox:insert ( numTxtR )

@@ -192,8 +192,8 @@ function check()
 
         for i = 1, count do
             if matchBalls[i].num == j then
-                timer.performWithDelay(j * 1000, 
-                    function (event)  
+                timer.performWithDelay(j * 1000,
+                    function (event)
                     matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
                 end)
             end
@@ -266,7 +266,7 @@ function scene:create( event )
 		displayText:setFillColor(priColor.R, priColor.G, priColor.B)
     physics.setGravity(0,0)
 
-    local background = display.newImageRect( "images/bg_blue_zig.png", 
+    local background = display.newImageRect( "images/bg_blue_zig.png",
             display.contentWidth, display.contentHeight )
     background.anchorX = 0
     background.anchorY = 0

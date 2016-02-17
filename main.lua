@@ -1,4 +1,4 @@
-require "CiderDebugger";---------------------------------------------------------------------------------
+--require "CiderDebugger";---------------------------------------------------------------------------------
 --
 -- main.lua
 --
@@ -257,4 +257,4 @@ end
 _G.convertDecToTens = convertDecToTens
 
 local composer = require( "composer" )
-composer.gotoScene( "menu" )
+composer.gotoScene( "lessons.kCount_03" )

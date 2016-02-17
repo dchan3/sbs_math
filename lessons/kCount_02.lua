@@ -63,7 +63,7 @@ local function drag( event )
 
         elseif "ended" == phase or "cancelled" == phase then
 
-                print(t.cooldedWith)
+                print(t.collidedWith)
 
                 if(t.collidedWith ~= nil) then
 
