@@ -47,19 +47,7 @@ local function showBoard ( event )
     board:scale(.8, .8)
     board.alpha = 0
     transition.fadeIn( board, {time=500} ) 
-end
-
-local function boardX ( event )
-    exitBtn = widget.newButton{
-                shape="circle",
-                label="x",
-		labelColor = { default={0}, over={128} },
-                font = font,
-                fontSize = 50,
-		onRelease = endIntro	-- event listener function
-	}
-    exitBtn.x = _W * .2 --board.x + 245
-    exitBtn.y = _H * .5 --board.y - 100
+    
 end
 
 -- fades hand into scene
@@ -112,6 +100,7 @@ local function endIntro()
         hand:removeSelf()
         boardText:removeSelf()
         board:removeSelf()
+        exitBtn:removeSelf()
         -- go to lesson 1
 	composer.gotoScene( "lessons.kCount_01", "fade", 500 )
 	
@@ -202,7 +191,22 @@ function scene:create( event )
     
     -- delayed calls to display board and hand
     timer.performWithDelay( 500, showBoard)
-    timer.performWithDelay( 500, showHand )  
+    timer.performWithDelay( 500, showHand ) 
+    
+    -- attempting to make exit button
+    --[[]
+    exitBtn = widget.newButton{
+                shape="circle",
+                radius="20",
+                label="x",
+		labelColor = { default={0}, over={128} },
+                font = font,
+                fontSize = 50,
+		onRelease = endIntro	-- event listener function
+    }
+    exitBtn.x = _W * .9 --board.x + 245
+    exitBtn.y = _H * .6 --board.y - 100
+    ]]--
     
     -- delayed calls to display board text 
     timer.performWithDelay( 1500, textDisplay )
