@@ -100,7 +100,7 @@ local function endIntro()
         hand:removeSelf()
         boardText:removeSelf()
         board:removeSelf()
-        exitBtn:removeSelf()
+        -- exitBtn:removeSelf()
         -- go to lesson 1
 	composer.gotoScene( "lessons.kCount_01", "fade", 500 )
 	
