@@ -11,6 +11,7 @@ local composer = require( "composer" )
 local numLine = require( "objects.numLine" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
+local widget = require "widget"
 local physics = require "physics"
 physics.start()
 
@@ -45,7 +46,20 @@ local function showBoard ( event )
     board.y = _H * .25
     board:scale(.8, .8)
     board.alpha = 0
-    transition.fadeIn( board, {time=500} )   
+    transition.fadeIn( board, {time=500} ) 
+end
+
+local function boardX ( event )
+    exitBtn = widget.newButton{
+                shape="circle",
+                label="x",
+		labelColor = { default={0}, over={128} },
+                font = font,
+                fontSize = 50,
+		onRelease = endIntro	-- event listener function
+	}
+    exitBtn.x = _W * .2 --board.x + 245
+    exitBtn.y = _H * .5 --board.y - 100
 end
 
 -- fades hand into scene
@@ -182,8 +196,8 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
  		initBalls()
-                
-    --------------------------------------
+
+--------------------------------------
     -- timed function calls for tutorial objects and transitions
     
     -- delayed calls to display board and hand
