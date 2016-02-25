@@ -6,11 +6,14 @@
     Set size, position, and transition of objects in tutorial functions below 
     variable list. 
 ]]--
+-- needs timer transition on exit button
+-- if exit == 0 used to prevent time delayed calls from procedding after scene exit
 
 local composer = require( "composer" )
 local numLine = require( "objects.numLine" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
+local widget = require "widget"
 local physics = require "physics"
 physics.start()
 
@@ -19,6 +22,7 @@ local scene = composer.newScene()
 
 local max = 3
 local count = max
+local exit = 0
 
 local countBalls = {}
 local matchBalls = {}
@@ -31,7 +35,7 @@ local decText
 local latText
 
 -- variables and functions for tutorial -------------------------------------
-
+local boardGroup = display.newGroup()
 local boardText
 local hand
 local board
@@ -45,7 +49,8 @@ local function showBoard ( event )
     board.y = _H * .25
     board:scale(.8, .8)
     board.alpha = 0
-    transition.fadeIn( board, {time=500} )   
+    transition.fadeIn( board, {time=500} ) 
+    boardGroup:insert(1, board) --used to keep board behind exit button (set to 2)
 end
 
 -- fades hand into scene
@@ -59,8 +64,7 @@ end
 
 -- chalkboard text sequence
 local function textDisplay ( event )
-    boardText = display.newText( "Drag the numbers", _W*.7, 
-            _H*.25, font, 40 )   
+    boardText = display.newText( "Drag the numbers", _W*.7, _H*.25, font, 40 )   
 end
 
 local function text2 ( event )
@@ -73,7 +77,9 @@ end
 
 local function text4 ( event )
     boardText.text = "Now YOU try!"
-    boardText:setFillColor(1,0,0)
+    if exit == 0 then
+        boardText:setFillColor(1,0,0)
+    end
 end
 
 -- upward hand transition
@@ -95,11 +101,15 @@ end
 local function endIntro()
 	
 	-- removing tutorial objects
-        hand:removeSelf()
-        boardText:removeSelf()
-        board:removeSelf()
-        -- go to lesson 1
-	composer.gotoScene( "lessons.kCount_01", "fade", 500 )
+        if exit == 0 then
+            hand:removeSelf()
+            boardText:removeSelf()
+            board:removeSelf()
+            exitBtn:removeSelf()
+            exit = 1
+            -- go to lesson 1
+            composer.gotoScene( "lessons.kCount_01", "fade", 500 )
+        end
 	
 	return true	-- indicates successful touch
 end
@@ -182,28 +192,55 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
  		initBalls()
-                
-    --------------------------------------
+
+--------------------------------------
     -- timed function calls for tutorial objects and transitions
     
     -- delayed calls to display board and hand
+ 
     timer.performWithDelay( 500, showBoard)
-    timer.performWithDelay( 500, showHand )  
-    
+    timer.performWithDelay( 500, showHand ) 
+     
+        exitBtn = widget.newButton{
+                    shape="circle",
+                    radius="30",
+                    label="x",
+                    labelColor = { default={0}, over={128} },
+                    font = font,
+                    fontSize = 50,                 
+                    onRelease = endIntro	-- event listener function
+        }
+        exitBtn.x = _W * .91 --board.x + 245
+        exitBtn.y = _H * .09 --board.y - 100
+        boardGroup:insert(2, exitBtn) --used to keep exit button in front of board
+       
     -- delayed calls to display board text 
-    timer.performWithDelay( 1500, textDisplay )
-    timer.performWithDelay( 5000, text2 )
-    timer.performWithDelay( 9000, text3 )
-    timer.performWithDelay( 11000, text4 )
-       
+    if exit == 0 then
+        timer.performWithDelay( 1500, textDisplay )
+    end   
+    if exit == 0 then
+        timer.performWithDelay( 5000, text2 )
+    end
+    if exit == 0 then
+        timer.performWithDelay( 9000, text3 )
+    end
+    if exit == 0 then
+        timer.performWithDelay( 11000, text4 )
+    end   
     -- calls to number drag movements
-    timer.performWithDelay( 2500, handMoveUp )
-    timer.performWithDelay( 6000, handMoveDown )
-    timer.performWithDelay( 7400, animalFade )
-    
+    if exit == 0 then
+        timer.performWithDelay( 2500, handMoveUp )
+    end
+    if exit == 0 then
+        timer.performWithDelay( 6000, handMoveDown )
+    end
+    if exit == 0 then
+        timer.performWithDelay( 7400, animalFade )
+    end
     -- call to remove tutorial objects and go to lesson 1
-    timer.performWithDelay( 14000, endIntro )
-       
+    if exit == 0 then
+        timer.performWithDelay( 14000, endIntro )
+    end   
 end
 
 
