@@ -263,7 +263,7 @@ function scene:create( event )
 
     sceneGroup = self.view
 		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
-		displayText:setFillColor(priColor.R, priColor.G, priColor.B)
+                displayText:setFillColor( 0, 0, 0 )
     physics.setGravity(0,0)
 
     local background = display.newImageRect( "images/bg_blue_zig.png",
@@ -280,12 +280,12 @@ function scene:create( event )
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
-    decText:setFillColor(priColor.R, priColor.G, priColor.B)
+    decText:setFillColor( 0, 0, 0 )
     sceneGroup:insert( decText )
 
     latText = display.newText( "", 0, 0, font, _W*.1 )
     latText.x, latText.y = _W*.833, _H*.75
-    latText:setFillColor(priColor.R, priColor.G, priColor.B)
+    latText:setFillColor( 0, 0, 0 )
     sceneGroup:insert( latText )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
