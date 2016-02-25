@@ -19,6 +19,7 @@ local matchCount = count
 local map1 = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 local map2 = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 
+local countBalls = {}
 local matchBalls1 = {}
 local matchBalls2 = {}
 
@@ -198,18 +199,72 @@ function initBalls()
 	put:insert(put.text)
 	put.x, put.y = _W * .5, _H * .5 + ballR * 1
 	sceneGroup:insert(put)
+        
+        -- left group of animals
+        for i=1,count1 do
+            matchBalls1[i] = Animal:new("images/puppy.png",  ballR*3, ballR*3, ballR*2)
+            matchBalls1[i]:addEventListener( "touch", drag )
+            matchBalls1[i]:insert( matchBalls1[i].ball )
+
+            --places balls in grid
+            while  matchBalls1[i].x == 0 and  matchBalls1[i].y == 0 do
+
+                local randomLocation = math.random(1, 15)
+
+                if map1[randomLocation] == false then
+                    --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3),
+                        --_H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
+                    matchBalls1[i].x, matchBalls1[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3),
+                        _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.01
+                    map1[randomLocation] = true
+
+                end
+
+            end
+
+            physics.addBody( matchBalls1[i], { radius=ballR*1.25 } )
+
+            sceneGroup:insert( matchBalls1[i] )
+        end
+
+        -- right group of animals
+        for i=1,count2 do
+            matchBalls2[i] = Animal:new("images/mouse.png",  ballR*3, ballR*3, ballR*2)
+            matchBalls2[i]:addEventListener( "touch", drag )
+            matchBalls2[i]:insert( matchBalls2[i].ball )
+
+            --places balls in grid
+            while  matchBalls2[i].x == 0 and  matchBalls2[i].y == 0 do
+
+                local randomLocation = math.random(1, 15)
+
+                if map2[randomLocation] == false then
+                    --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3),
+                        --_H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
+                    matchBalls2[i].x, matchBalls2[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3),
+                        _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.01
+                    map2[randomLocation] = true
+
+                end
+
+            end
+
+            physics.addBody( matchBalls2[i], { radius=ballR*1.25 } )
+
+            sceneGroup:insert( matchBalls2[i] )
+        end
 end
 
 function scene:create( event )
  	sceneGroup = self.view
 	physics.setGravity(0,0)
 
-	numLine1 = numLine:new(1, 10, _W*.5, 90 )
+	numLine1 = numLine:new(1, 10, _W*.5, 90, 0 )
 	numLine1.anchorX, numLine1.anchorY = 0.5, 0.5
 	numLine1.x , numLine1.y = _H * .1, _W * .0325
 	sceneGroup:insert(numLine1)
 
-	numLine2 =  numLine:new(1, 10, _W*.5, 90 )
+	numLine2 =  numLine:new(1, 10, _W*.5, 90, 0 )
 	numLine2.anchorX, numLine2.anchorY = 0.5, 0.5
 	numLine2.x , numLine2.y = _H * 1.6, _W * .0325
 	sceneGroup:insert(numLine2)
