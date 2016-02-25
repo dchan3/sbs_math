@@ -204,12 +204,12 @@ function scene:create( event )
  	sceneGroup = self.view
 	physics.setGravity(0,0)
 
-	numLine1 = numLine:new(1, 10, _W*.5, 90 )
+	numLine1 = numLine:new(1, 10, _W*.5, 90, 0 )
 	numLine1.anchorX, numLine1.anchorY = 0.5, 0.5
 	numLine1.x , numLine1.y = _H * .1, _W * .0325
 	sceneGroup:insert(numLine1)
 
-	numLine2 =  numLine:new(1, 10, _W*.5, 90 )
+	numLine2 =  numLine:new(1, 10, _W*.5, 90, 0 )
 	numLine2.anchorX, numLine2.anchorY = 0.5, 0.5
 	numLine2.x , numLine2.y = _H * 1.6, _W * .0325
 	sceneGroup:insert(numLine2)
