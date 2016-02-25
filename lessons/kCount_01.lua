@@ -183,8 +183,10 @@ function check()
 			local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
 			local time = distance/maxSpeed*1000
 			--print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
-			transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y, time=1000})
-			--transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
+                        -- "-30" in transition below sets the offset from numberline when dogs move to line
+                        transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y -30, time=1000})
+                        -- line below does slower 3D effect transision
+                        --transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
 	end
 
 	for j=1,count do
@@ -263,7 +265,7 @@ function scene:create( event )
 
     sceneGroup = self.view
 		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
-		displayText:setFillColor(priColor.R, priColor.G, priColor.B)
+                displayText:setFillColor( 0, 0, 0 )
     physics.setGravity(0,0)
 
     local background = display.newImageRect( "images/bg_blue_zig.png",
@@ -280,12 +282,12 @@ function scene:create( event )
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
-    decText:setFillColor(priColor.R, priColor.G, priColor.B)
+    decText:setFillColor( 0, 0, 0 )
     sceneGroup:insert( decText )
 
     latText = display.newText( "", 0, 0, font, _W*.1 )
     latText.x, latText.y = _W*.833, _H*.75
-    latText:setFillColor(priColor.R, priColor.G, priColor.B)
+    latText:setFillColor( 0, 0, 0 )
     sceneGroup:insert( latText )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.

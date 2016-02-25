@@ -28,7 +28,8 @@ function NumLine:new( min, max, length, angle )
     line.num[i]:setFillColor( priColor.R,priColor.G,priColor.B )
     line.hash[i] = display.newLine(   step*(i -min)*math.cos(math.rad(angle)) - hashW*math.cos(anglePerp), step*(i - min)*math.sin(math.rad(angle)) - hashW*math.sin(anglePerp),
                step*(i-min)*math.cos(math.rad(angle)) + hashW*math.cos(anglePerp), step*(i - min)*math.sin(math.rad(angle)) + hashW*math.sin(anglePerp)    )
-    line.hash[i].strokeWidth = _H*.005
+    --line.hash[i].strokeWidth = _H*.005
+    line.hash[i].strokeWidth = _H*.01
     line.hash[i]:setStrokeColor(0,0,0)
 
 
