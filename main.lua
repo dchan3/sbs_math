@@ -257,8 +257,8 @@ end
 _G.convertDecToTens = convertDecToTens
 
 local composer = require( "composer" )
-composer.gotoScene( "lessons.kCount_01" )
+--composer.gotoScene( "lessons.kCount_01" )
 --composer.gotoScene( "lessons.kCount_02" )
---composer.gotoScene( "lessons.kCount_03" )
+composer.gotoScene( "lessons.kCount_03" )
 --composer.gotoScene( "lessons.intro1" )
 --composer.gotoScene( "menu" )
