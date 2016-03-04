@@ -16,7 +16,7 @@ _G.scale = _H/960
 _G.width = 100*scale
 _G.ballR = width*.375
 
-_G.maxSpeed  = _W*.25
+_G.maxSpeed  = _W
 
 _G.font = "Dyslexie Regular"
 --attempting to get font to work
