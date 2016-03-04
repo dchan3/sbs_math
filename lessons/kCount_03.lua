@@ -18,6 +18,9 @@ local count2 = math.random( 1, max)
 local matchCount = count
 local map1 = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 local map2 = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
+local leftBound = _W*.375   -- Used to calculate the left  bounds of the draggable elements
+local rightBound = _W*.625  -- Used to calculate the right bounds of the draggable elements
+
 
 local countBalls = {}
 local matchBalls1 = {}
@@ -141,7 +144,15 @@ local function drag( event )
 		if "moved" == phase then
 			-- Make object move (we subtract t.x0,t.y0 so that moves are
 			-- relative to initial grab point, rather than object "snapping").
-			t.x = event.x - t.x0
+            -- Make sure objects don't move beyond the bounds
+            if (event.x < leftBound and t.type == "comp") then 
+                t.x = leftBound
+            elseif (event.x > rightBound and t.type == "comp") then 
+                t.x = rightBound
+            else 
+                t.x = event.x - t.x0 
+            end           
+			
 			t.y = event.y - t.y0
 		elseif "ended" == phase or "cancelled" == phase then
 			if(t.collidedWith ~= nil) then
@@ -159,6 +170,7 @@ end
 
 function initBalls()
 	eq = CompBall:new("=", ballR*1.5)
+    eq.type = "comp"
 	eq:addEventListener( "touch", drag )
 	eq.isSensor = true
 	eq.collision = onLocalCollision
@@ -170,6 +182,7 @@ function initBalls()
 	eq.x, eq.y = _W * .5, _H * .5 - ballR * 4.5
 
 	lt = CompBall:new("<", ballR*1.5)
+    lt.type = "comp"
 	lt:addEventListener( "touch", drag )
 	lt.isSensor = true
 	lt.collision = onLocalCollision
@@ -182,6 +195,7 @@ function initBalls()
 
 	gt = CompBall:new(">", ballR*1.5)
 	gt:addEventListener( "touch", drag )
+    gt.type = "comp"
 	gt.isSensor = true
 	gt.collision = onLocalCollision
 	gt:addEventListener("collision", gt)
@@ -192,9 +206,11 @@ function initBalls()
 	gt.x, gt.y = _W * .5 + ballR * 3, _H * .5 - ballR * 4.5
 
 	put = CompBallPut:new(ballR * 1.5)
-	put.isSensor = true
 	put.collision = onLocalCollision
 	put:addEventListener("collision", put)
+    physics.addBody( put, { radius=ballR*1.5 } )
+    put.isSensor = true
+    lt:insert(lt.ball)
 	put:insert(put.ball)
 	put:insert(put.text)
 	put.x, put.y = _W * .5, _H * .5 + ballR * 1
@@ -214,7 +230,7 @@ function initBalls()
                 if map1[randomLocation] == false then
                     --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3),
                         --_H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-                    matchBalls1[i].x, matchBalls1[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3),
+                    matchBalls1[i].x, matchBalls1[i].y = leftBound*.95 - math.random(_W*.3), -- _W*math.random(_W*.1), --+ _W*.1*math.floor((randomLocation-1) / 3),
                         _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.01
                     map1[randomLocation] = true
 
@@ -241,7 +257,7 @@ function initBalls()
                 if map2[randomLocation] == false then
                     --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3),
                         --_H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-                    matchBalls2[i].x, matchBalls2[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3),
+                    matchBalls2[i].x, matchBalls2[i].y = rightBound*1.05 + math.random(_W*.3),--_W*.05 + _W*.1*math.floor((randomLocation-1) / 3),
                         _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.01
                     map2[randomLocation] = true
 
@@ -253,6 +269,9 @@ function initBalls()
 
             sceneGroup:insert( matchBalls2[i] )
         end
+
+        print(count1)
+        print(count2)
 end
 
 function scene:create( event )
@@ -270,7 +289,7 @@ function scene:create( event )
 	sceneGroup:insert(numLine2)
 
 	area = display.newGroup()
-	area.rect = display.newRect(_W * .5, _H * .5, _W * .25, _H)
+	area.rect = display.newRect(_W * .5, _H * .5, (leftBound - rightBound), _H)
 	area.rect:setFillColor(Red.R, Red.G, Red.B,.5)
 	area:insert(area.rect)
 	sceneGroup:insert(area)
