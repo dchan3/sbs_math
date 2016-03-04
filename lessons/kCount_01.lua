@@ -11,7 +11,7 @@ local scene = composer.newScene()
 
 local hasCollidedCircle
 
-local max = 4
+local max = 10
 local count = max -- math.random( 1, max)
 local matchCount = count
 local map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
@@ -138,7 +138,7 @@ function hasCollidedCircle(obj1, obj2)
                         onComplete = listener
                     })
 
-                   obj2.text = display.newText( obj1.num, 0, 0, font, ballR*2 )
+                   obj2.text.text = obj1.num--= display.newText( obj1.num, 0, 0, font, ballR*2 )
                     obj2.text:setFillColor(0,0,0)
                     obj2.text.alpha = 0
                     obj2.num = obj1.num
@@ -184,9 +184,10 @@ function check()
 			local time = distance/maxSpeed*1000
 			--print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
                         -- "-30" in transition below sets the offset from numberline when dogs move to line
-                        transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y -30, time=1000})
+                        --transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y -30, time=1000})
                         -- line below does slower 3D effect transision
-                        --transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
+                        transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x,  numberLine.y + 2*ballR, time )
+                        --numberLine.hash[matchBalls[i].num].y +
 	end
 
 	for j=1,count do
@@ -197,6 +198,7 @@ function check()
                 timer.performWithDelay(j * 1000,
                     function (event)
                     matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
+                    matchBalls[i].outline.alpha = 1
                 end)
             end
         end
@@ -217,7 +219,7 @@ function initBalls()
 	        countBalls[i]:insert( countBalls[i].text )
 
 
-	        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y - _H*0.030
+	        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y 
 
 	        physics.addBody( countBalls[i], { radius=ballR*1.5 } )
 	        countBalls[i].isSensor = true
@@ -276,8 +278,8 @@ function scene:create( event )
     sceneGroup:insert( background )
 
     --local coordinates =
-    numberLine =  numLine:new(0, 10, _W*.9, 0 )
-    numberLine.x , numberLine.y = _H*.1, _W*.2
+    numberLine =  numLine:new(0, 10, _W*.85, 0 )
+    numberLine.x , numberLine.y = _H*.125, _W*.2
     sceneGroup:insert(numberLine)
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
