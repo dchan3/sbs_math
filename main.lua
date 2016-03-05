@@ -1,4 +1,4 @@
-require "CiderDebugger";---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
 --
 -- main.lua
 --
@@ -232,6 +232,11 @@ local function convertDecToLat( number )
 
 end
 _G.convertDecToLat = convertDecToLat
+
+local function createGrid(w, h, size)
+	local p = Math.floor(w / size)
+	local q = Math.floor(h / size)
+end
 
 local function convertDecToTens( number )
 

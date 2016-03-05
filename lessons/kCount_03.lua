@@ -48,6 +48,33 @@ local latText2
 
 local area
 
+function check()
+	for i=1, count1 do
+		local distance = math.pow( (math.pow( matchBalls1[i].x - numLine1.x, 2 ) + math.pow( matchBalls1[i].y, 2 )), .5  )
+		local time = distance/maxSpeed*1000
+		transition.moveTo( matchBalls1[i], {x = numLine1.hash[matchBalls1[i].num].x + numLine1.x, y = numLine1.hash[matchBalls1[i].num].y + numLine1.y, time=1000})
+	end
+	for j=1, count2 do
+		local distance = math.pow( (math.pow( matchBalls2[j].x - numLine2.x, 2 ) + math.pow( matchBalls2[j].y, 2 )), .5  )
+		local time = distance/maxSpeed*1000
+		transition.moveTo( matchBalls2[j], {x = numLine2.hash[matchBalls2[j].num].x + numLine2.x, y = numLine2.hash[matchBalls2[j].num].y + numLine2.y, time=1000})
+	end
+	for k=1,count1 do
+		timer.performWithDelay(k * 1000, function (event) displayText1.text = convertDecToLat(k) end)
+	end
+	for l=1,count2 do
+		timer.performWithDelay((count1 + l) * 1000, function (event) displayText2.text = convertDecToLat(l) end)
+	end
+	timer.performWithDelay((count1 + count2) * 1000, function (event)
+		if (count1 < count2 and put.operator == "<") or (count1 == count2 and put.operator == "=") or (count1 > count2 and put.operator == ">") then
+			put.ball:setFillColor(Green.R, Green.G, Green.B);
+		else
+			put.ball:setFillColor(Red.R, Red.G, Red.B);
+		end
+	end)
+	timer.performWithDelay((count1 + count2 + 2) * 1000, function (event) clearBalls() initBalls() end)
+end
+
 function hasCollidedCircle(obj1, obj2)
 
     if obj1 == nil then
@@ -145,21 +172,33 @@ local function drag( event )
 			-- Make object move (we subtract t.x0,t.y0 so that moves are
 			-- relative to initial grab point, rather than object "snapping").
             -- Make sure objects don't move beyond the bounds
-            if (event.x < leftBound and t.type == "comp") then 
+            if (event.x < leftBound and t.type == "comp") then
                 t.x = leftBound
-            elseif (event.x > rightBound and t.type == "comp") then 
+            elseif (event.x > rightBound and t.type == "comp") then
                 t.x = rightBound
-            else 
-                t.x = event.x - t.x0 
-            end           
-			
+            else
+                t.x = event.x - t.x0
+            end
+
+						if t.hovered == false and t.x - put.x <= 1 and t.y - put.y <= 1 then
+							t.hovered = true
+						end
+
 			t.y = event.y - t.y0
 		elseif "ended" == phase or "cancelled" == phase then
+			print(t.collidedWith);
 			if(t.collidedWith ~= nil) then
 					hasCollidedCircle(t, t.collidedWith )
 			end
 			display.getCurrentStage():setFocus( nil )
 			t.isFocus = false
+
+			if t.hovered == true then
+				put.operator = t.operator
+				put.text.text = put.operator
+				sceneGroup:remove(t)
+				check()
+			end
 		end
 	end
 
@@ -168,11 +207,39 @@ local function drag( event )
 	return true
 end
 
+function clearBalls()
+	if eq.isVisible then
+	sceneGroup:remove(eq)
+	end
+	if lt.isVisible then
+	sceneGroup:remove(lt)
+	end
+	if gt.isVisible then
+	sceneGroup:remove(gt)
+	end
+	for i=1, count1 do
+		sceneGroup:remove(matchBalls1[i])
+		matchBalls1[i] = nil
+	end
+	for j=1, count2 do
+		sceneGroup:remove(matchBalls2[j])
+		matchBalls2[j] = nil
+	end
+	displayText1.text = ""
+	displayText2.text = ""
+	count1 = math.random( 1, max)
+	count2 = math.random(1, max)
+	put.operator = ""
+	put.text.text = ""
+end
+
 function initBalls()
+
 	eq = CompBall:new("=", ballR*1.5)
     eq.type = "comp"
 	eq:addEventListener( "touch", drag )
 	eq.isSensor = true
+	eq.hovered = false
 	eq.collision = onLocalCollision
 	eq:addEventListener("collision", eq)
 	physics.addBody( eq, { radius=ballR*1.5 } )
@@ -185,6 +252,7 @@ function initBalls()
     lt.type = "comp"
 	lt:addEventListener( "touch", drag )
 	lt.isSensor = true
+	lt.hovered = false
 	lt.collision = onLocalCollision
 	lt:addEventListener("collision", lt)
 	physics.addBody( lt, { radius=ballR*1.5 } )
@@ -197,6 +265,7 @@ function initBalls()
 	gt:addEventListener( "touch", drag )
     gt.type = "comp"
 	gt.isSensor = true
+	gt.hovered = false
 	gt.collision = onLocalCollision
 	gt:addEventListener("collision", gt)
 	physics.addBody( gt, { radius=ballR*1.5 } )
@@ -215,10 +284,11 @@ function initBalls()
 	put:insert(put.text)
 	put.x, put.y = _W * .5, _H * .5 + ballR * 1
 	sceneGroup:insert(put)
-        
+
         -- left group of animals
         for i=1,count1 do
             matchBalls1[i] = Animal:new("images/puppy.png",  ballR*3, ballR*3, ballR*2)
+						matchBalls1[i].num = i
             matchBalls1[i]:addEventListener( "touch", drag )
             matchBalls1[i]:insert( matchBalls1[i].ball )
 
@@ -246,6 +316,7 @@ function initBalls()
         -- right group of animals
         for i=1,count2 do
             matchBalls2[i] = Animal:new("images/mouse.png",  ballR*3, ballR*3, ballR*2)
+						matchBalls2[i].num = i
             matchBalls2[i]:addEventListener( "touch", drag )
             matchBalls2[i]:insert( matchBalls2[i].ball )
 
@@ -287,6 +358,12 @@ function scene:create( event )
 	numLine2.anchorX, numLine2.anchorY = 0.5, 0.5
 	numLine2.x , numLine2.y = rightBound + _W*.05, _W * .0325
 	sceneGroup:insert(numLine2)
+
+	displayText1 = display.newText("", _W * .20, _H * .125, font, _W*.05)
+	displayText2 = display.newText("", _W * .80, _H * .125, font, _W*.05)
+
+	displayText1:setFillColor(Blue.R, Blue.G, Blue.B)
+	displayText2:setFillColor(Blue.R, Blue.G, Blue.B)
 
 	area = display.newGroup()
 	area.rect = display.newRect(_W * .5, _H * .5, (leftBound - rightBound), _H)
