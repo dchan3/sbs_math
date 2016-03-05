@@ -238,9 +238,9 @@ local function createGrid(w, h, size)
 	local q = Math.floor(h / size)
 	retval = {}
 	for i=1,p do
-		mt[i] = {}
+		retval[i] = {}
 		for j=1,q do
-			mt[i][j] = false
+			retval[i][j] = false
 		end
 	end
 end
