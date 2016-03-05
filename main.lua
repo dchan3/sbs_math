@@ -236,6 +236,13 @@ _G.convertDecToLat = convertDecToLat
 local function createGrid(w, h, size)
 	local p = Math.floor(w / size)
 	local q = Math.floor(h / size)
+	retval = {}
+	for i=1,p do
+		mt[i] = {}
+		for j=1,q do
+			mt[i][j] = false
+		end
+	end
 end
 
 local function convertDecToTens( number )
