@@ -1,4 +1,4 @@
-require "CiderDebugger";---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
 --
 -- main.lua
 --
@@ -16,7 +16,7 @@ _G.scale = _H/960
 _G.width = 100*scale
 _G.ballR = width*.375
 
-_G.maxSpeed  = _W*.25
+_G.maxSpeed  = _W
 
 _G.font = "Dyslexie Regular"
 --attempting to get font to work
@@ -232,6 +232,18 @@ local function convertDecToLat( number )
 
 end
 _G.convertDecToLat = convertDecToLat
+
+local function createGrid(w, h, size)
+	local p = Math.floor(w / size)
+	local q = Math.floor(h / size)
+	retval = {}
+	for i=1,p do
+		retval[i] = {}
+		for j=1,q do
+			retval[i][j] = false
+		end
+	end
+end
 
 local function convertDecToTens( number )
 
