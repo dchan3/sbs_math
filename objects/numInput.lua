@@ -9,13 +9,15 @@ local widget = require( "widget" )
 
 local numInput = {}
 
-local countBox = display.newGroup()
+
 local leftNum = 0
 local rightNum = 0
 local strokeC = { 1, 0, 0.5 } --RGB, change or remove for final draft
 
 function numInput:new( leftMax, x, y ) -- constructor
 
+    local countBox = display.newGroup()
+    
     leftMax = leftMax or 9
     x = x or 0
     y = y or 0
@@ -164,6 +166,7 @@ function numInput:new( leftMax, x, y ) -- constructor
     countBox.x = x
     countBox.y = y
 
+    return countBox
 end
 
 return numInput

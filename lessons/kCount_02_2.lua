@@ -5,15 +5,17 @@ local numLine = require( "objects.numLine" )
 local numInput = require( "objects.numInput" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
+local numInput = require( "objects.numInput" )
 local physics = require "physics"
 physics.start()
 --physics.setDrawMode( "hybrid" )
-
 
 local scene = composer.newScene()
 
 local hasCollidedCircle
 
+-- number box not working
+--local boxTest = numInput.new( 6, -190, 40 )
 local max = 10
 local count = max -- math.random( 1, max)
 local matchCount = count
@@ -297,6 +299,7 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
  		initBalls()
+                
 end
 
 
