@@ -266,10 +266,13 @@ end
 function scene:create( event )
 
 
+
+
     sceneGroup = self.view
 		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
                 displayText:setFillColor( 0, 0, 0 )
     physics.setGravity(0,0)
+    sceneGroup:insert(displayText)
 
     local background = display.newImageRect( "images/bg_blue_zig.png",
             display.contentWidth, display.contentHeight )
@@ -316,6 +319,7 @@ function scene:show( event )
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
     elseif ( phase == "did" ) then
+
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
@@ -341,8 +345,8 @@ end
 function scene:destroy( event )
 
 
-    display.remove(sceneGroup)
-    composer.removeAll()
+   -- display.remove(sceneGroup)
+   -- composer.removeAll()
 
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.

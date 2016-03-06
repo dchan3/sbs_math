@@ -272,6 +272,7 @@ end
 _G.convertDecToTens = convertDecToTens
 
 local composer = require( "composer" )
+composer.recycleOnSceneChange = true
 --composer.gotoScene( "lessons.kCount_01" )
 --composer.gotoScene( "lessons.kCount_02" )
 --composer.gotoScene( "lessons.kCount_02_2" )

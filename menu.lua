@@ -220,7 +220,7 @@ function scene:destroy( event )
 
     local sceneGroup = self.view
 
-    composer.removeAll()
+    --composer.removeAll()
 
     -- Called prior to the removal of scene's view
     -- Insert code here to clean up the scene
