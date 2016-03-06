@@ -75,61 +75,7 @@ function check()
 	timer.performWithDelay((count1 + count2 + 2) * 1000, function (event) clearBalls() initBalls() end)
 end
 
-function hasCollidedCircle(obj1, obj2)
 
-    if obj1 == nil then
-        return false
-    end
-
-    if obj2 == nil then
-        return false
-    end
-
-    local sqrt = math.sqrt
-    local dx =  obj1.x - obj2.x;
-    local dy =  obj1.y - obj2.y;
-    local distance = sqrt(dx*dx + dy*dy);
-    local objectSize = (obj2.contentWidth/2) + (obj1.contentWidth/2)
-
-    if distance < objectSize then
-
-                    local function listener( event )
-                        display.remove(obj1)
-                    end
-
-
-                    local transitionTime = 100
-
-
-                    transition.to(obj1,
-                    {
-                        time=transitionTime,
-                        x = obj2.x,
-                        y = obj2.y,
-                        onComplete = listener
-                    })
-
-                   	obj2.text = display.newText(obj1.operator, 0, 0, font, ballR*1.5 )
-                    obj2.text:setFillColor(0,0,0)
-                    obj2.text.alpha = 0
-                    obj2.operator = obj1.operator
-                    obj2:insert( obj2.text )
-                    obj2.matched = true
-
-
-                    local function listener( event )
-                        transition.to(obj2.text,
-                        {
-                        time=500,
-                        alpha =.75
-                        })
-                    end
-                    timer.performWithDelay( transitionTime, listener )
-        print("true")
-        return true
-    end
-    return false
-end
 
 local function onLocalCollision( self, event )
    local t = event.target
@@ -188,7 +134,7 @@ local function drag( event )
 		elseif "ended" == phase or "cancelled" == phase then
 			print(t.collidedWith);
 			if(t.collidedWith ~= nil) then
-					hasCollidedCircle(t, t.collidedWith )
+				--	hasCollidedCircle(t, t.collidedWith )
 			end
 			display.getCurrentStage():setFocus( nil )
 			t.isFocus = false
@@ -349,9 +295,17 @@ function scene:create( event )
  	sceneGroup = self.view
 	physics.setGravity(0,0)
 
-	numLine1 = numLine:new(1, 10, _W*.5, 90, 1)
+
+    local background = display.newImageRect( "images/bg_blue_zig.png",
+            display.contentWidth, display.contentHeight )
+    background.anchorX = 0
+    background.anchorY = 0
+    background.x, background.y = 0, 0
+    sceneGroup:insert( background )
+
+	numLine1 = numLine:new(1, 10, _H*.9, 90, 1)
 	numLine1.anchorX, numLine1.anchorY = 0.5, 0.5
-	numLine1.x , numLine1.y = leftBound - _W*.05, _W * .0325
+	numLine1.x , numLine1.y = leftBound - _W*.05, _H * .05
 
 	for p=1,10 do
 		numLine1.num[p].x = -50
@@ -359,9 +313,9 @@ function scene:create( event )
 
 	sceneGroup:insert(numLine1)
 
-	numLine2 =  numLine:new(1, 10, _W*.5, 90, 1)
+	numLine2 =  numLine:new(1, 10, _H*.9, 90, 1)
 	numLine2.anchorX, numLine2.anchorY = 0.5, 0.5
-	numLine2.x , numLine2.y = rightBound + _W*.05, _W * .0325
+	numLine2.x , numLine2.y = rightBound + _W*.05, _H * .05
 
 	sceneGroup:insert(numLine2)
 
@@ -371,11 +325,27 @@ function scene:create( event )
 	displayText1:setFillColor(Blue.R, Blue.G, Blue.B)
 	displayText2:setFillColor(Blue.R, Blue.G, Blue.B)
 
-	area = display.newGroup()
-	area.rect = display.newRect(_W * .5, _H * .5, (leftBound - rightBound), _H)
-	area.rect:setFillColor(Red.R, Red.G, Red.B,.5)
-	area:insert(area.rect)
-	sceneGroup:insert(area)
+	local options =
+{
+    -- The params below are required
+
+    width = (leftBound - rightBound),
+    height = _H,
+    numFrames = 1,
+
+    -- The params below are optional (used for dynamic image sheet selection)
+
+    sheetContentWidth = _W,  -- width of original 1x size of entire sheet
+    sheetContentHeight = _H  -- height of original 1x size of entire sheet
+}
+
+local imageSheet = graphics.newImageSheet( "fishies.png", options )
+
+	local area = display.newImageRect( "images/bg_green_stripes3.png",
+            (leftBound - rightBound), _H)
+    area.x, area.y = _W * .5, _H * .5
+    sceneGroup:insert( area )
+
 	initBalls()
 end
 
