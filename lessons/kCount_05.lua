@@ -4,7 +4,9 @@ local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local physics = require "physics"
 physics.start()
-physics.setDrawMode( "hybrid" )
+
+------------THIS IS A TEST LEVEL TRYING TO FIND MEMORY LEAKS
+--physics.setDrawMode( "hybrid" )
 
 
 local scene = composer.newScene()
@@ -304,7 +306,7 @@ function scene:create( event )
     sceneGroup:insert( latText )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
- 	initBalls()
+ 	--initBalls()
 end
 
 
@@ -339,7 +341,6 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
-
 
     display.remove(sceneGroup)
     composer.removeAll()

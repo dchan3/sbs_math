@@ -111,6 +111,11 @@ end
 -- "scene:create()"
 function scene:create( event )
 
+    local previousScene = composer.getPrevious()
+    if previousScene then
+        composer.removeScene(previousScene)
+    end
+    
     local sceneGroup = self.view
     local background = display.newRect(sceneGroup, centerX,centerY, _W,_H)
     background:setFillColor(1,.5,0,.25)
@@ -214,6 +219,8 @@ end
 function scene:destroy( event )
 
     local sceneGroup = self.view
+
+    composer.removeAll()
 
     -- Called prior to the removal of scene's view
     -- Insert code here to clean up the scene

@@ -6,7 +6,7 @@ local compball = require("objects.compball")
 local compball = require("objects.compballput")
 local physics = require "physics"
 physics.start()
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 
 local hasCollidedCircle
 
@@ -29,6 +29,7 @@ local matchBalls2 = {}
 local eq
 local gt
 local lt
+local guess = ""
 
 local put
 
@@ -49,6 +50,21 @@ local latText2
 local area
 
 function check()
+
+	local correct
+	if count1 > count2 then
+		correct = ">"
+	elseif count1 < count2 then
+		correct = "<"
+	else
+		correct = "="
+	end
+
+	local answer = false
+	if correct == put.operator then
+		answer = true
+	end
+
 	for i=1, count1 do
 		local distance = math.pow( (math.pow( matchBalls1[i].x - numLine1.x, 2 ) + math.pow( matchBalls1[i].y, 2 )), .5  )
 		local time = distance/maxSpeed*1000
@@ -59,20 +75,31 @@ function check()
 		local time = distance/maxSpeed*1000
 		transition.moveTo( matchBalls2[j], {x = numLine2.hash[matchBalls2[j].num].x + numLine2.x, y = numLine2.hash[matchBalls2[j].num].y + numLine2.y, time=1000})
 	end
-	for k=1,count1 do
-		timer.performWithDelay(k * 1000, function (event) displayText1.text = convertDecToLat(k) end)
+
+	local max = math.max( count1, count2 )
+	local min = math.min( count1, count2 )
+	for k=1, max do
+		if answer == false then
+			displayText1:setFillColor(Red.R, Red.B, Red.G)
+			displayText2:setFillColor(Red.R, Red.B, Red.G)
+		end
+		if k <= count1 then
+			timer.performWithDelay(k * 1000, function (event) displayText1.text = convertDecToLat(k) end)
+		end
+		if k <= count2 then
+			timer.performWithDelay(k * 1000, function (event) displayText2.text = convertDecToLat(k) end)
+		end
+
+
 	end
-	for l=1,count2 do
-		timer.performWithDelay((count1 + l) * 1000, function (event) displayText2.text = convertDecToLat(l) end)
-	end
-	timer.performWithDelay((count1 + count2) * 1000, function (event)
+	timer.performWithDelay((count1 + count2 - 1) * 1000, function (event)
 		if (count1 < count2 and put.operator == "<") or (count1 == count2 and put.operator == "=") or (count1 > count2 and put.operator == ">") then
 			put.ball:setFillColor(Green.R, Green.G, Green.B);
 		else
 			put.ball:setFillColor(Red.R, Red.G, Red.B);
 		end
 	end)
-	timer.performWithDelay((count1 + count2 + 2) * 1000, function (event) clearBalls() initBalls() end)
+	timer.performWithDelay((count1 + count2 + 2) * 1000 + 500, function (event) clearBalls() initBalls() end)
 end
 
 
@@ -125,7 +152,7 @@ local function drag( event )
             else
                 t.x = event.x - t.x0
             end
-
+            			-- Causing issues 
 						if t.hovered == false and t.x - put.x <= 1 and t.y - put.y <= 1 then
 							t.hovered = true
 						end
@@ -142,7 +169,10 @@ local function drag( event )
 			if t.hovered == true then
 				put.operator = t.operator
 				put.text.text = put.operator
-				sceneGroup:remove(t)
+				guess = t.operator
+				sceneGroup:remove(eq)
+				sceneGroup:remove(lt)
+				sceneGroup:remove(gt)
 				check()
 			end
 		end
@@ -173,6 +203,8 @@ function clearBalls()
 	end
 	displayText1.text = ""
 	displayText2.text = ""
+	displayText1:setFillColor(priColor.R,priColor.G,priColor.B)
+	displayText2:setFillColor(priColor.R,priColor.G,priColor.B)
 	count1 = math.random( 1, max)
 	count2 = math.random(1, max)
 	put.operator = ""
@@ -303,6 +335,15 @@ function scene:create( event )
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
 
+    local menu = display.newImageRect( "images/menu.png",
+            _H*.1,  _H*.1)
+    menu.x, menu.y = _W*.9, _H*.1
+    local function listener()
+        composer.gotoScene( "menu" )
+    end
+    menu:addEventListener( "tap", listener )
+    sceneGroup:insert( menu )
+
 	numLine1 = numLine:new(1, 10, _H*.9, 90, 1)
 	numLine1.anchorX, numLine1.anchorY = 0.5, 0.5
 	numLine1.x , numLine1.y = leftBound - _W*.05, _H * .05
@@ -322,8 +363,8 @@ function scene:create( event )
 	displayText1 = display.newText("", _W * .20, _H * .125, font, _W*.05)
 	displayText2 = display.newText("", _W * .80, _H * .125, font, _W*.05)
 
-	displayText1:setFillColor(Blue.R, Blue.G, Blue.B)
-	displayText2:setFillColor(Blue.R, Blue.G, Blue.B)
+	displayText1:setFillColor(priColor.R,priColor.G,priColor.B)
+	displayText2:setFillColor(priColor.R,priColor.G,priColor.B)
 
 local options =
 {
@@ -375,6 +416,9 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
+
+	composer.removeAll()
+
 
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
