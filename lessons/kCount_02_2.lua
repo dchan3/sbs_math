@@ -244,8 +244,8 @@ function initBalls()
 
 	            if map[randomLocation] == false then
 	                --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-										matchBalls[i].x, matchBalls[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.5
-										map[randomLocation] = true
+                        matchBalls[i].x, matchBalls[i].y = _W*.4 + _W*.125*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.45
+                        map[randomLocation] = true
 
 	            end
 
@@ -279,7 +279,7 @@ function scene:create( event )
     sceneGroup:insert( background )
 
     --local coordinates =
-    numberLine =  numLine:new(0, 10, _W*.65, 0 )
+    numberLine =  numLine:new(0, 10, _W*.65, 0, 0 )
     numberLine.x , numberLine.y = _H*.55, _W*.2
     sceneGroup:insert(numberLine)
 

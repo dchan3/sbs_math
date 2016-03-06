@@ -1,7 +1,6 @@
 -- reference: https://coronalabs.com/blog/2015/04/14/tutorial-the-basic-game-template/
 
 -- menu.lua
-
 local composer = require( "composer" )
 local scene = composer.newScene()
 
@@ -11,6 +10,8 @@ local widget = require "widget"
 
 local lesson1Btn
 local lesson2Btn
+local lesson2_2Btn
+local lesson3Btn
 local l1introBtn
 
 -- 'onRelease' event listener for lesson1Btn
@@ -27,6 +28,24 @@ local function onPlayBtnRelease2()
 	
 	-- go to kCount_02 scene
 	composer.gotoScene( "lessons.kCount_02", "fade", 500 )
+	
+	return true	-- indicates successful touch
+end
+
+-- 'onRelease' event listener for lesson2_2Btn
+local function onPlayBtnRelease2_2()
+	
+	-- go to kCount_02 scene
+	composer.gotoScene( "lessons.kCount_02_2", "fade", 500 )
+	
+	return true	-- indicates successful touch
+end
+
+-- 'onRelease' event listener for lesson3Btn
+local function onPlayBtnRelease3()
+	
+	-- go to kCount_02 scene
+	composer.gotoScene( "lessons.kCount_03", "fade", 500 )
 	
 	return true	-- indicates successful touch
 end
@@ -82,8 +101,38 @@ function scene:create( event )
 		width=150, height=150,
 		onRelease = onPlayBtnRelease2	-- event listener function
 	}
-	lesson2Btn.x = display.contentWidth*0.8
+	lesson2Btn.x = display.contentWidth*0.4
 	lesson2Btn.y = display.contentHeight - 400
+        
+        -- create a widget button (which will loads kCount_02_2.lua on release)
+	lesson2_2Btn = widget.newButton{
+		label="Lesson 2_2",
+		labelColor = { default={0}, over={128} },
+                labelYOffset = 80,
+                font = font,
+                fontSize = 50,
+		defaultFile="images/mouse.png",
+		overFile="images/tenDogs.png",
+		width=150, height=150,
+		onRelease = onPlayBtnRelease2_2	-- event listener function
+	}
+	lesson2_2Btn.x = display.contentWidth*0.4
+	lesson2_2Btn.y = display.contentHeight - 150
+        
+        -- create a widget button (which will loads kCount_03.lua on release)
+	lesson3Btn = widget.newButton{
+		label="Lesson 3",
+		labelColor = { default={0}, over={128} },
+                labelYOffset = 80,
+                font = font,
+                fontSize = 50,
+		defaultFile="images/cat.png",
+		overFile="images/tenDogs.png",
+		width=150, height=150,
+		onRelease = onPlayBtnRelease3	-- event listener function
+	}
+	lesson3Btn.x = display.contentWidth*0.6
+	lesson3Btn.y = display.contentHeight - 400
         
         -- create a widget button (which will loads testIntro.lua on release)
 	l1introBtn = widget.newButton{
@@ -105,6 +154,8 @@ function scene:create( event )
 	sceneGroup:insert( titleLogo )
 	sceneGroup:insert( lesson1Btn )
         sceneGroup:insert( lesson2Btn )
+        sceneGroup:insert( lesson2_2Btn )
+        sceneGroup:insert( lesson3Btn )
         sceneGroup:insert( l1introBtn )
 end
 
