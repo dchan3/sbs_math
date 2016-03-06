@@ -6,7 +6,7 @@ local compball = require("objects.compball")
 local compball = require("objects.compballput")
 local physics = require "physics"
 physics.start()
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 
 local hasCollidedCircle
 
@@ -29,6 +29,7 @@ local matchBalls2 = {}
 local eq
 local gt
 local lt
+local guess = ""
 
 local put
 
@@ -49,6 +50,21 @@ local latText2
 local area
 
 function check()
+
+	local correct
+	if count1 > count2 then
+		correct = ">"
+	elseif count1 < count2 then
+		correct = "<"
+	else
+		correct = "="
+	end
+
+	local answer = false
+	if correct == put.operator then
+		answer = true
+	end
+
 	for i=1, count1 do
 		local distance = math.pow( (math.pow( matchBalls1[i].x - numLine1.x, 2 ) + math.pow( matchBalls1[i].y, 2 )), .5  )
 		local time = distance/maxSpeed*1000
@@ -59,77 +75,34 @@ function check()
 		local time = distance/maxSpeed*1000
 		transition.moveTo( matchBalls2[j], {x = numLine2.hash[matchBalls2[j].num].x + numLine2.x, y = numLine2.hash[matchBalls2[j].num].y + numLine2.y, time=1000})
 	end
-	for k=1,count1 do
-		timer.performWithDelay(k * 1000, function (event) displayText1.text = convertDecToLat(k) end)
+
+	local max = math.max( count1, count2 )
+	local min = math.min( count1, count2 )
+	for k=1, max do
+		if answer == false then
+			displayText1:setFillColor(Red.R, Red.B, Red.G)
+			displayText2:setFillColor(Red.R, Red.B, Red.G)
+		end
+		if k <= count1 then
+			timer.performWithDelay(k * 1000, function (event) displayText1.text = convertDecToLat(k) end)
+		end
+		if k <= count2 then
+			timer.performWithDelay(k * 1000, function (event) displayText2.text = convertDecToLat(k) end)
+		end
+
+
 	end
-	for l=1,count2 do
-		timer.performWithDelay((count1 + l) * 1000, function (event) displayText2.text = convertDecToLat(l) end)
-	end
-	timer.performWithDelay((count1 + count2) * 1000, function (event)
+	timer.performWithDelay((count1 + count2 - 1) * 1000, function (event)
 		if (count1 < count2 and put.operator == "<") or (count1 == count2 and put.operator == "=") or (count1 > count2 and put.operator == ">") then
 			put.ball:setFillColor(Green.R, Green.G, Green.B);
 		else
 			put.ball:setFillColor(Red.R, Red.G, Red.B);
 		end
 	end)
-	timer.performWithDelay((count1 + count2 + 2) * 1000, function (event) clearBalls() initBalls() end)
+	timer.performWithDelay((count1 + count2 + 2) * 1000 + 500, function (event) clearBalls() initBalls() end)
 end
 
-function hasCollidedCircle(obj1, obj2)
 
-    if obj1 == nil then
-        return false
-    end
-
-    if obj2 == nil then
-        return false
-    end
-
-    local sqrt = math.sqrt
-    local dx =  obj1.x - obj2.x;
-    local dy =  obj1.y - obj2.y;
-    local distance = sqrt(dx*dx + dy*dy);
-    local objectSize = (obj2.contentWidth/2) + (obj1.contentWidth/2)
-
-    if distance < objectSize then
-
-                    local function listener( event )
-                        display.remove(obj1)
-                    end
-
-
-                    local transitionTime = 100
-
-
-                    transition.to(obj1,
-                    {
-                        time=transitionTime,
-                        x = obj2.x,
-                        y = obj2.y,
-                        onComplete = listener
-                    })
-
-                   	obj2.text = display.newText(obj1.operator, 0, 0, font, ballR*1.5 )
-                    obj2.text:setFillColor(0,0,0)
-                    obj2.text.alpha = 0
-                    obj2.operator = obj1.operator
-                    obj2:insert( obj2.text )
-                    obj2.matched = true
-
-
-                    local function listener( event )
-                        transition.to(obj2.text,
-                        {
-                        time=500,
-                        alpha =.75
-                        })
-                    end
-                    timer.performWithDelay( transitionTime, listener )
-        print("true")
-        return true
-    end
-    return false
-end
 
 local function onLocalCollision( self, event )
    local t = event.target
@@ -179,7 +152,7 @@ local function drag( event )
             else
                 t.x = event.x - t.x0
             end
-
+            			-- Causing issues 
 						if t.hovered == false and t.x - put.x <= 1 and t.y - put.y <= 1 then
 							t.hovered = true
 						end
@@ -188,7 +161,7 @@ local function drag( event )
 		elseif "ended" == phase or "cancelled" == phase then
 			print(t.collidedWith);
 			if(t.collidedWith ~= nil) then
-					hasCollidedCircle(t, t.collidedWith )
+				--	hasCollidedCircle(t, t.collidedWith )
 			end
 			display.getCurrentStage():setFocus( nil )
 			t.isFocus = false
@@ -196,7 +169,10 @@ local function drag( event )
 			if t.hovered == true then
 				put.operator = t.operator
 				put.text.text = put.operator
-				sceneGroup:remove(t)
+				guess = t.operator
+				sceneGroup:remove(eq)
+				sceneGroup:remove(lt)
+				sceneGroup:remove(gt)
 				check()
 			end
 		end
@@ -227,6 +203,8 @@ function clearBalls()
 	end
 	displayText1.text = ""
 	displayText2.text = ""
+	displayText1:setFillColor(priColor.R,priColor.G,priColor.B)
+	displayText2:setFillColor(priColor.R,priColor.G,priColor.B)
 	count1 = math.random( 1, max)
 	count2 = math.random(1, max)
 	put.operator = ""
@@ -349,27 +327,63 @@ function scene:create( event )
  	sceneGroup = self.view
 	physics.setGravity(0,0)
 
-	numLine1 = numLine:new(1, 10, _W*.5, 90, 0 )
+
+    local background = display.newImageRect( "images/bg_blue_zig.png",
+            display.contentWidth, display.contentHeight )
+    background.anchorX = 0
+    background.anchorY = 0
+    background.x, background.y = 0, 0
+    sceneGroup:insert( background )
+
+    local menu = display.newImageRect( "images/menu.png",
+            _H*.1,  _H*.1)
+    menu.x, menu.y = _W*.9, _H*.1
+    local function listener()
+        composer.gotoScene( "menu" )
+    end
+    menu:addEventListener( "tap", listener )
+    sceneGroup:insert( menu )
+
+	numLine1 = numLine:new(1, 10, _H*.9, 90, 1)
 	numLine1.anchorX, numLine1.anchorY = 0.5, 0.5
-	numLine1.x , numLine1.y = leftBound - _W*.05, _W * .0325
+	numLine1.x , numLine1.y = leftBound - _W*.05, _H * .05
+
+	for p=1,10 do
+		numLine1.num[p].x = -50
+	end
+
 	sceneGroup:insert(numLine1)
 
-	numLine2 =  numLine:new(1, 10, _W*.5, 90, 0 )
+	numLine2 =  numLine:new(1, 10, _H*.9, 90, 1)
 	numLine2.anchorX, numLine2.anchorY = 0.5, 0.5
-	numLine2.x , numLine2.y = rightBound + _W*.05, _W * .0325
+	numLine2.x , numLine2.y = rightBound + _W*.05, _H * .05
+
 	sceneGroup:insert(numLine2)
 
 	displayText1 = display.newText("", _W * .20, _H * .125, font, _W*.05)
 	displayText2 = display.newText("", _W * .80, _H * .125, font, _W*.05)
 
-	displayText1:setFillColor(Blue.R, Blue.G, Blue.B)
-	displayText2:setFillColor(Blue.R, Blue.G, Blue.B)
+	displayText1:setFillColor(priColor.R,priColor.G,priColor.B)
+	displayText2:setFillColor(priColor.R,priColor.G,priColor.B)
 
-	area = display.newGroup()
-	area.rect = display.newRect(_W * .5, _H * .5, (leftBound - rightBound), _H)
-	area.rect:setFillColor(Red.R, Red.G, Red.B,.5)
-	area:insert(area.rect)
-	sceneGroup:insert(area)
+local options =
+{
+    --required parameters
+    width = (rightBound - leftBound),
+    height = _H,
+    numFrames = 2,
+
+    --optional parameters; used for scaled content support
+    sheetContentWidth = _W,  -- width of original 1x size of entire sheet
+    sheetContentHeight = _H   -- height of original 1x size of entire sheet
+}
+
+local imageSheet = graphics.newImageSheet( "images/bg_green_stripes3.png", options )
+
+	local area = display.newImage( imageSheet, 1)
+    area.x, area.y = _W * .5, _H * .5
+    sceneGroup:insert( area )
+
 	initBalls()
 end
 
@@ -402,6 +416,9 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
+
+	composer.removeAll()
+
 
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.

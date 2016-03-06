@@ -1,227 +1,234 @@
--- reference: https://coronalabs.com/blog/2015/04/14/tutorial-the-basic-game-template/
-
--- menu.lua
 local composer = require( "composer" )
+local lm = require("ogt_levelmanager")
+
 local scene = composer.newScene()
 
-local widget = require "widget"
+-- -----------------------------------------------------------------------------------------------------------------
+-- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called
+-- -----------------------------------------------------------------------------------------------------------------
 
---------------------------------------------
+-- Local forward references should go here
 
-local lesson1Btn
-local lesson2Btn
-local lesson2_2Btn
-local lesson3Btn
-local l1introBtn
+-- -------------------------------------------------------------------------------
+local menuScreens = {}
+local swipeTrans
+local centerObject
+local currCenterObject = 0
+local moved
+local cancelTouch = false
+local leftText = display.newText(  " ", _W*.2, _H*.9, font, 36 )
+leftText:setFillColor(0,0,0)
+local rightText = display.newText(  "LEVEL SELECT >", _W*.8, _H*.90, font, 36 )
+rightText:setFillColor(0,0,0)
 
--- 'onRelease' event listener for lesson1Btn
-local function onPlayBtnRelease()
-	
-	-- go to kCount_01 scene
-	composer.gotoScene( "lessons.kCount_01", "fade", 500 )
-	
-	return true	-- indicates successful touch
+local function swipe( event, params )
+    local body = event.target
+    local phase = event.phase
+    local stage = display.getCurrentStage()
+
+
+    if cancelTouch == false then
+
+        if "began" == phase then
+
+            transition.cancel(swipeTrans)
+
+        elseif "moved" == phase then
+
+            local targetX = _W*.5 + (event.x-event.xStart)
+            centerObject.x =  centerObject.x + (targetX -  centerObject.x)*.1
+
+            local function canTouch()
+                cancelTouch = false
+            end
+
+
+            if ( event.x>= event.xStart+_W*.4 ) then
+        
+                if currCenterObject ~= 0 then
+                    transition.to( centerObject, {time =1000,  x =1.5*_W, transition = easing.outBack, onComplete = canTouch})
+                    cancelTouch = true
+                    currCenterObject = currCenterObject - 1
+                    centerObject = menuScreens[currCenterObject]
+                    transition.to( centerObject, {time =1000,  x=centerX, transition = easing.outBack })
+
+                    local function listener()
+                        transition.to( leftText, {time =400,  y=_H*.9, transition = easing.outBack })
+                        transition.to( rightText, {time =500,  y=_H*.9, transition = easing.outBack })
+                        leftText.text = menuScreens[currCenterObject].leftText
+                        rightText.text = menuScreens[currCenterObject].rightText
+                    end
+
+                    transition.to( leftText, {time =500,  y=_H*1.05, transition = easing.outBack, onComplete = listener})
+                    transition.to( rightText, {time =500,  y=_H*1.1, transition = easing.outBack })
+
+
+                end
+            elseif ( event.x<= event.xStart-_W*.4 ) then
+
+                    if currCenterObject ~= 3 then
+                    transition.to( centerObject, {time =1000,  x =1.5*-_W, transition = easing.outBack, onComplete = canTouch })
+                    cancelTouch = true
+                    currCenterObject = currCenterObject + 1
+                    centerObject = menuScreens[currCenterObject]
+                    transition.to( centerObject, {time =1000,  x=centerX, transition = easing.outBack })
+
+                    local function listener()
+                        transition.to( leftText, {time =400,  y=_H*.9, transition = easing.outBack })
+                        transition.to( rightText, {time =500,  y=_H*.9, transition = easing.outBack })
+                        leftText.text = menuScreens[currCenterObject].leftText
+                        rightText.text = menuScreens[currCenterObject].rightText
+                    end
+
+                    transition.to( leftText, {time =500,  y=_H*1.05, transition = easing.outBack, onComplete = listener})
+                    transition.to( rightText, {time =500,  y=_H*1.1, transition = easing.outBack })
+
+                end
+            end
+
+
+        elseif "ended" == phase or "cancelled" == phase then
+
+            local timeToCenter = (centerObject.x-centerX)/_W*2000
+            if timeToCenter < 0 then
+                timeToCenter = timeToCenter*-1
+            end
+            swipeTrans = transition.to( centerObject, {time =timeToCenter,  x =centerX, transition = easing.outBack })
+
+
+        end
+
+    end
+
+    return true
+
 end
 
--- 'onRelease' event listener for lesson2Btn
-local function onPlayBtnRelease2()
-	
-	-- go to kCount_02 scene
-	composer.gotoScene( "lessons.kCount_02", "fade", 500 )
-	
-	return true	-- indicates successful touch
+local function createSettings(group)
+
 end
 
--- 'onRelease' event listener for lesson2_2Btn
-local function onPlayBtnRelease2_2()
-	
-	-- go to kCount_02 scene
-	composer.gotoScene( "lessons.kCount_02_2", "fade", 500 )
-	
-	return true	-- indicates successful touch
-end
-
--- 'onRelease' event listener for lesson3Btn
-local function onPlayBtnRelease3()
-	
-	-- go to kCount_02 scene
-	composer.gotoScene( "lessons.kCount_03", "fade", 500 )
-	
-	return true	-- indicates successful touch
-end
-
--- 'onRelease' event listener for lesson2Btn
-local function onPlayBtnReleaseL1intro()
-	
-	-- go to kCount_02 scene
-	composer.gotoScene( "lessons.intro1", "fade", 500 )
-	
-	return true	-- indicates successful touch
-end
-
+-- "scene:create()"
 function scene:create( event )
-	local sceneGroup = self.view
 
-	-- display a background image
-	local background = display.newImageRect( "images/bg_blue_rays.png", 
-            _W, _H )
-	background.anchorX = 0
-	background.anchorY = 0
-	background.x, background.y = 0, 0
-	
-	-- create logo/title image (currently cat)
-	local titleLogo = display.newImageRect( "images/cat.png", _W*.2, _W*.2 )
-	titleLogo.x = _W * 0.5
-	titleLogo.y = 100
-	
-	-- create a widget button (which will loads kCount_01.lua on release)
-	lesson1Btn = widget.newButton{
-		label="Lesson 1",
-		labelColor = { default={0}, over={128} },
-                labelYOffset = 80,
-                font = font,
-                fontSize = 40,
-		defaultFile="images/bunny.png",
-		overFile="images/puppy.png",
-		width=_W*.1, height=_W*.1,
-		onRelease = onPlayBtnRelease	-- event listener function
-	}
-	lesson1Btn.x = _W*0.2
-	lesson1Btn.y = _H*0.5
-        
-        -- create a widget button (which will loads kCount_02.lua on release)
-	lesson2Btn = widget.newButton{
-		label="Lesson 2",
-		labelColor = { default={0}, over={128} },
-                labelYOffset = 80,
-                font = font,
-                fontSize = 40,
-		defaultFile="images/dog.png",
-		overFile="images/tenDogs.png",
-		width=_W*.1, height=_W*.1,
-		onRelease = onPlayBtnRelease2	-- event listener function
-	}
-	lesson2Btn.x = _W*0.5
-	lesson2Btn.y = _H*0.5
-        
-        -- create a widget button (which will loads kCount_02_2.lua on release)
-	lesson2_2Btn = widget.newButton{
-		label="Lesson 2_2",
-		labelColor = { default={0}, over={128} },
-                labelYOffset = 80,
-                font = font,
-                fontSize = 40,
-		defaultFile="images/mouse.png",
-		overFile="images/tenDogs.png",
-		width=_W*.1, height=_W*.1,
-		onRelease = onPlayBtnRelease2_2	-- event listener function
-	}
-	lesson2_2Btn.x = _W*0.5
-	lesson2_2Btn.y = _H*0.8
-        
-        -- create a widget button (which will loads kCount_03.lua on release)
-	lesson3Btn = widget.newButton{
-		label="Lesson 3",
-		labelColor = { default={0}, over={128} },
-                labelYOffset = 80,
-                font = font,
-                fontSize = 40,
-		defaultFile="images/cat.png",
-		overFile="images/tenDogs.png",
-		width=_W*.1, height=_W*.1,
-		onRelease = onPlayBtnRelease3	-- event listener function
-	}
-	lesson3Btn.x = _W*0.8
-	lesson3Btn.y = _H*0.5
-        
-        -- create a widget button (which will loads testIntro.lua on release)
-	l1introBtn = widget.newButton{
-		label="L1 Intro",
-		labelColor = { default={0}, over={128} },
-                labelYOffset = 80,
-                font = font,
-                fontSize = 40,
-		defaultFile="images/dog.png",
-		overFile="images/bunny.png",
-		width=_W*.1, height=_W*.1,
-		onRelease = onPlayBtnReleaseL1intro	-- event listener function
-	}
-	l1introBtn.x = _W*0.2
-	l1introBtn.y = _H*0.8
-	
-	-- all display objects must be inserted into group
-	sceneGroup:insert( background )
-	sceneGroup:insert( titleLogo )
-	sceneGroup:insert( lesson1Btn )
-        sceneGroup:insert( lesson2Btn )
-        sceneGroup:insert( lesson2_2Btn )
-        sceneGroup:insert( lesson3Btn )
-        sceneGroup:insert( l1introBtn )
+    local previousScene = composer.getPrevious()
+    if previousScene then
+        composer.removeScene(previousScene)
+    end
+    
+    local sceneGroup = self.view
+    local background = display.newRect(sceneGroup, centerX,centerY, _W,_H)
+    background:setFillColor(1,.5,0,.25)
+    background:addEventListener("touch", swipe) -- CHANGE TO background
+
+    local contNav = display.newGroup()
+    contNav.x,contNav.y = centerX, centerY
+    contNav.main = display.newCircle( contNav, 0,0, _W*.4)
+    contNav.text = display.newText( contNav, "Continue", 0, 0, font, 36 )
+    contNav.text:setFillColor(0,0,0)
+
+    local function listener()
+        lm.loadCurrLevel()
+    end
+    contNav:addEventListener("tap", listener)
+
+
+    local levelSelNav = display.newGroup()
+    levelSelNav.x,levelSelNav.y = centerX + _W, centerY
+    levelSelNav.main = display.newCircle( levelSelNav , 0,0, _W*.4)
+    levelSelNav.main:setFillColor(1,.5,.5,.25)
+    levelSelNav.text = display.newText( levelSelNav , "Level Select", 0, 0, font, 36 )
+    levelSelNav.text:setFillColor(0,0,0)
+    lm.init(levelSelNav)
+
+
+    local supportNav = display.newGroup()
+    supportNav.x,supportNav.y = centerX + _W, centerY
+    supportNav.main = display.newCircle( supportNav , 0,0, _W*.4)
+    supportNav.main:setFillColor(1,.5,.5,.25)
+    supportNav.text = display.newText( supportNav , "SUPPORT US", 0, 0, font, 36 )
+    levelSelNav.text:setFillColor(0,0,0)
+
+    local settingsNav = display.newGroup()
+    settingsNav.x,settingsNav.y = centerX + _W, centerY
+    settingsNav.main = display.newCircle( settingsNav , 0,0, _W*.4)
+    settingsNav.main:setFillColor(0,1,0,.25)
+    settingsNav.text = display.newText( settingsNav , "Settings", 0, 0, font, 36 )
+    settingsNav.text:setFillColor(0,0,0)
+    
+    menuScreens[0] = contNav
+    menuScreens[0].leftText = " "
+    menuScreens[0].rightText = "LEVEL SELECT >"
+    menuScreens[1] = levelSelNav
+    menuScreens[1].leftText = "< CONTINUE "
+    menuScreens[1].rightText = "SUPPORT US >"
+    menuScreens[2] = supportNav
+    menuScreens[2].leftText = "< LEVEL SELECT"
+    menuScreens[2].rightText = "SETTINGS >"
+    menuScreens[3] = settingsNav
+    menuScreens[3].leftText = "< SUPPORT US"
+    menuScreens[3].rightText = " "
+
+    centerObject = contNav
+    currCenterObject = 0
+
+    sceneGroup:insert(contNav)
+    sceneGroup:insert(levelSelNav)
+    sceneGroup:insert(supportNav)
+    sceneGroup:insert(settingsNav)
+    sceneGroup:insert(leftText)
+    sceneGroup:insert(rightText)
+    -- Initialize the scene here
+    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
 
+
+-- "scene:show()"
 function scene:show( event )
-	local sceneGroup = self.view
-	local phase = event.phase
-	
-	if phase == "will" then
-		-- Called when the scene is still off screen and is about to move on screen
-	elseif phase == "did" then
-		-- Called when the scene is now on screen
-		-- 
-		-- INSERT code here to make the scene come alive
-		-- e.g. start timers, begin animation, play audio, etc.
-	end	
+
+    local sceneGroup = self.view
+    local phase = event.phase
+
+    if ( phase == "will" ) then
+        -- Called when the scene is still off screen (but is about to come on screen)
+    elseif ( phase == "did" ) then
+        -- Called when the scene is now on screen
+        -- Insert code here to make the scene come alive
+        -- Example: start timers, begin animation, play audio, etc.
+    end
 end
 
+
+-- "scene:hide()"
 function scene:hide( event )
-	local sceneGroup = self.view
-	local phase = event.phase
-	
-	if event.phase == "will" then
-		-- Called when the scene is on screen and is about to move off screen
-		--
-		-- INSERT code here to pause the scene
-		-- e.g. stop timers, stop animation, unload sounds, etc.)
-	elseif phase == "did" then
-		-- Called when the scene is now off screen
-	end	
+
+    local sceneGroup = self.view
+    local phase = event.phase
+
+    if ( phase == "will" ) then
+        -- Called when the scene is on screen (but is about to go off screen)
+        -- Insert code here to "pause" the scene
+        -- Example: stop timers, stop animation, stop audio, etc.
+    elseif ( phase == "did" ) then
+        -- Called immediately after scene goes off screen
+    end
 end
 
+
+-- "scene:destroy()"
 function scene:destroy( event )
-	local sceneGroup = self.view
-	
-	-- Called prior to the removal of scene's "view" (sceneGroup)
-	-- 
-	-- INSERT code here to cleanup the scene
-	-- e.g. remove display objects, remove touch listeners, save state, etc.
-	
-	if lesson1Btn then
-		lesson1Btn:removeSelf()	-- widgets must be manually removed
-		lesson1Btn = nil
-	end
-        
-        if lesson2Btn then
-		lesson2Btn:removeSelf()	-- widgets must be manually removed
-		lesson2Btn = nil
-	end
-        
-        if lesson2_2Btn then
-		lesson2_2Btn:removeSelf()	-- widgets must be manually removed
-		lesson2_2Btn = nil
-	end
-        
-        if lesson3Btn then
-		lesson3Btn:removeSelf()	-- widgets must be manually removed
-		lesson3Btn = nil
-	end
-        
-        if l1introBtn then
-		l1introBtn:removeSelf()	-- widgets must be manually removed
-		l1introBtn = nil
-	end
+
+    local sceneGroup = self.view
+
+    composer.removeAll()
+
+    -- Called prior to the removal of scene's view
+    -- Insert code here to clean up the scene
+    -- Example: remove display objects, save state, etc.
 end
 
----------------------------------------------------------------------------------
+
+-- -------------------------------------------------------------------------------
 
 -- Listener setup
 scene:addEventListener( "create", scene )
@@ -229,7 +236,6 @@ scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 
------------------------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------
 
 return scene
-
