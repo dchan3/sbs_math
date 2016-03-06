@@ -1,17 +1,18 @@
 local composer = require( "composer" )
-local numLine = require( "objects.tenNumLine" )
+local numLine = require( "objects.numLine" )
+local numInput = require( "objects.numInput" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local physics = require "physics"
 physics.start()
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 
 
 local scene = composer.newScene()
 
 local hasCollidedCircle
 
-local max = 4
+local max = 10
 local count = max -- math.random( 1, max)
 local matchCount = count
 local map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
@@ -42,8 +43,8 @@ local function drag( event )
         parent:insert( t )
         display.getCurrentStage():setFocus( t )
 
-        decText.text = t.num * 10
-        local text = convertDecToTens( t.num * 10)
+        decText.text = t.num
+        local text = convertDecToLat( t.num )
         latText.text = text
         -- Spurious events can be sent to the target, e.g. the user presses
         -- elsewhere on the screen and then moves the finger over the target.
@@ -63,7 +64,7 @@ local function drag( event )
 
         elseif "ended" == phase or "cancelled" == phase then
 
-                print(t.collidedWith)
+                print(t.cooldedWith)
 
                 if(t.collidedWith ~= nil) then
 
@@ -138,7 +139,7 @@ function hasCollidedCircle(obj1, obj2)
                         onComplete = listener
                     })
 
-                   obj2.text = display.newText(obj1.num*10, 0, 0, font, ballR*2 )
+                   obj2.text.text = obj1.num--= display.newText( obj1.num, 0, 0, font, ballR*2 )
                     obj2.text:setFillColor(0,0,0)
                     obj2.text.alpha = 0
                     obj2.num = obj1.num
@@ -172,24 +173,42 @@ end
 function reset()
 	displayText.text = ""
 	clearBalls()
-  initBalls()
+	count = math.random(1,max)
+    	matchCount = count
+  	initBalls()
 end
 
 function check()
+
 	for i=1, count do
 			local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
 			local time = distance/maxSpeed*1000
 			--print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
-			transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y, time=1000})
-			--transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
+                        -- "-30" in transition below sets the offset from numberline when dogs move to line
+                        --transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y -30, time=1000})
+                        -- line below does slower 3D effect transision
+                        transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x,  numberLine.y + 2*ballR, time )
+                        --numberLine.hash[matchBalls[i].num].y +
 	end
 
 	for j=1,count do
-		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToTens(j * 10) end)
+		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j) end)
+
+        for i = 1, count do
+            if matchBalls[i].num == j then
+                timer.performWithDelay(j * 1000,
+                    function (event)
+                    matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
+                    matchBalls[i].outline.alpha = 1
+                end)
+            end
+        end
 	end
+
 	local currScene = composer.getSceneName( "current" )
 	print(currScene)
 	timer.performWithDelay((count + 1) * 1000, function (event) reset() end)
+
 end
 
 function initBalls()
@@ -201,7 +220,7 @@ function initBalls()
 	        countBalls[i]:insert( countBalls[i].text )
 
 
-	        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y - _H*0.030
+	        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y 
 
 	        physics.addBody( countBalls[i], { radius=ballR*1.5 } )
 	        countBalls[i].isSensor = true
@@ -214,7 +233,7 @@ function initBalls()
 			map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 
 	    for i=1,count do
-	        matchBalls[i] = Animal:new("images/tenDogs.png",  ballR*3, ballR*3, ballR*2)
+	        matchBalls[i] = Animal:new("images/puppy.png",  ballR*3, ballR*3, ballR*2)
 	        matchBalls[i]:addEventListener( "touch", drag )
 	        matchBalls[i]:insert( matchBalls[i].ball )
 
@@ -249,22 +268,29 @@ function scene:create( event )
 
     sceneGroup = self.view
 		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
-		displayText:setFillColor(Blue.R, Blue.G, Blue.B)
+                displayText:setFillColor( 0, 0, 0 )
     physics.setGravity(0,0)
 
+    local background = display.newImageRect( "images/bg_blue_zig.png",
+            display.contentWidth, display.contentHeight )
+    background.anchorX = 0
+    background.anchorY = 0
+    background.x, background.y = 0, 0
+    sceneGroup:insert( background )
+
     --local coordinates =
-    numberLine =  numLine:new(1, 10, _W*.9, 0 )
-    numberLine.x , numberLine.y = _H*.1, _W*.2
+    numberLine =  numLine:new(0, 10, _W*.85, 0 )
+    numberLine.x , numberLine.y = _H*.125, _W*.2
     sceneGroup:insert(numberLine)
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
-    decText:setFillColor(Blue.R, Blue.G, Blue.B)
+    decText:setFillColor( 0, 0, 0 )
     sceneGroup:insert( decText )
 
     latText = display.newText( "", 0, 0, font, _W*.1 )
     latText.x, latText.y = _W*.833, _H*.75
-    latText:setFillColor(Blue.R, Blue.G, Blue.B)
+    latText:setFillColor( 0, 0, 0 )
     sceneGroup:insert( latText )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
