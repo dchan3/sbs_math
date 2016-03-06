@@ -213,7 +213,7 @@ end
 
 function initBalls()
 	    for i=1,count do
-	        countBalls[i] = AnimalBall:new(0,0, ballR*1.5, i)
+	        countBalls[i] = AnimalBall:new(0,0, ballR*1.2, i)
 	        countBalls[i]:addEventListener( "touch", drag )
 
 	        countBalls[i]:insert( countBalls[i].ball )
@@ -279,8 +279,8 @@ function scene:create( event )
     sceneGroup:insert( background )
 
     --local coordinates =
-    numberLine =  numLine:new(0, 10, _W*.85, 0 )
-    numberLine.x , numberLine.y = _H*.125, _W*.2
+    numberLine =  numLine:new(0, 10, _W*.65, 0 )
+    numberLine.x , numberLine.y = _H*.55, _W*.2
     sceneGroup:insert(numberLine)
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
