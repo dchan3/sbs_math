@@ -64,14 +64,14 @@ function scene:create( event )
 
 	-- display a background image
 	local background = display.newImageRect( "images/bg_blue_rays.png", 
-            display.contentWidth, display.contentHeight )
+            _W, _H )
 	background.anchorX = 0
 	background.anchorY = 0
 	background.x, background.y = 0, 0
 	
 	-- create logo/title image (currently cat)
-	local titleLogo = display.newImageRect( "images/cat.png", 220, 220 )
-	titleLogo.x = display.contentWidth * 0.5
+	local titleLogo = display.newImageRect( "images/cat.png", _W*.2, _W*.2 )
+	titleLogo.x = _W * 0.5
 	titleLogo.y = 100
 	
 	-- create a widget button (which will loads kCount_01.lua on release)
@@ -80,14 +80,14 @@ function scene:create( event )
 		labelColor = { default={0}, over={128} },
                 labelYOffset = 80,
                 font = font,
-                fontSize = 50,
+                fontSize = 40,
 		defaultFile="images/bunny.png",
 		overFile="images/puppy.png",
-		width=150, height=150,
+		width=_W*.1, height=_W*.1,
 		onRelease = onPlayBtnRelease	-- event listener function
 	}
-	lesson1Btn.x = display.contentWidth*0.2
-	lesson1Btn.y = display.contentHeight - 400
+	lesson1Btn.x = _W*0.2
+	lesson1Btn.y = _H*0.5
         
         -- create a widget button (which will loads kCount_02.lua on release)
 	lesson2Btn = widget.newButton{
@@ -95,14 +95,14 @@ function scene:create( event )
 		labelColor = { default={0}, over={128} },
                 labelYOffset = 80,
                 font = font,
-                fontSize = 50,
+                fontSize = 40,
 		defaultFile="images/dog.png",
 		overFile="images/tenDogs.png",
-		width=150, height=150,
+		width=_W*.1, height=_W*.1,
 		onRelease = onPlayBtnRelease2	-- event listener function
 	}
-	lesson2Btn.x = display.contentWidth*0.4
-	lesson2Btn.y = display.contentHeight - 400
+	lesson2Btn.x = _W*0.5
+	lesson2Btn.y = _H*0.5
         
         -- create a widget button (which will loads kCount_02_2.lua on release)
 	lesson2_2Btn = widget.newButton{
@@ -110,14 +110,14 @@ function scene:create( event )
 		labelColor = { default={0}, over={128} },
                 labelYOffset = 80,
                 font = font,
-                fontSize = 50,
+                fontSize = 40,
 		defaultFile="images/mouse.png",
 		overFile="images/tenDogs.png",
-		width=150, height=150,
+		width=_W*.1, height=_W*.1,
 		onRelease = onPlayBtnRelease2_2	-- event listener function
 	}
-	lesson2_2Btn.x = display.contentWidth*0.4
-	lesson2_2Btn.y = display.contentHeight - 150
+	lesson2_2Btn.x = _W*0.5
+	lesson2_2Btn.y = _H*0.8
         
         -- create a widget button (which will loads kCount_03.lua on release)
 	lesson3Btn = widget.newButton{
@@ -125,14 +125,14 @@ function scene:create( event )
 		labelColor = { default={0}, over={128} },
                 labelYOffset = 80,
                 font = font,
-                fontSize = 50,
+                fontSize = 40,
 		defaultFile="images/cat.png",
 		overFile="images/tenDogs.png",
-		width=150, height=150,
+		width=_W*.1, height=_W*.1,
 		onRelease = onPlayBtnRelease3	-- event listener function
 	}
-	lesson3Btn.x = display.contentWidth*0.6
-	lesson3Btn.y = display.contentHeight - 400
+	lesson3Btn.x = _W*0.8
+	lesson3Btn.y = _H*0.5
         
         -- create a widget button (which will loads testIntro.lua on release)
 	l1introBtn = widget.newButton{
@@ -140,14 +140,14 @@ function scene:create( event )
 		labelColor = { default={0}, over={128} },
                 labelYOffset = 80,
                 font = font,
-                fontSize = 50,
+                fontSize = 40,
 		defaultFile="images/dog.png",
 		overFile="images/bunny.png",
-		width=150, height=150,
+		width=_W*.1, height=_W*.1,
 		onRelease = onPlayBtnReleaseL1intro	-- event listener function
 	}
-	l1introBtn.x = display.contentWidth*0.2
-	l1introBtn.y = display.contentHeight - 150
+	l1introBtn.x = _W*0.2
+	l1introBtn.y = _H*0.8
 	
 	-- all display objects must be inserted into group
 	sceneGroup:insert( background )
@@ -203,6 +203,21 @@ function scene:destroy( event )
         if lesson2Btn then
 		lesson2Btn:removeSelf()	-- widgets must be manually removed
 		lesson2Btn = nil
+	end
+        
+        if lesson2_2Btn then
+		lesson2_2Btn:removeSelf()	-- widgets must be manually removed
+		lesson2_2Btn = nil
+	end
+        
+        if lesson3Btn then
+		lesson3Btn:removeSelf()	-- widgets must be manually removed
+		lesson3Btn = nil
+	end
+        
+        if l1introBtn then
+		l1introBtn:removeSelf()	-- widgets must be manually removed
+		l1introBtn = nil
 	end
 end
 
