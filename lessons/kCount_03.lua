@@ -325,24 +325,21 @@ function scene:create( event )
 	displayText1:setFillColor(Blue.R, Blue.G, Blue.B)
 	displayText2:setFillColor(Blue.R, Blue.G, Blue.B)
 
-	local options =
+local options =
 {
-    -- The params below are required
-
-    width = (leftBound - rightBound),
+    --required parameters
+    width = (rightBound - leftBound),
     height = _H,
-    numFrames = 1,
+    numFrames = 2,
 
-    -- The params below are optional (used for dynamic image sheet selection)
-
+    --optional parameters; used for scaled content support
     sheetContentWidth = _W,  -- width of original 1x size of entire sheet
-    sheetContentHeight = _H  -- height of original 1x size of entire sheet
+    sheetContentHeight = _H   -- height of original 1x size of entire sheet
 }
 
-local imageSheet = graphics.newImageSheet( "fishies.png", options )
+local imageSheet = graphics.newImageSheet( "images/bg_green_stripes3.png", options )
 
-	local area = display.newImageRect( "images/bg_green_stripes3.png",
-            (leftBound - rightBound), _H)
+	local area = display.newImage( imageSheet, 1)
     area.x, area.y = _W * .5, _H * .5
     sceneGroup:insert( area )
 
