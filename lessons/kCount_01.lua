@@ -265,21 +265,24 @@ end
 -- "scene:create()"
 function scene:create( event )
 
-
-
-
     sceneGroup = self.view
-		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
-                displayText:setFillColor( 0, 0, 0 )
-    physics.setGravity(0,0)
-    sceneGroup:insert(displayText)
 
+    count = math.random(1,max)
+    matchCount = count
+    
     local background = display.newImageRect( "images/bg_blue_zig.png",
             display.contentWidth, display.contentHeight )
     background.anchorX = 0
     background.anchorY = 0
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
+
+    
+        displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
+                displayText:setFillColor( 0, 0, .5 )
+    physics.setGravity(0,0)
+    sceneGroup:insert(displayText)
+
 
     local menu = display.newImageRect( "images/menu.png",
             _H*.1,  _H*.1)
