@@ -4,7 +4,7 @@ local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local physics = require "physics"
 physics.start()
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 
 
 local scene = composer.newScene()
@@ -243,8 +243,8 @@ function initBalls()
 
 	            if map[randomLocation] == false then
 	                --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-                            matchBalls[i].x, matchBalls[i].y = _W*.15 + _W*.12*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.43
-                            map[randomLocation] = true
+										matchBalls[i].x, matchBalls[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.5
+										map[randomLocation] = true
 
 	            end
 
@@ -258,21 +258,18 @@ end
 
 function clearBalls()
 	for i=1, count do
-		display.remove(matchBalls[i])
+		sceneGroup:remove(matchBalls[i])
 		matchBalls[i] = nil
-                -- attempting to address memory leak
-                display.remove(countBalls[i])
-                countBalls[i] = nil
 	end
 end
 -- "scene:create()"
 function scene:create( event )
 
     sceneGroup = self.view
+		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
+                displayText:setFillColor( 0, 0, 0 )
+    physics.setGravity(0,0)
 
-    count = math.random(1,max)
-    matchCount = count
-    
     local background = display.newImageRect( "images/bg_blue_zig.png",
             display.contentWidth, display.contentHeight )
     background.anchorX = 0
@@ -280,26 +277,9 @@ function scene:create( event )
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
 
-    
-        displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
-                displayText:setFillColor( 0, 0, .5 )
-    physics.setGravity(0,0)
-    sceneGroup:insert(displayText)
-
-
-    local menu = display.newImageRect( "images/menu.png",
-            _H*.1,  _H*.1)
-    menu.x, menu.y = _W*.9, _H*.1
-    local function listener()
-        composer.gotoScene( "menu" )
-    end
-    menu:addEventListener( "tap", listener )
-    sceneGroup:insert( menu )
-
-
     --local coordinates =
-    numberLine =  numLine:new(0, 10, _W*.9, 0 )
-    numberLine.x , numberLine.y = _H*.1, _W*.2
+    numberLine =  numLine:new(0, 10, _W*.85, 0 )
+    numberLine.x , numberLine.y = _H*.125, _W*.2
     sceneGroup:insert(numberLine)
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
@@ -313,7 +293,7 @@ function scene:create( event )
     sceneGroup:insert( latText )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
- 	initBalls()
+ 		initBalls()
 end
 
 
@@ -325,7 +305,6 @@ function scene:show( event )
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
     elseif ( phase == "did" ) then
-
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
@@ -349,10 +328,6 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
-
-
-   -- display.remove(sceneGroup)
-   -- composer.removeAll()
 
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.

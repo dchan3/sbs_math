@@ -1,8 +1,8 @@
-TenNumLine = {}
+NumLine = {}
 
---:new( minumum number, max number, total length of line, angle of line )
+--:new( minumum number, max number, total length of line, angle of line, text alpha )
 
-function TenNumLine:new( min, max, length, angle )
+function NumLine:new( min, max, length, angle, textAlpha )
 
   local line = display.newGroup()
   local range = max - min
@@ -23,11 +23,15 @@ function TenNumLine:new( min, max, length, angle )
   line.hash = {}
 
   for i=min,max do
-    line.num[i] = display.newText( i*10 , step*(i - min)*math.cos(math.rad(angle)) - 3*hashW*math.cos(anglePerp),
+    line.num[i] = display.newText( i , step*(i - min)*math.cos(math.rad(angle)) - 3*hashW*math.cos(anglePerp),
                 step*(i-min)*math.sin(math.rad(angle) ) - 3*hashW*math.sin(anglePerp), font, fontSize  )
-    line.num[i]:setFillColor( Blue.R,Blue.G,Blue.B )
+    if textAlpha ~= null then
+        line.num[i].alpha = textAlpha
+    end
+    line.num[i]:setFillColor( priColor.R,priColor.G,priColor.B )    
     line.hash[i] = display.newLine(   step*(i -min)*math.cos(math.rad(angle)) - hashW*math.cos(anglePerp), step*(i - min)*math.sin(math.rad(angle)) - hashW*math.sin(anglePerp),
                step*(i-min)*math.cos(math.rad(angle)) + hashW*math.cos(anglePerp), step*(i - min)*math.sin(math.rad(angle)) + hashW*math.sin(anglePerp)    )
+    --line.hash[i].strokeWidth = _H*.005
     line.hash[i].strokeWidth = _H*.01
     line.hash[i]:setStrokeColor(0,0,0)
 
@@ -44,6 +48,4 @@ function TenNumLine:new( min, max, length, angle )
 end
 
 
-return TenNumLine
-
-
+return NumLine
