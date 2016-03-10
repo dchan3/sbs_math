@@ -182,7 +182,7 @@ function check()
 			--print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
 			transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y, time=1000})
 			--transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
-	end
+	end             
 
 	for j=1,count do
 		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToTens(j * 10) end)
@@ -225,8 +225,8 @@ function initBalls()
 
 	            if map[randomLocation] == false then
 	                --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-										matchBalls[i].x, matchBalls[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.5
-										map[randomLocation] = true
+                            matchBalls[i].x, matchBalls[i].y = _W*.15 + _W*.1*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.43
+                            map[randomLocation] = true
 
 	            end
 
@@ -251,6 +251,13 @@ function scene:create( event )
 		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
 		displayText:setFillColor(Blue.R, Blue.G, Blue.B)
     physics.setGravity(0,0)
+    
+    local background = display.newImageRect( "images/bg_green_stripes3.png",
+            display.contentWidth, display.contentHeight )
+    background.anchorX = 0
+    background.anchorY = 0
+    background.x, background.y = 0, 0
+    sceneGroup:insert( background )
 
     --local coordinates =
     numberLine =  numLine:new(1, 10, _W*.9, 0 )

@@ -243,8 +243,8 @@ function initBalls()
 
 	            if map[randomLocation] == false then
 	                --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-										matchBalls[i].x, matchBalls[i].y = _W*.05 + _W*.1*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.5
-										map[randomLocation] = true
+                            matchBalls[i].x, matchBalls[i].y = _W*.15 + _W*.12*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.43
+                            map[randomLocation] = true
 
 	            end
 
@@ -260,6 +260,9 @@ function clearBalls()
 	for i=1, count do
 		display.remove(matchBalls[i])
 		matchBalls[i] = nil
+                -- attempting to address memory leak
+                display.remove(countBalls[i])
+                countBalls[i] = nil
 	end
 end
 -- "scene:create()"
@@ -289,8 +292,8 @@ function scene:create( event )
 
 
     --local coordinates =
-    numberLine =  numLine:new(0, 10, _W*.85, 0 )
-    numberLine.x , numberLine.y = _H*.125, _W*.2
+    numberLine =  numLine:new(0, 10, _W*.9, 0 )
+    numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine)
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
