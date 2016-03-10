@@ -180,7 +180,7 @@ function check()
 			local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
 			local time = distance/maxSpeed*1000
 			--print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
-			transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y, time=1000})
+			transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y*1.25, time=1000})
 			--transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
 	end             
 
@@ -201,7 +201,7 @@ function initBalls()
 	        countBalls[i]:insert( countBalls[i].text )
 
 
-	        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y - _H*0.030
+	        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y*.55 + numberLine.y - _H*0.030
 
 	        physics.addBody( countBalls[i], { radius=ballR*1.5 } )
 	        countBalls[i].isSensor = true
@@ -252,7 +252,7 @@ function scene:create( event )
 		displayText:setFillColor(Blue.R, Blue.G, Blue.B)
     physics.setGravity(0,0)
     
-    local background = display.newImageRect( "images/bg_green_stripes3.png",
+    local background = display.newImageRect( "images/bg_pink_stripes.png",
             display.contentWidth, display.contentHeight )
     background.anchorX = 0
     background.anchorY = 0
