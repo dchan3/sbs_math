@@ -5,10 +5,8 @@
 -- local numInput = require( "objects.numInput" )
 -- local boxTest = numInput.new( 6, -190, 40 )
 ------------------------------------------------------------
+numInput = {}
 local widget = require( "widget" )
-
-local numInput = {}
-
 
 local leftNum = 0
 local rightNum = 0
@@ -70,12 +68,13 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     -- rectanglular outer box, adjust looks as needed for final draft
     -- paremeters: parent, x, y, width, height
-    local box = display.newRect(countBox, display.contentWidth*0.5,
-                                        display.contentHeight -175, 100, 180 )
+    local box = display.newRect(countBox, _W*0.5,
+                                        _H*0.45, _W*0.25, _H*0.6 )
 
         box:setFillColor( 1, 1, 1 )
         box.stroke = strokeC
         box.strokeWidth = 3
+        box.alpha = 0.5
 
     -- buttons, adjust looks as needed for final draft
     local plusButtonL = widget.newButton{
@@ -85,8 +84,10 @@ function numInput:new( leftMax, x, y ) -- constructor
                     labelYOffset = 0, -- can remove this line
                     -- font = font,-- custom font not working correctly
                     fontSize = 20,
-                    defaultFile="images/Icon-Small.png",
-                    overFile="images/Icon-Small-40.png",
+                    width = 100,
+                    height = 100,
+                    defaultFile="images/cat.png",
+                    overFile="images/puppy.png",
                     onPress = onStepperPress,
             }
         plusButtonL.x = display.contentWidth*0.45
@@ -99,8 +100,10 @@ function numInput:new( leftMax, x, y ) -- constructor
                     labelYOffset = 0, -- can remove this line
                     -- font = font, -- custom font not working correctly
                     fontSize = 20,
-                    defaultFile="images/Icon-Small.png",
-                    overFile="images/Icon-Small-40.png",
+                    width = 100,
+                    height = 100,
+                    defaultFile="images/cat.png",
+                    overFile="images/puppy.png",
                     onPress = onStepperPress,
             }
         plusButtonR.x = display.contentWidth*0.55
@@ -112,8 +115,10 @@ function numInput:new( leftMax, x, y ) -- constructor
                     labelColor = { default={255,0,50}, over={128} },
                     labelYOffset = 0, -- can remove this line
                     fontSize = 20,
-                    defaultFile="images/Icon-Small.png",
-                    overFile="images/Icon-Small-40.png",
+                    width = 100,
+                    height = 100,
+                    defaultFile="images/mouse.png",
+                    overFile="images/puppy.png",
                     onPress = onStepperPress,
             }
         minusButtonL.x = display.contentWidth*0.45
@@ -125,8 +130,10 @@ function numInput:new( leftMax, x, y ) -- constructor
                     labelColor = { default={255,0,50}, over={128} },
                     labelYOffset = 0, -- can remove this line
                     fontSize = 20,
-                    defaultFile="images/Icon-Small.png",
-                    overFile="images/Icon-Small-40.png",
+                    width = 100,
+                    height = 100,
+                    defaultFile="images/mouse.png",
+                    overFile="images/puppy.png",
                     onPress = onStepperPress,
             }
         minusButtonR.x = display.contentWidth*0.55
@@ -137,8 +144,10 @@ function numInput:new( leftMax, x, y ) -- constructor
                     labelColor = { default={0,255,0}, over={128} },
                     labelYOffset = 0, -- can remove this line
                     fontSize = 20,
-                    defaultFile="images/Icon-Small.png",
-                    overFile="images/Icon-Small-40.png",
+                    width = 100,
+                    height = 100,
+                    defaultFile="images/bunny.png",
+                    overFile="images/puppy.png",
                     onPress = onCheck,
             }
         checkButton.x = display.contentWidth*0.5
