@@ -5,7 +5,6 @@ local numLine = require( "objects.numLine" )
 local numInput = require( "objects.numInput" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
-local numInput = require( "objects.numInput" )
 local physics = require "physics"
 physics.start()
 --physics.setDrawMode( "hybrid" )
@@ -15,7 +14,6 @@ local scene = composer.newScene()
 local hasCollidedCircle
 
 -- number box not working
---local boxTest = numInput.new( 6, -190, 40 )
 local max = 10
 local count = max -- math.random( 1, max)
 local matchCount = count
@@ -24,6 +22,7 @@ local map = { false, false, false, false, false, false, false, false, false, fal
 local countBalls = {}
 local matchBalls = {}
 local numberLine
+local boxTest
 local displayText = {}
 
 local sceneGroup
@@ -282,6 +281,8 @@ function scene:create( event )
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
 
+    boxTest = numInput:new( 6, _W*(-.35), _H*.01 )
+    
     --local coordinates =
     numberLine =  numLine:new(0, 10, _W*.65, 0, 0 )
     numberLine.x , numberLine.y = _H*.55, _W*.2
