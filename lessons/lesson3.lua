@@ -417,7 +417,7 @@ end
 -- "scene:destroy()"
 function scene:destroy( event )
 
-	composer.removeAll()
+	--composer.removeAll()
 
 
     -- Called prior to the removal of scene's view ("sceneGroup").
