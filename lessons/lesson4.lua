@@ -19,6 +19,9 @@ local hasCollidedCircle
 
 local max = 10
 local count = max -- math.random( 1, max)
+local numberOne = math.random( 0, max )
+local numberTwo = math.random( 0, max )
+local result = numberOne + numberTwo
 local matchCount = count
 local map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 
@@ -27,6 +30,11 @@ local matchBalls = {}
 local numberLine
 local displayText = {}
 local bucket
+local bucket1
+local bucket2
+local bucketY = _H*.25
+local bucketX1 = _W*.15
+local bucketX2 = _W*.5
 
 local sceneGroup
 
@@ -238,9 +246,27 @@ function initBalls()
 
 			--map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 
+            for i = 1, numberOne do
+
+                matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
+                matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
+                physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
+                sceneGroup:insert( matchBalls[i] )
+
+            end
+
+            for i = numberOne+1, result do
+
+                matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
+                matchBalls[i].x, matchBalls[i].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*i
+                physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
+                sceneGroup:insert( matchBalls[i] )
+
+            end
+--[[
 	    for i=1,count do
 	        matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
-	        matchBalls[i]:addEventListener( "touch", drag )
+	       -- matchBalls[i]:addEventListener( "touch", drag )
 	        matchBalls[i]:insert( matchBalls[i].ball )
 
 	        --places balls in grid
@@ -256,11 +282,12 @@ function initBalls()
 	            end
 
 	        end
+]]
+	       -- physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
 
-	        physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
+	      --  sceneGroup:insert( matchBalls[i] )
 
-	        sceneGroup:insert( matchBalls[i] )
-	    end
+	   -- end
 end
 
 function clearBalls()
@@ -306,14 +333,12 @@ function scene:create( event )
     local input = numInput:new(2, _W*.80,centerY)
 
 
-    --local coordinates =
---[[    numberLine =  numLine:new(0, 10, _W*.9, 0 )
-    numberLine.x , numberLine.y = _H*.1, _W*.2
-    sceneGroup:insert(numberLine) ]]--
-
-    bucket1 = bucketObject:new( _W*.25, _H*.4 )
+    bucket1 = bucketObject:new( bucketX1, bucketY )
     
-    bucket2 = bucketObject:new( _W*.5, _H*.4 )
+    bucket2 = bucketObject:new( bucketX2, bucketY )
+    
+    sceneGroup:insert( bucket1 )
+    sceneGroup:insert( bucket2 )
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
