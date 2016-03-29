@@ -8,6 +8,7 @@ local numLine = require( "objects.numLine" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local bucketObject = require( "objects.bucketObject")
+local numInput = require( "objects.numInput")
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
@@ -235,7 +236,7 @@ function initBalls()
 	        sceneGroup:insert(countBalls[i])
 	    end  ]]--
 
-			map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
+			--map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 
 	    for i=1,count do
 	        matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
@@ -302,15 +303,17 @@ function scene:create( event )
     menu:addEventListener( "tap", listener )
     sceneGroup:insert( menu )
 
+    local input = numInput:new(2, _W*.80,centerY)
+
 
     --local coordinates =
 --[[    numberLine =  numLine:new(0, 10, _W*.9, 0 )
     numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine) ]]--
 
-    bucket1 = bucketObject:new( _W*.35, _H*.65 )
+    bucket1 = bucketObject:new( _W*.25, _H*.4 )
     
-    bucket2 = bucketObject:new( _W*.7, _H*.7 )
+    bucket2 = bucketObject:new( _W*.5, _H*.4 )
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
