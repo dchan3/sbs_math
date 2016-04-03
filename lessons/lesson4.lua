@@ -33,8 +33,10 @@ local bucket
 local bucket1
 local bucket2
 local bucketY = _H*.25
+local bucketY3 = _H*.7
 local bucketX1 = _W*.15
 local bucketX2 = _W*.5
+local bucketX3 = _W*.32
 
 local sceneGroup
 
@@ -336,6 +338,16 @@ function scene:create( event )
     bucket1 = bucketObject:new( bucketX1, bucketY )
     
     bucket2 = bucketObject:new( bucketX2, bucketY )
+    
+    bucket3 = bucketObject:new( bucketX3, bucketY3 )
+    
+    -- plus sign
+    local plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )
+    plus:setFillColor( 0,0,0 )
+    
+    -- equal sign
+    local equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
+    equal:setFillColor( 0,0,0 )
     
     sceneGroup:insert( bucket1 )
     sceneGroup:insert( bucket2 )
