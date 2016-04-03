@@ -1,29 +1,42 @@
--- TEST PUSH SINCE PULL NOT WORKING
+-- addition_01
+-- currently just a test scene
+-- needs a lot of work
+----------------------------------------------------------
 
 local composer = require( "composer" )
 local numLine = require( "objects.numLine" )
-local numInput = require( "objects.numInput" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
+local bucketObject = require( "objects.bucketObject")
+local numInput = require( "objects.numInput")
 local physics = require "physics"
 physics.start()
---physics.setDrawMode( "hybrid" )
+physics.setDrawMode( "hybrid" )
 
 local scene = composer.newScene()
 
 local hasCollidedCircle
 
--- number box not working
 local max = 10
 local count = max -- math.random( 1, max)
+local numberOne = math.random( 0, max )
+local numberTwo = math.random( 0, max )
+local result = numberOne + numberTwo
 local matchCount = count
 local map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 
 local countBalls = {}
 local matchBalls = {}
 local numberLine
-local boxTest
 local displayText = {}
+local bucket
+local bucket1
+local bucket2
+local bucketY = _H*.25
+local bucketY3 = _H*.7
+local bucketX1 = _W*.15
+local bucketX2 = _W*.5
+local bucketX3 = _W*.32
 
 local sceneGroup
 
@@ -214,9 +227,22 @@ function check()
 
 end
 
+-- not working, need to call after user has set number and pushed check
+-- trying to check answer 
+function correctCheck( answer )
+    
+    --local check = numInput:onCheck()
+    --local check = numInput:checkButton()
+    if check == answer then
+        print ( "correct" )
+    else
+        print ( "incorrect" )
+    end
+end
+
 function initBalls()
-	    for i=1,count do
-	        countBalls[i] = AnimalBall:new(0,0, ballR*1.2, i)
+	--[[]    for i=1,count do
+	        countBalls[i] = AnimalBall:new(0,0, ballR*1.5, i)
 	        countBalls[i]:addEventListener( "touch", drag )
 
 	        countBalls[i]:insert( countBalls[i].ball )
@@ -231,13 +257,31 @@ function initBalls()
 	        countBalls[i]:addEventListener( "collision", countBalls[i] )
 
 	        sceneGroup:insert(countBalls[i])
-	    end
+	    end  ]]--
 
-			map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
+			--map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 
+            for i = 1, numberOne do
+
+                matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
+                matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
+                physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
+                sceneGroup:insert( matchBalls[i] )
+
+            end
+
+            for i = numberOne+1, result do
+
+                matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
+                matchBalls[i].x, matchBalls[i].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*i
+                physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
+                sceneGroup:insert( matchBalls[i] )
+
+            end
+--[[
 	    for i=1,count do
-	        matchBalls[i] = Animal:new("images/puppy.png",  ballR*3, ballR*3, ballR*2)
-	        matchBalls[i]:addEventListener( "touch", drag )
+	        matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
+	       -- matchBalls[i]:addEventListener( "touch", drag )
 	        matchBalls[i]:insert( matchBalls[i].ball )
 
 	        --places balls in grid
@@ -247,33 +291,37 @@ function initBalls()
 
 	            if map[randomLocation] == false then
 	                --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-                        matchBalls[i].x, matchBalls[i].y = _W*.4 + _W*.125*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.45
-                        map[randomLocation] = true
+                            matchBalls[i].x, matchBalls[i].y = _W*.15 + _W*.12*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.43
+                            map[randomLocation] = true
 
 	            end
 
 	        end
+]]
+	       -- physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
 
-	        physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
+	      --  sceneGroup:insert( matchBalls[i] )
 
-	        sceneGroup:insert( matchBalls[i] )
-	    end
+	   -- end
 end
 
 function clearBalls()
 	for i=1, count do
-		sceneGroup:remove(matchBalls[i])
+		display.remove(matchBalls[i])
 		matchBalls[i] = nil
+                -- attempting to address memory leak
+                display.remove(countBalls[i])
+                countBalls[i] = nil
 	end
 end
 -- "scene:create()"
 function scene:create( event )
 
     sceneGroup = self.view
-		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
-                displayText:setFillColor( 0, 0, 0 )
-    physics.setGravity(0,0)
 
+    count = math.random(1,max)
+    matchCount = count
+    
     local background = display.newImageRect( "images/bg_blue_zig.png",
             display.contentWidth, display.contentHeight )
     background.anchorX = 0
@@ -281,12 +329,46 @@ function scene:create( event )
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
 
-    boxTest = numInput:new( 6, _W*(-.35), _H*.01 )
     
-    --local coordinates =
-    numberLine =  numLine:new(0, 10, _W*.65, 0, 0 )
-    numberLine.x , numberLine.y = _H*.55, _W*.2
-    sceneGroup:insert(numberLine)
+        displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
+                displayText:setFillColor( 0, 0, .5 )
+ --   physics.setGravity(0,0)
+    sceneGroup:insert(displayText)
+
+
+    local menu = display.newImageRect( "images/menu.png",
+            _H*.1,  _H*.1)
+    menu.x, menu.y = _W*.9, _H*.1
+    local function listener()
+        composer.gotoScene( "menu" )
+    end
+    menu:addEventListener( "tap", listener )
+    sceneGroup:insert( menu )
+
+    local input = numInput:new(2, _W*.80,centerY)
+
+
+    bucket1 = bucketObject:new( bucketX1, bucketY )
+    
+    bucket2 = bucketObject:new( bucketX2, bucketY )
+    
+    bucket3 = bucketObject:new( bucketX3, bucketY3 )
+    
+    -- plus sign
+    local plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )
+    plus:setFillColor( 0,0,0 )
+    
+    -- equal sign
+    local equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
+    equal:setFillColor( 0,0,0 )
+    
+    -- question mark
+    local question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
+    question:setFillColor( 0,0,0 )
+    
+    sceneGroup:insert( bucket1 )
+    sceneGroup:insert( bucket2 )
+    sceneGroup:insert( bucket3 )
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
@@ -299,8 +381,8 @@ function scene:create( event )
     sceneGroup:insert( latText )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
- 		initBalls()
-                
+ 	initBalls()
+        
 end
 
 
@@ -312,6 +394,7 @@ function scene:show( event )
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
     elseif ( phase == "did" ) then
+
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
@@ -335,6 +418,10 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
+
+
+   -- display.remove(sceneGroup)
+   -- composer.removeAll()
 
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.

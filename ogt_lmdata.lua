@@ -36,8 +36,8 @@ Or, create a table in k.sceneNames that holds the storyboard scene
 name for each level you have.
 	-- ==============================================================]]
 k.playScene = nil --"play" -- name of SB scene or nil to go to sequential scenes
-k.sequentialScene = "lessons.kCount_0" -- will turn into level1, level2, etc.
-k.sceneNames = nil -- {"scene01", "playme", "world3"}
+k.sequentialScene = "lessons.lesson" -- will turn into level1, level2, etc.
+k.sceneNames = nil  --{"kCount_01", "addition_01", "lessons.kCount_02", "lessons.kCount_03", "lessons.kCount_04", "lessons.kCount_05"}
 
 --[[ =========================================
  If images or audio files are in folders, define

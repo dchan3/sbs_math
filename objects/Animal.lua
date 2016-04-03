@@ -11,6 +11,7 @@ function Animal:new(file, w, h, fontsize)
 	animal.text = display.newText("", 0, h*.06, font, fontsize)
 	animal.num = 0
 	animal.matched = false
+	animal:insert( animal.ball )
 	animal:insert( animal.outline )
 	return animal
 end
