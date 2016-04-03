@@ -70,27 +70,25 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     -- rectanglular outer box, adjust looks as needed for final draft
     -- paremeters: parent, x, y, width, height
-    local boxW = _W*0.25
-    local boxH = _H*0.6
+    local boxW = _W*0.15
+    local boxH = _W*0.32
 
+    -- invisible box for containing other elements
     local box = display.newRect(countBox, 0, 0, boxW, boxH )
-        box:setFillColor( 1, 1, 1 )
-        box.stroke = strokeC
-        box.strokeWidth = 3
-        box.alpha = 0.5
-
+        box.alpha = 0
+        
     -- buttons, adjust looks as needed for final draft
     local plusButtonL = widget.newButton{
                     id = "LeftPlus",
-                    label="+",
-                    labelColor = { default={0,255,50}, over={128} },
-                    labelYOffset = 0, -- can remove this line
+                    --label="+",
+                    --labelColor = { default={0,255,50}, over={128} },
+                    --labelYOffset = 0, -- can remove this line
                     -- font = font,-- custom font not working correctly
-                    fontSize = 20,
-                    width = 100,
-                    height = 100,
-                    defaultFile="images/cat.png",
-                    overFile="images/puppy.png",
+                    --fontSize = 20,
+                    width = _W*.07,
+                    height = _W*.07,
+                    defaultFile="images/plus.png",
+                    overFile="images/plus.png", -- not needed
                     onPress = onStepperPress,
             }
         plusButtonL.x = -boxW*.25
@@ -98,15 +96,15 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     local plusButtonR = widget.newButton{
                     id = "RightPlus",
-                    label="+",
-                    labelColor = { default={0,255,50}, over={128} },
-                    labelYOffset = 0, -- can remove this line
+                    --label="+",
+                    --labelColor = { default={0,255,50}, over={128} },
+                    --labelYOffset = 0, -- can remove this line
                     -- font = font, -- custom font not working correctly
-                    fontSize = 20,
-                    width = 100,
-                    height = 100,
-                    defaultFile="images/cat.png",
-                    overFile="images/puppy.png",
+                    --fontSize = 20,
+                    width = _W*.07,
+                    height = _W*.07,
+                    defaultFile="images/plus.png",
+                    overFile="images/plus.png", -- not needed
                     onPress = onStepperPress,
             }
         plusButtonR.x = boxW*.25
@@ -114,14 +112,14 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     local minusButtonL = widget.newButton{
                     id = "LeftMinus",
-                    label="-",
-                    labelColor = { default={255,0,50}, over={128} },
-                    labelYOffset = 0, -- can remove this line
-                    fontSize = 20,
-                    width = 100,
-                    height = 100,
-                    defaultFile="images/mouse.png",
-                    overFile="images/puppy.png",
+                    --label="-",
+                    --labelColor = { default={255,0,50}, over={128} },
+                    --labelYOffset = 0, -- can remove this line
+                    --fontSize = 20,
+                    width = _W*.07,
+                    height = _W*.07,
+                    defaultFile="images/minus.png",
+                    overFile="images/minus.png", -- not needed
                     onPress = onStepperPress,
             }
         minusButtonL.x = -boxW*.25
@@ -129,45 +127,60 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     local minusButtonR = widget.newButton{
                     id = "RightMinus",
-                    label="-",
-                    labelColor = { default={255,0,50}, over={128} },
-                    labelYOffset = 0, -- can remove this line
-                    fontSize = 20,
-                    width = 100,
-                    height = 100,
-                    defaultFile="images/mouse.png",
-                    overFile="images/puppy.png",
+                    --label="-",
+                    --labelColor = { default={255,0,50}, over={128} },
+                    --labelYOffset = 0, -- can remove this line
+                    --fontSize = 20,
+                    width = _W*.07,
+                    height = _W*.07,
+                    defaultFile="images/minus.png",
+                    overFile="images/minus.png", -- not needed
                     onPress = onStepperPress,
             }
         minusButtonR.x = boxW*.25
         minusButtonR.y = boxH*.25
 
     local checkButton = widget.newButton{
-                    label="!",
-                    labelColor = { default={0,255,0}, over={128} },
-                    labelYOffset = 0, -- can remove this line
-                    fontSize = 20,
-                    width = 100,
-                    height = 100,
-                    defaultFile="images/bunny.png",
-                    overFile="images/puppy.png",
+                    id = "CheckButton",
+                    --label="!",
+                    --labelColor = { default={0,255,0}, over={128} },
+                    --labelYOffset = 0, -- can remove this line
+                    --fontSize = 20,
+                    width = _W*.05,
+                    height = _W*.05,
+                    defaultFile="images/check.png",
+                    overFile="images/check.png", -- not needed
                     onPress = onCheck,
             }
         checkButton.x = 0
-        checkButton.y = boxH*.40
+        checkButton.y = boxH*.55
+        
+    -- grey shadow behind left number
+    local leftShadow = display.newRect (countBox, 0, 0, boxW*.45, boxH*.4)
+        leftShadow:setFillColor( 0, 0, 0 )
+        leftShadow.alpha = 0.5
+        leftShadow.x = -boxW*.25
+        
+    -- grey shadow behind right number    
+    local rightShadow = display.newRect (countBox, 0, 0, boxW*.45, boxH*.4)
+        rightShadow:setFillColor( 0, 0, 0 )
+        rightShadow.alpha = 0.5
+        rightShadow.x = boxW*.25
 
     countBox:insert( plusButtonL )
     countBox:insert( plusButtonR )
     countBox:insert( minusButtonL )
     countBox:insert( minusButtonR )
     countBox:insert( checkButton )
+    countBox:insert( leftShadow )
+    countBox:insert( rightShadow )
 
-    numTxtL = display.newText( leftNum, 0, 0, default, 55 )
+    numTxtL = display.newText( leftNum, 0, 0, default, _W*.07 )
             numTxtL:setFillColor( 0 )
             numTxtL.x = -boxW*.25
             numTxtL.y = 0
 
-    numTxtR = display.newText( rightNum, 0, 0, default, 55 )
+    numTxtR = display.newText( rightNum, 0, 0, default, _W*.07 )
             numTxtR:setFillColor( 0 )
             numTxtR.x = boxW*.25
             numTxtR.y = 0
