@@ -19,6 +19,7 @@ local hasCollidedCircle
 
 local max = 10
 local count = max -- math.random( 1, max)
+math.randomseed(os.time())
 local numberOne = math.random( 0, max )
 local numberTwo = math.random( 0, max )
 local result = numberOne + numberTwo
@@ -260,9 +261,9 @@ function initBalls()
 	    end  ]]--
 
 			--map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
-
+                
             for i = 1, numberOne do
-
+                
                 matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
                 matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
