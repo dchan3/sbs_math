@@ -57,12 +57,13 @@ function numInput:new( leftMax, x, y ) -- constructor
     end
 
 
-    -- NEED TO MAKE finalNumber ACCESSIBLE BY OTHER OBJECTS
+    -- NEED TO MAKE finalNumber ACCESSIBLE BY OTHER CLASSES
     function onCheck ( event )
 
         finalNumber = leftNum * 10 + rightNum
         countBox.num = finalNumber
 
+        print ( finalNumber ) -- can remove this
         return finalNumber
 
     end

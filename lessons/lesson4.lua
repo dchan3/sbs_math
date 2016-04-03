@@ -227,6 +227,19 @@ function check()
 
 end
 
+-- not working, need to call after user has set number and pushed check
+-- trying to check answer 
+function correctCheck( answer )
+    
+    --local check = numInput:onCheck()
+    --local check = numInput:checkButton()
+    if check == answer then
+        print ( "correct" )
+    else
+        print ( "incorrect" )
+    end
+end
+
 function initBalls()
 	--[[]    for i=1,count do
 	        countBalls[i] = AnimalBall:new(0,0, ballR*1.5, i)
@@ -349,8 +362,13 @@ function scene:create( event )
     local equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
     equal:setFillColor( 0,0,0 )
     
+    -- question mark
+    local question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
+    question:setFillColor( 0,0,0 )
+    
     sceneGroup:insert( bucket1 )
     sceneGroup:insert( bucket2 )
+    sceneGroup:insert( bucket3 )
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
@@ -364,6 +382,7 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
  	initBalls()
+        
 end
 
 
