@@ -11,6 +11,7 @@ local widget = require( "widget" )
 local leftNum = 0
 local rightNum = 0
 local strokeC = { 1, 0, 0.5 } --RGB, change or remove for final draft
+_G.finalNumber = 0
 
 function numInput:new( leftMax, x, y ) -- constructor
 
@@ -62,8 +63,11 @@ function numInput:new( leftMax, x, y ) -- constructor
 
         finalNumber = leftNum * 10 + rightNum
         countBox.num = finalNumber
-
-        print ( finalNumber ) -- can remove this
+        
+        --testing only
+        print ( "finalNumber", finalNumber ) -- can remove
+        
+        
         return finalNumber
 
     end
@@ -80,11 +84,6 @@ function numInput:new( leftMax, x, y ) -- constructor
     -- buttons, adjust looks as needed for final draft
     local plusButtonL = widget.newButton{
                     id = "LeftPlus",
-                    --label="+",
-                    --labelColor = { default={0,255,50}, over={128} },
-                    --labelYOffset = 0, -- can remove this line
-                    -- font = font,-- custom font not working correctly
-                    --fontSize = 20,
                     width = _W*.07,
                     height = _W*.07,
                     defaultFile="images/plus.png",
@@ -96,11 +95,6 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     local plusButtonR = widget.newButton{
                     id = "RightPlus",
-                    --label="+",
-                    --labelColor = { default={0,255,50}, over={128} },
-                    --labelYOffset = 0, -- can remove this line
-                    -- font = font, -- custom font not working correctly
-                    --fontSize = 20,
                     width = _W*.07,
                     height = _W*.07,
                     defaultFile="images/plus.png",
@@ -112,10 +106,6 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     local minusButtonL = widget.newButton{
                     id = "LeftMinus",
-                    --label="-",
-                    --labelColor = { default={255,0,50}, over={128} },
-                    --labelYOffset = 0, -- can remove this line
-                    --fontSize = 20,
                     width = _W*.07,
                     height = _W*.07,
                     defaultFile="images/minus.png",
@@ -127,10 +117,6 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     local minusButtonR = widget.newButton{
                     id = "RightMinus",
-                    --label="-",
-                    --labelColor = { default={255,0,50}, over={128} },
-                    --labelYOffset = 0, -- can remove this line
-                    --fontSize = 20,
                     width = _W*.07,
                     height = _W*.07,
                     defaultFile="images/minus.png",
@@ -142,10 +128,6 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     local checkButton = widget.newButton{
                     id = "CheckButton",
-                    --label="!",
-                    --labelColor = { default={0,255,0}, over={128} },
-                    --labelYOffset = 0, -- can remove this line
-                    --fontSize = 20,
                     width = _W*.05,
                     height = _W*.05,
                     defaultFile="images/check.png",

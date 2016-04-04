@@ -9,6 +9,7 @@ local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local bucketObject = require( "objects.bucketObject")
 local numInput = require( "objects.numInput")
+local widget = require "widget"
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
@@ -176,10 +177,10 @@ function hasCollidedCircle(obj1, obj2)
                     matchCount = matchCount - 1
 
                     if matchCount <= 0 then
-											decText.text = ""
-											latText.text = ""
+                        decText.text = ""
+                        latText.text = ""
                       check()
-											matchCount = count
+                        matchCount = count
                     end
         print("true")
         return true
@@ -228,17 +229,17 @@ function check()
 
 end
 
--- not working, need to call after user has set number and pushed check
--- trying to check answer 
-function correctCheck( answer )
+-- currently just printing result to terminal
+function correctCheck()
     
-    --local check = numInput:onCheck()
-    --local check = numInput:checkButton()
-    if check == answer then
-        print ( "correct" )
+    local user = _G.finalNumber
+    
+    if result == user then
+        print ( "CORRECT")
     else
-        print ( "incorrect" )
+        print ( "NEGATIVE" )
     end
+    
 end
 
 function initBalls()
@@ -383,7 +384,23 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
  	initBalls()
-        
+            
+    -- testing only
+    -- local check button to compare user guess to actual
+    -- can possibly set check button in numInput object as global to perform both functions
+    checkBtn = widget.newButton{
+                    width = _W*.04,
+                    height = _W*.04,
+                    defaultFile="images/check.png", 
+                    label = "click this to check, AFTER clicking other check",
+                    labelYOffset = -30,
+                    labelColor = { default = {1, 0, 0}, over = {1, 0, 0} },
+                    fontSize = 20,
+                    onRelease = correctCheck	-- event listener function
+    }
+    checkBtn.x = _W*.8
+    checkBtn.y = centerY*1.75
+    
 end
 
 
