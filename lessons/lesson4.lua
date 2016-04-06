@@ -233,6 +233,8 @@ end
 function correctCheck()
     
     local user = _G.finalNumber
+
+--    local num = 
     
     if result == user then
         print ( "CORRECT")
@@ -243,68 +245,29 @@ function correctCheck()
 end
 
 function initBalls()
-	--[[]    for i=1,count do
-	        countBalls[i] = AnimalBall:new(0,0, ballR*1.5, i)
-	        countBalls[i]:addEventListener( "touch", drag )
 
-	        countBalls[i]:insert( countBalls[i].ball )
-	        countBalls[i]:insert( countBalls[i].text )
-
-
-	        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y 
-
-	        physics.addBody( countBalls[i], { radius=ballR*1.5 } )
-	        countBalls[i].isSensor = true
-	        countBalls[i].collision = onLocalCollision
-	        countBalls[i]:addEventListener( "collision", countBalls[i] )
-
-	        sceneGroup:insert(countBalls[i])
-	    end  ]]--
-
-			--map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
-                
+        local ballSize = ballR*2
+    
             for i = 1, numberOne do
                 
-                matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
+                matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
-                physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
+                physics.addBody( matchBalls[i], { radius=ballSize*.5 } )
+                matchBalls[i].text.text = i
                 sceneGroup:insert( matchBalls[i] )
 
             end
 
             for i = numberOne+1, result do
 
-                matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
+                matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*i
-                physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
+                physics.addBody( matchBalls[i], { radius=ballSize*.5 } )
+                 matchBalls[i].text.text = i - numberOne
                 sceneGroup:insert( matchBalls[i] )
 
             end
---[[
-	    for i=1,count do
-	        matchBalls[i] = Animal:new("images/ball.png",  ballR*3, ballR*3, ballR*2)
-	       -- matchBalls[i]:addEventListener( "touch", drag )
-	        matchBalls[i]:insert( matchBalls[i].ball )
 
-	        --places balls in grid
-	        while  matchBalls[i].x == 0 and  matchBalls[i].y == 0 do
-
-	            local randomLocation = math.random(1, 15)
-
-	            if map[randomLocation] == false then
-	                --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3), _H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-                            matchBalls[i].x, matchBalls[i].y = _W*.15 + _W*.12*math.floor((randomLocation-1) / 3), _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.43
-                            map[randomLocation] = true
-
-	            end
-
-	        end
-]]
-	       -- physics.addBody( matchBalls[i], { radius=ballR*1.25 } )
-
-	      --  sceneGroup:insert( matchBalls[i] )
-
-	   -- end
 end
 
 function clearBalls()
@@ -388,18 +351,35 @@ function scene:create( event )
     -- testing only
     -- local check button to compare user guess to actual
     -- can possibly set check button in numInput object as global to perform both functions
-    checkBtn = widget.newButton{
-                    width = _W*.04,
-                    height = _W*.04,
+    --[[checkBtn = widget.newButton{
+                    width = _W*.09,
+                    height = _W*.09,
                     defaultFile="images/check.png", 
                     label = "click this to check, AFTER clicking other check",
-                    labelYOffset = -30,
-                    labelColor = { default = {1, 0, 0}, over = {1, 0, 0} },
+                    labelYOffset = 0,
+                    labelColor = { default = {1, 1, 1}, over = {1, 0, 0} },
                     fontSize = 20,
-                    onRelease = correctCheck	-- event listener function
+                    onRelease = correctCheck()	-- event listener function
     }
     checkBtn.x = _W*.8
-    checkBtn.y = centerY*1.75
+    checkBtn.y = centerY*1.75]]--
+
+    local overCheck = display.newRect(_W*.8, centerY*1.75, _W*.09, _W*.09)
+    overCheck.alpha = .5
+
+
+    function overCheck:tap( event )
+
+        local user = input.getNumber()
+
+        if result == user then
+            print ( "CORRECT")
+        else
+            print ( "NEGATIVE" )
+        end
+    end
+
+overCheck:addEventListener( "tap", overCheck )
     
 end
 

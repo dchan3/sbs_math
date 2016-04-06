@@ -13,5 +13,6 @@ function Animal:new(file, w, h, fontsize)
 	animal.matched = false
 	animal:insert( animal.ball )
 	animal:insert( animal.outline )
+	animal:insert( animal.text )
 	return animal
 end

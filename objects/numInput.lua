@@ -5,7 +5,7 @@
 -- local numInput = require( "objects.numInput" )
 -- local boxTest = numInput.new( 6, -190, 40 )
 ------------------------------------------------------------
-numInput = {}
+local numInput = {}
 local widget = require( "widget" )
 
 local leftNum = 0
@@ -38,6 +38,14 @@ function numInput:new( leftMax, x, y ) -- constructor
             rightNum = rightNum + 1
             numTxtR.text = rightNum
             print( rightNum ) -- can remove this line
+        elseif id == "RightPlus" and rightNum == 9 then
+            rightNum = 0
+            numTxtR.text = rightNum
+            leftNum = leftNum + 1
+            numTxtL.text = leftNum
+            print( rightNum )
+            print( leftNum )
+
         end
 
         --increments on left plus press
@@ -52,25 +60,18 @@ function numInput:new( leftMax, x, y ) -- constructor
             rightNum = rightNum - 1
             numTxtR.text = rightNum
             print( rightNum ) -- can remove this line
+        elseif id == "RightMinus" and rightNum == 0 then
+            if leftNum > 0 then 
+                rightNum = 9
+                numTxtR.text = rightNum
+                leftNum = leftNum - 1
+                numTxtL.text = leftNum
+            end
         end
 
         return true
     end
 
-
-    -- NEED TO MAKE finalNumber ACCESSIBLE BY OTHER CLASSES
-    function onCheck ( event )
-
-        finalNumber = leftNum * 10 + rightNum
-        countBox.num = finalNumber
-        
-        --testing only
-        print ( "finalNumber", finalNumber ) -- can remove
-        
-        
-        return finalNumber
-
-    end
 
     -- rectanglular outer box, adjust looks as needed for final draft
     -- paremeters: parent, x, y, width, height
@@ -131,8 +132,8 @@ function numInput:new( leftMax, x, y ) -- constructor
                     width = _W*.05,
                     height = _W*.05,
                     defaultFile="images/check.png",
-                    overFile="images/check.png", -- not needed
-                    onPress = onCheck,
+                    overFile="images/check.png" -- not needed
+                    --onPress = onCheck,
             }
         checkButton.x = 0
         checkButton.y = boxH*.55
@@ -173,7 +174,13 @@ function numInput:new( leftMax, x, y ) -- constructor
     countBox.x = x
     countBox.y = y
 
+    function countBox.getNumber()
+        return leftNum * 10 + rightNum
+    end
+
     return countBox
 end
+
+
 
 return numInput
