@@ -34,15 +34,7 @@ function bucketObj:new( x,y )  -- constructor
     rside.isVisible = false
     rside.rotation = 10
     physics.addBody(rside, "static")
-    --[[
-    -- balls for testing only
-    local ball = display.newCircle(display.contentCenterX, display.contentHeight*.2, display.contentHeight*.05)
-    ball:setFillColor(1,0,1)
-    physics.addBody(ball, "dynamic", {desity=1, friction=.3, bounce=.4})
-    
-    local ball2 = display.newCircle(display.contentCenterX*.9, display.contentHeight*.3, display.contentHeight*.06)
-    ball2:setFillColor(1,0,0)
-    physics.addBody(ball2, "dynamic", {desity=1, friction=.3, bounce=.4})]]
+
     
     
     return bucket

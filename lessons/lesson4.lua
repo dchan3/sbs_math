@@ -8,6 +8,7 @@ local numLine = require( "objects.numLine" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local bucketObject = require( "objects.bucketObject")
+local bucket = require( "objects.bucket")
 local numInput = require( "objects.numInput")
 local widget = require "widget"
 local physics = require "physics"
@@ -31,7 +32,7 @@ local countBalls = {}
 local matchBalls = {}
 local numberLine
 local displayText = {}
-local bucket
+--local bucket
 local bucket1
 local bucket2
 local bucketY = _H*.25
@@ -198,6 +199,9 @@ end
 
 function check()
 
+      transition.to( bucket1, { time=1000, rotation = 90 } )
+        transition.to( bucket2, { time=1000, rotation = -90 } )
+--[[
 	for i=1, count do
 			local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
 			local time = distance/maxSpeed*1000
@@ -205,7 +209,7 @@ function check()
                         -- "-30" in transition below sets the offset from numberline when dogs move to line
                         --transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y -30, time=1000})
                         -- line below does slower 3D effect transision
-                        transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x,  numberLine.y + 2*ballR, time )
+                     --   transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x,  numberLine.y + 2*ballR, time )
                         --numberLine.hash[matchBalls[i].num].y +
 	end
 
@@ -221,7 +225,7 @@ function check()
                 end)
             end
         end
-	end
+	end]]
 
 	local currScene = composer.getSceneName( "current" )
 	print(currScene)
@@ -229,20 +233,6 @@ function check()
 
 end
 
--- currently just printing result to terminal
-function correctCheck()
-    
-    local user = _G.finalNumber
-
---    local num = 
-    
-    if result == user then
-        print ( "CORRECT")
-    else
-        print ( "NEGATIVE" )
-    end
-    
-end
 
 function initBalls()
 
@@ -271,7 +261,9 @@ function initBalls()
 end
 
 function clearBalls()
-	for i=1, count do
+    bucket1.rotation = 0 
+    bucket2.rotation = 0 
+	for i=1, result do
 		display.remove(matchBalls[i])
 		matchBalls[i] = nil
                 -- attempting to address memory leak
@@ -313,9 +305,11 @@ function scene:create( event )
     local input = numInput:new(2, _W*.80,centerY)
 
 
-    bucket1 = bucketObject:new( bucketX1, bucketY )
+    bucket1 = bucket:new(200,200)
+    bucket1.x, bucket1.y = bucketX1, bucketY 
     
-    bucket2 = bucketObject:new( bucketX2, bucketY )
+    bucket2 = bucket:new(200,200) 
+    bucket2.x, bucket2.y = bucketX2, bucketY 
     
     bucket3 = bucketObject:new( bucketX3, bucketY3 )
     
@@ -371,6 +365,10 @@ function scene:create( event )
     function overCheck:tap( event )
 
         local user = input.getNumber()
+
+        check()
+      
+
 
         if result == user then
             print ( "CORRECT")
