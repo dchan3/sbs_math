@@ -178,6 +178,14 @@ function numInput:new( leftMax, x, y ) -- constructor
         return leftNum * 10 + rightNum
     end
 
+    function countBox.reset()
+         numTxtL.text = 0
+         numTxtR.text = 0
+         rightNum = 0 
+         leftNum  = 0
+        --return leftNum * 10 + rightNum
+    end
+
     return countBox
 end
 

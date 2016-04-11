@@ -8,6 +8,7 @@ local numLine = require( "objects.numLine" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local bucketObject = require( "objects.bucketObject")
+local numLine = require( "objects.numLine" )
 local bucket = require( "objects.bucket")
 local numInput = require( "objects.numInput")
 local widget = require "widget"
@@ -27,7 +28,6 @@ local numberOne = math.random( 0, max )
 local numberTwo = math.random( 0, max )
 local result = numberOne + numberTwo
 local matchCount = count
-local map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 
 local countBalls = {}
 local matchBalls = {}
@@ -43,6 +43,10 @@ local bucketX2 = _W*.5
 local bucketX3 = _W*.32
 local num1
 local num2
+local plus
+local input
+local numberLine
+local question
 
 local sceneGroup
 
@@ -196,19 +200,54 @@ function reset()
 
 	clearBalls()
   	initBalls()
+    input.reset()
+    physics.start()
+    numberLine.y = -bucketY
+    num1.y = bucketY
+    num2.y = bucketY
+    plus.y = bucketY
+    question.text = "?"
+    displayText.text = ""
 end
 
 function check()
 
-      transition.to( bucket1, { time=1000, rotation = 90 } )
-        transition.to( bucket2, { time=1000, rotation = -90 } )
 
-    transition.to( bucket1, { delay = 5000, time=1000, y = -bucketY } )
-     transition.to( bucket2, { delay = 5000, time=1000, y = -bucketY } )
 
-	local currScene = composer.getSceneName( "current" )
-	print(currScene)
-	timer.performWithDelay( 7000, function (event) reset() end)
+    local delayTime = 5000
+
+    transition.to( bucket1, { time=1000, rotation = 90 } )
+    transition.to( bucket2, { time=1000, rotation = -90 } )
+    transition.to( input, { time=1000, x = _W*1.25} )
+    question.text = input.getNumber()
+
+
+    transition.to( bucket1, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( bucket2, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( num1, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( num2, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( plus, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( numberLine, { delay = delayTime, time=1000, y = bucketY } )
+
+    timer.performWithDelay( delayTime, function (event) physics.pause() end)
+
+
+    for i=1, (numberOne+numberTwo) do
+           
+            transition.to( matchBalls[i], { time=1000, delay = delayTime+1000,  x =  numberLine.hash[i].x + numberLine.x, y = bucketY + 2*ballR, rotation = 0} )
+
+    end
+
+    for j=1,(numberOne+numberTwo) do
+
+        timer.performWithDelay((delayTime + 2000+ j * 400), function (event) 
+            displayText.text = convertDecToLat(j) 
+            matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
+            matchBalls[j].outline.alpha = .5
+            end)
+    end
+
+	timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo) * 400), function (event) reset() end)
 
 end
 
@@ -290,7 +329,7 @@ function scene:create( event )
     menu:addEventListener( "tap", listener )
     sceneGroup:insert( menu )
 
-    local input = numInput:new(2, _W*.80,centerY)
+    input = numInput:new(2, _W*.80,centerY)
 
 
     bucket1 = bucket:new(200,200)
@@ -302,7 +341,7 @@ function scene:create( event )
     bucket3 = bucketObject:new( bucketX3, bucketY3 )
     
     -- plus sign
-    local plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )
+    plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )
     plus:setFillColor( 0,0,0 )
     
     -- equal sign
@@ -318,7 +357,7 @@ function scene:create( event )
     num2:setFillColor( 0,0,0, .5 )
     
     -- question mark
-    local question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
+    question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
     
     sceneGroup:insert( bucket1 )
@@ -338,21 +377,9 @@ function scene:create( event )
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
  	initBalls()
             
-    -- testing only
-    -- local check button to compare user guess to actual
-    -- can possibly set check button in numInput object as global to perform both functions
-    --[[checkBtn = widget.newButton{
-                    width = _W*.09,
-                    height = _W*.09,
-                    defaultFile="images/check.png", 
-                    label = "click this to check, AFTER clicking other check",
-                    labelYOffset = 0,
-                    labelColor = { default = {1, 1, 1}, over = {1, 0, 0} },
-                    fontSize = 20,
-                    onRelease = correctCheck()	-- event listener function
-    }
-    checkBtn.x = _W*.8
-    checkBtn.y = centerY*1.75]]--
+    numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
+    numberLine.x , numberLine.y = _H*.1, -bucketY
+    sceneGroup:insert(numberLine)
 
     local overCheck = display.newRect(_W*.8, centerY*1.75, _W*.09, _W*.09)
     overCheck.alpha = .5
