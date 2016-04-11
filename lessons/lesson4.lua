@@ -15,7 +15,7 @@ local widget = require "widget"
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
-physics.setTimeStep( 1/20 )
+physics.setTimeStep( 1/15 )
 
 local scene = composer.newScene()
 
@@ -208,6 +208,8 @@ function reset()
     num2.y = bucketY
     plus.y = bucketY
     question.text = "?"
+    question:setFillColor(0,0,0,.5) 
+    input.x = _W*.80
     displayText.text = ""
 end
 
@@ -215,10 +217,10 @@ function check()
 
 
 
-    local delayTime = 5000
+    local delayTime = 4000
 
-    transition.to( bucket1, { time=1000, rotation = 90 } )
-    transition.to( bucket2, { time=1000, rotation = -90 } )
+    transition.to( bucket1, { time=500, rotation = 90 } )
+    transition.to( bucket2, { time=500, rotation = -90 } )
     transition.to( input, { time=1000, x = _W*1.25} )
     question.text = input.getNumber()
 
@@ -245,6 +247,16 @@ function check()
             displayText.text = convertDecToLat(j) 
             matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
             matchBalls[j].outline.alpha = .5
+            end)
+    end
+
+    if (numberOne+numberTwo) == input.getNumber() then
+        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event) 
+            question:setFillColor(0,1,0) 
+            end)
+    else
+        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event) 
+            question:setFillColor(1,0,0) 
             end)
     end
 
