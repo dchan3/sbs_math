@@ -14,6 +14,7 @@ local widget = require "widget"
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
+physics.setTimeStep( 1/20 )
 
 local scene = composer.newScene()
 
@@ -40,6 +41,8 @@ local bucketY3 = _H*.7
 local bucketX1 = _W*.15
 local bucketX2 = _W*.5
 local bucketX3 = _W*.32
+local num1
+local num2
 
 local sceneGroup
 
@@ -190,10 +193,8 @@ function hasCollidedCircle(obj1, obj2)
 end
 
 function reset()
-	displayText.text = ""
+
 	clearBalls()
-	count = math.random(1,max)
-    	matchCount = count
   	initBalls()
 end
 
@@ -201,48 +202,26 @@ function check()
 
       transition.to( bucket1, { time=1000, rotation = 90 } )
         transition.to( bucket2, { time=1000, rotation = -90 } )
---[[
-	for i=1, count do
-			local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
-			local time = distance/maxSpeed*1000
-			--print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
-                        -- "-30" in transition below sets the offset from numberline when dogs move to line
-                        --transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y -30, time=1000})
-                        -- line below does slower 3D effect transision
-                     --   transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x,  numberLine.y + 2*ballR, time )
-                        --numberLine.hash[matchBalls[i].num].y +
-	end
 
-	for j=1,count do
-		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j) end)
-
-        for i = 1, count do
-            if matchBalls[i].num == j then
-                timer.performWithDelay(j * 1000,
-                    function (event)
-                    matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
-                    matchBalls[i].outline.alpha = 1
-                end)
-            end
-        end
-	end]]
+    transition.to( bucket1, { delay = 5000, time=1000, y = -bucketY } )
+     transition.to( bucket2, { delay = 5000, time=1000, y = -bucketY } )
 
 	local currScene = composer.getSceneName( "current" )
 	print(currScene)
-	timer.performWithDelay((count + 1) * 1000, function (event) reset() end)
+	timer.performWithDelay( 7000, function (event) reset() end)
 
 end
 
 
 function initBalls()
 
-        local ballSize = ballR*2
+        local ballSize = ballR*1.75
     
             for i = 1, numberOne do
                 
                 matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
-                physics.addBody( matchBalls[i], { radius=ballSize*.5 } )
+                physics.addBody( matchBalls[i], { radius=ballSize*.5 , friction = .5} )
                 matchBalls[i].text.text = i
                 sceneGroup:insert( matchBalls[i] )
 
@@ -252,7 +231,7 @@ function initBalls()
 
                 matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*i
-                physics.addBody( matchBalls[i], { radius=ballSize*.5 } )
+                physics.addBody( matchBalls[i], { radius=ballSize*.5, friction = .5 } )
                  matchBalls[i].text.text = i - numberOne
                 sceneGroup:insert( matchBalls[i] )
 
@@ -263,13 +242,22 @@ end
 function clearBalls()
     bucket1.rotation = 0 
     bucket2.rotation = 0 
-	for i=1, result do
-		display.remove(matchBalls[i])
-		matchBalls[i] = nil
-                -- attempting to address memory leak
-                display.remove(countBalls[i])
-                countBalls[i] = nil
-	end
+    bucket1.y = bucketY
+    bucket2.y = bucketY
+
+    local i=1
+    for k,v in pairs(matchBalls) do
+        display.remove(matchBalls[i])
+        matchBalls[i] = nil
+        i=i + 1
+    end
+
+    numberOne = math.random( 0, max )
+    numberTwo = math.random( 0, max )
+    result = numberOne + numberTwo
+    num1.text = numberOne
+    num2.text = numberTwo
+
 end
 -- "scene:create()"
 function scene:create( event )
@@ -320,10 +308,18 @@ function scene:create( event )
     -- equal sign
     local equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
     equal:setFillColor( 0,0,0 )
+
+     -- question mark
+    num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
+    num1:setFillColor( 0,0,0, .5 )
+
+     -- question mark
+    num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
+    num2:setFillColor( 0,0,0, .5 )
     
     -- question mark
     local question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
-    question:setFillColor( 0,0,0 )
+    question:setFillColor( 0,0,0, .5 )
     
     sceneGroup:insert( bucket1 )
     sceneGroup:insert( bucket2 )
@@ -414,6 +410,7 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
+    physics.setTimeStep( -1 )
 
 
    -- display.remove(sceneGroup)
