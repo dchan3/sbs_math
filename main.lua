@@ -289,5 +289,6 @@ composer.recycleOnSceneChange = true
 --composer.gotoScene( "lessons.kCount_03" )
 --composer.gotoScene( "lessons.intro1" )
 --composer.gotoScene( "lessons.lesson1" )
-composer.gotoScene( "lessons.lesson4" )
+--composer.gotoScene( "lessons.lesson4" )
+composer.gotoScene( "lessons.lesson5" )
 --composer.gotoScene( "menu" )
