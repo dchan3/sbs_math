@@ -50,6 +50,7 @@ local subtract
 local input
 local numberLine
 local question
+local equal
 
 local sceneGroup
 
@@ -204,12 +205,15 @@ function reset()
 	clearBalls()
   	initBalls()
     input.reset()
+    input.x = _W*.8
     physics.start()
     numberLine.y = -bucketY
     num1.y = bucketY
     num2.y = bucketY
     subtract.y = bucketY
     question.text = "?"
+    question.y = bucketY3
+    equal.y = _H*.7
     displayText.text = ""
 end
 
@@ -219,18 +223,20 @@ function check()
 
     local delayTime = 5000
 
-    transition.to( bucket1, { time=1000, rotation = 90 } )
-    transition.to( bucket2, { time=1000, rotation = -90 } )
+   -- transition.to( bucket1, { time=1000, rotation = 90 } )
+   -- transition.to( bucket2, { time=1000, rotation = -90 } )
     transition.to( input, { time=1000, x = _W*1.25} )
     question.text = input.getNumber()
 
 
-    transition.to( bucket1, { delay = delayTime, time=1000, y = -bucketY } )
-    transition.to( bucket2, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( bucket1, { delay = delayTime, time=1000, y = bucketY*3 } )
+    transition.to( bucket2, { delay = delayTime, time=1000, y = bucketY*3 } )
     transition.to( num1, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( num2, { delay = delayTime, time=1000, y = -bucketY } )
-    transition.to( subtract, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( subtract, { delay = delayTime, time=1000, y = bucketY*3 } )
     transition.to( numberLine, { delay = delayTime, time=1000, y = bucketY } )
+    transition.to( question, { delay = delayTime, time=1000, y = bucketY*5 } )
+    transition.to( equal, { delay = delayTime, time=1000, y = bucketY*5 } )
 
     timer.performWithDelay( delayTime, function (event) physics.pause() end)
 
@@ -347,7 +353,7 @@ function scene:create( event )
     subtract:setFillColor( 0,0,0 )
     
     -- equal sign
-    local equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
+    equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
     equal:setFillColor( 0,0,0 )
 
      -- question mark
