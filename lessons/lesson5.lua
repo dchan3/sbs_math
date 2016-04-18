@@ -24,7 +24,7 @@ math.randomseed(os.time())
 local numberOne = math.random( 1, max )
 local numberTwo = math.random( 0, max )
 -- preventing negative result
-while ( numberTwo > numberOne ) do
+while ( numberTwo >= numberOne ) do
     print( "negative result" )
     numberTwo = math.random( 0, max )
 end
@@ -247,13 +247,19 @@ function check()
 
     end
 
-    for j=1,(numberOne+numberTwo) do
+    for j=1,(numberOne-numberTwo) do
 
         timer.performWithDelay((delayTime + 2000+ j * 400), function (event) 
             displayText.text = convertDecToLat(j) 
             matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
             matchBalls[j].outline.alpha = .5
             end)
+    end
+    
+    for k=(numberOne-numberTwo+1), (numberOne+numberTwo) do
+        
+       transition.to( matchBalls[k], { time=2000, delay = delayTime+2000,  x = numberLine.hash[k].x + numberLine.x, y = -bucketY + 2*ballR, rotation = 0} ) 
+        
     end
 
 	timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo) * 400), function (event) reset() end)
@@ -302,6 +308,11 @@ function clearBalls()
 
     numberOne = math.random( 1, max )
     numberTwo = math.random( 0, max )
+    -- preventing negative result
+    while ( numberTwo >= numberOne ) do
+        print( "negative result" )
+        numberTwo = math.random( 0, max )
+    end 
     total = numberOne + numberTwo
     result = numberOne - numberTwo
     num1.text = numberOne
