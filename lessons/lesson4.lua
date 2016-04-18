@@ -201,6 +201,7 @@ function reset()
 	clearBalls()
   	initBalls()
     input.reset()
+    input.x = _W*.8
     physics.start()
     numberLine.y = -bucketY
     num1.y = bucketY
