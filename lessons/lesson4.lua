@@ -15,7 +15,7 @@ local widget = require "widget"
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
-physics.setTimeStep( 1/15 )
+physics.setTimeStep( 1/10 )
 physics.setGravity( 0, 9.8 )
 
 local scene = composer.newScene()
@@ -210,6 +210,7 @@ function reset()
     num2.y = bucketY
     num1:toFront()
     num2:toFront()
+    question:toFront()
     plus.y = bucketY
     question.text = "?"
     question:setFillColor(0,0,0,.5) 
@@ -351,12 +352,12 @@ function scene:create( event )
     sceneGroup:insert( input )
 
 
-    bucket1 = bucket:new(ballR*8,ballR*8)
+    bucket1 = bucket:new(ballR*8,ballR*7)
     bucket1.x, bucket1.y = bucketX1, bucketY 
     sceneGroup:insert( bucket1)
 
     
-    bucket2 = bucket:new(ballR*8,ballR*8)
+    bucket2 = bucket:new(ballR*8,ballR*7)
     bucket2.x, bucket2.y = bucketX2, bucketY 
     sceneGroup:insert( bucket2)
 
@@ -388,7 +389,7 @@ function scene:create( event )
     -- question mark
     question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
-    sceneGroup:insert( question )
+   
     
     
 
@@ -406,6 +407,7 @@ function scene:create( event )
  	initBalls()
     sceneGroup:insert( num1 )
     sceneGroup:insert( num2 )
+     sceneGroup:insert( question )
             
     numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
     numberLine.x , numberLine.y = _H*.1, -bucketY

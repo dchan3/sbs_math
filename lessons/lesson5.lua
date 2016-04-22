@@ -12,7 +12,7 @@ local widget = require "widget"
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
-physics.setTimeStep( 1/20 )
+physics.setTimeStep( 1/10 )
 
 local scene = composer.newScene()
 
@@ -135,70 +135,6 @@ local function onLocalCollision( self, event )
 end
 
 
-function hasCollidedCircle(obj1, obj2)
-
-    if obj1 == nil then
-        return false
-    end
-
-    if obj2 == nil then
-        return false
-    end
-
-    local sqrt = math.sqrt
-    local dx =  obj1.x - obj2.x;
-    local dy =  obj1.y - obj2.y;
-    local distance = sqrt(dx*dx + dy*dy);
-    local objectSize = (obj2.contentWidth/2) + (obj1.contentWidth/2)
-
-    if distance < objectSize then
-
-                    local function listener( event )
-                        display.remove(obj1)
-                    end
-
-
-                    local transitionTime = 100
-
-
-                    transition.to(obj1,
-                    {
-                        time=transitionTime,
-                        x = obj2.x,
-                        y= obj2.y,
-                        onComplete = listener
-                    })
-
-                   obj2.text.text = obj1.num--= display.newText( obj1.num, 0, 0, font, ballR*2 )
-                    obj2.text:setFillColor(0,0,0)
-                    obj2.text.alpha = 0
-                    obj2.num = obj1.num
-                    obj2:insert( obj2.text )
-                    obj2.matched = true
-
-
-                    local function listener( event )
-                        transition.to(obj2.text,
-                        {
-                        time=500,
-                        alpha =.75
-                        })
-                    end
-                    timer.performWithDelay( transitionTime, listener )
-
-                    matchCount = matchCount - 1
-
-                    if matchCount <= 0 then
-                        decText.text = ""
-                        latText.text = ""
-                      check()
-                        matchCount = count
-                    end
-        print("true")
-        return true
-    end
-    return false
-end
 
 function reset()
 
