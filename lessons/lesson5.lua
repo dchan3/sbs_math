@@ -324,6 +324,7 @@ function scene:create( event )
 
     sceneGroup = self.view
 
+    physics.start()
     count = math.random(1,max)
     matchCount = count
     
@@ -335,9 +336,9 @@ function scene:create( event )
     sceneGroup:insert( background )
 
     
-        displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
-                displayText:setFillColor( 0, 0, .5 )
- --   physics.setGravity(0,0)
+    displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
+    displayText:setFillColor( 0, 0, .5 )
+
     sceneGroup:insert(displayText)
 
 
@@ -351,9 +352,10 @@ function scene:create( event )
     sceneGroup:insert( menu )
 
     input = numInput:new(2, _W*.80,centerY)
+    sceneGroup:insert( input )
 
 
-    bucket1 = bucket:new(200,200)
+    bucket1 = bucket:new(ballR*10,ballR*10)
     bucket1.x, bucket1.y = bucketX1, bucketY 
     
     bucket2 = bucket:new(200,200) 
@@ -362,22 +364,27 @@ function scene:create( event )
     -- subtraction sign
     subtract = display.newText( "-", _W*.32, _H*.25, font, _W*.15 )
     subtract:setFillColor( 0,0,0 )
+    sceneGroup:insert(subtract)
     
     -- equal sign
     equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
-    equal:setFillColor( 0,0,0 )
+    equal:setFillColor( 0,0,0 ) 
+    sceneGroup:insert(equal)
 
      -- question mark
     num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
     num1:setFillColor( 0,0,0, .5 )
+    sceneGroup:insert(num1)
 
      -- question mark
     num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
     num2:setFillColor( 0,0,0, .5 )
+    sceneGroup:insert(num2)
     
     -- question mark
     question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
+    sceneGroup:insert(question)
     
     sceneGroup:insert( bucket1 )
     sceneGroup:insert( bucket2 )
@@ -399,8 +406,9 @@ function scene:create( event )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)
 
-    local overCheck = display.newRect(_W*.8, centerY*1.75, _W*.09, _W*.09)
+    local overCheck = display.newRect(_W*.8, centerY*1.6, _W*.09, _W*.09)
     overCheck.alpha = .5
+    sceneGroup:insert(overCheck)
 
 
     function overCheck:tap( event )

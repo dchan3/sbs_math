@@ -4,8 +4,8 @@ function Bucket:new( bucketH, bucketW )
 
 
 	local bucket = display.newImage( "images/bucket.png" )
-	bucket.width = 250
-    bucket.height = 250
+	bucket.width = bucketH
+    bucket.height = bucketW
 
 	local leftSide =	{ -bucketW*.5,bucketH*.5,	 -bucketW*.5, -bucketH*.5, 		 -bucketW*.65*.5, bucketH*.5	}
 	local rightSide = 	{  bucketW*.5,bucketH*.5,	  bucketW*.5, -bucketH*.5, 		  bucketW*.65*.5, bucketH*.5	}
