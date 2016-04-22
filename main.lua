@@ -290,5 +290,6 @@ composer.recycleOnSceneChange = true
 --composer.gotoScene( "lessons.intro1" )
 --composer.gotoScene( "lessons.lesson1" )
 --composer.gotoScene( "lessons.lesson4" )
-composer.gotoScene( "lessons.lesson5" )
+--composer.gotoScene( "lessons.lesson5" )
+composer.gotoScene( "lessons.lesson6" )
 --composer.gotoScene( "menu" )
