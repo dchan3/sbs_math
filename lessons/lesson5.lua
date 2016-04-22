@@ -210,6 +210,8 @@ function reset()
     numberLine.y = -bucketY
     num1.y = bucketY
     num2.y = bucketY
+    num1:toFront()
+    num2:toFront()
     subtract.y = bucketY
     question.text = "?"
     question.y = bucketY3
@@ -219,13 +221,11 @@ end
 
 function check()
 
-
-
     local delayTime = 5000
-
-   -- transition.to( bucket1, { time=1000, rotation = 90 } )
-   -- transition.to( bucket2, { time=1000, rotation = -90 } )
+     transition.to( bucket1, { time=500, rotation = 90 } )
+    transition.to( bucket2, { time=500, rotation = -90 } )
     transition.to( input, { time=1000, x = _W*1.25} )
+    question.text = input.getNumber()
     question.text = input.getNumber()
 
 
@@ -283,10 +283,10 @@ function initBalls()
 
             for i = numberOne+1, total do
 
-                matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
+                matchBalls[i] = Animal:new("images/redX.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5, friction = .5 } )
-                 matchBalls[i].text.text = i - numberOne
+                matchBalls[i].text.text = i - numberOne
                 sceneGroup:insert( matchBalls[i] )
 
             end
@@ -354,12 +354,17 @@ function scene:create( event )
     input = numInput:new(2, _W*.80,centerY)
     sceneGroup:insert( input )
 
-
-    bucket1 = bucket:new(ballR*10,ballR*10)
+    bucket1 = bucket:new(ballR*8,ballR*8)
     bucket1.x, bucket1.y = bucketX1, bucketY 
+    sceneGroup:insert( bucket1)
     
-    bucket2 = bucket:new(200,200) 
+    bucket2 = bucket:new(ballR*8,ballR*8)
     bucket2.x, bucket2.y = bucketX2, bucketY 
+    sceneGroup:insert( bucket2)
+
+    bucket3 = bucket:new(ballR*8,ballR*8) 
+    bucket3.x, bucket3.y = bucketX3, bucketY3 
+    sceneGroup:insert( bucket3)
     
     -- subtraction sign
     subtract = display.newText( "-", _W*.32, _H*.25, font, _W*.15 )
@@ -374,20 +379,18 @@ function scene:create( event )
      -- question mark
     num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
     num1:setFillColor( 0,0,0, .5 )
-    sceneGroup:insert(num1)
+   
 
      -- question mark
     num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
     num2:setFillColor( 0,0,0, .5 )
-    sceneGroup:insert(num2)
+    
     
     -- question mark
     question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
     sceneGroup:insert(question)
     
-    sceneGroup:insert( bucket1 )
-    sceneGroup:insert( bucket2 )
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
@@ -401,12 +404,15 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
  	initBalls()
+    sceneGroup:insert( num1 )
+    sceneGroup:insert( num2 )
             
     numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)
 
-    local overCheck = display.newRect(_W*.8, centerY*1.6, _W*.09, _W*.09)
+    local overCheck = display.newRect( 0, 0, _W*.09, _W*.09)
+    overCheck.x, overCheck.y = _W*.8, input.getCheckY() + input.y
     overCheck.alpha = .5
     sceneGroup:insert(overCheck)
 

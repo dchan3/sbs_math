@@ -208,6 +208,8 @@ function reset()
     numberLine.y = -bucketY
     num1.y = bucketY
     num2.y = bucketY
+    num1:toFront()
+    num2:toFront()
     plus.y = bucketY
     question.text = "?"
     question:setFillColor(0,0,0,.5) 
