@@ -69,50 +69,7 @@ end
 return false
 end
 
-local function drag( event )
-  local t = event.target
 
-	local phase = event.phase
-	if "began" == phase then
-		local parent = t.parent
-		parent:insert( t )
-		display.getCurrentStage():setFocus( t )
-
-		t.isFocus = true
-
-		-- Store initial position
-		t.x0 = event.x - t.x
-		t.y0 = event.y - t.y
-	elseif t.isFocus then
-		if "moved" == phase then
-			-- Make object move (we subtract t.x0,t.y0 so that moves are
-			-- relative to initial grab point, rather than object "snapping").
-            -- Make sure objects don't move beyond the bounds
-			t.x = event.x - t.x0
-			t.y = event.y - t.y0
-
-			if t.hovered == false and t.x - longBucket.x <= 1 and t.y - longBucket.y <= 1 then
-				t.hovered = true
-			end
-
-			if t.hovered == false and t.x - shortBucket.x <= 1 and t.y - shortBucket.y <= 1 then
-				t.hovered = true
-			end
-		elseif "ended" == phase or "cancelled" == phase then
-			print(t.collidedWith);
-			if(t.collidedWith ~= nil) then
-				hasCollided(t, t.collidedWith )
-			end
-			display.getCurrentStage():setFocus( nil )
-			t.isFocus = false
-
-			if t.hovered == true then
-				check()
-			end
-		end
-	end
-	return true
-end
 
 function check()
 end
@@ -134,7 +91,7 @@ function initSnakes()
 		snakes[i].collision = onLocalCollision
 		snakes[i].collidedWith = nil
 		physics.addBody( snakes[i], { radius=4 * _H * .075 * .5 } )
-		snakes[i]:addEventListener("touch", drag)
+		
 		snakes[i]:insert(snakes[i].img);
 		sceneGroup:insert( snakes[i] )
 
