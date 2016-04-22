@@ -109,7 +109,7 @@ k.gridOffsetY = -_H*.5 	-- vertical offset for the entire grid on the page
 
 -- misc variables
 
-k.numUnlocked = 10 -- how many of the first levels are unlocked (minimum 1)
+k.numUnlocked = 15 -- how many of the first levels are unlocked (minimum 1)
 
 k.rememberPage = true -- if true, shows page from last selected level
 k.currentPage = 1 	-- probably won't change this (much) manually
