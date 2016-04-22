@@ -16,6 +16,7 @@ local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
 physics.setTimeStep( 1/15 )
+physics.setGravity( 0, 9.8 )
 
 local scene = composer.newScene()
 
@@ -343,35 +344,45 @@ function scene:create( event )
     sceneGroup:insert( menu )
 
     input = numInput:new(2, _W*.80,centerY)
+    sceneGroup:insert( input )
 
 
-    bucket1 = bucket:new(200,200)
+    bucket1 = bucket:new(ballR*8,ballR*8)
     bucket1.x, bucket1.y = bucketX1, bucketY 
+    sceneGroup:insert( bucket1)
+
     
-    bucket2 = bucket:new(200,200) 
+    bucket2 = bucket:new(ballR*8,ballR*8)
     bucket2.x, bucket2.y = bucketX2, bucketY 
-    
-    bucket3 = bucketObject:new( bucketX3, bucketY3 )
-    
+    sceneGroup:insert( bucket1)
+
+    bucket3 = bucket:new(ballR*8,ballR*8) 
+    bucket3.x, bucket3.y = bucketX3, bucketY3 
+    sceneGroup:insert( bucket3)
     -- plus sign
     plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )
     plus:setFillColor( 0,0,0 )
+    sceneGroup:insert( plus )
     
     -- equal sign
     local equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
     equal:setFillColor( 0,0,0 )
+    sceneGroup:insert( equal )
 
      -- question mark
     num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
     num1:setFillColor( 0,0,0, .5 )
+    sceneGroup:insert( num1 )
 
      -- question mark
     num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
     num2:setFillColor( 0,0,0, .5 )
+    sceneGroup:insert( num2 )
     
     -- question mark
     question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
+    sceneGroup:insert( question )
     
     sceneGroup:insert( bucket1 )
     sceneGroup:insert( bucket2 )
