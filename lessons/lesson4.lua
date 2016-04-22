@@ -29,6 +29,7 @@ local numberOne = math.random( 0, max )
 local numberTwo = math.random( 0, max )
 local result = numberOne + numberTwo
 local matchCount = count
+local notChecked = true
 
 local countBalls = {}
 local matchBalls = {}
@@ -212,6 +213,7 @@ function reset()
     question:setFillColor(0,0,0,.5) 
     input.x = _W*.80
     displayText.text = ""
+    notChecked = true
 end
 
 function check()
@@ -354,11 +356,13 @@ function scene:create( event )
     
     bucket2 = bucket:new(ballR*8,ballR*8)
     bucket2.x, bucket2.y = bucketX2, bucketY 
-    sceneGroup:insert( bucket1)
+    sceneGroup:insert( bucket2)
 
     bucket3 = bucket:new(ballR*8,ballR*8) 
     bucket3.x, bucket3.y = bucketX3, bucketY3 
     sceneGroup:insert( bucket3)
+
+
     -- plus sign
     plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )
     plus:setFillColor( 0,0,0 )
@@ -372,21 +376,19 @@ function scene:create( event )
      -- question mark
     num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
     num1:setFillColor( 0,0,0, .5 )
-    sceneGroup:insert( num1 )
+    
 
      -- question mark
     num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
     num2:setFillColor( 0,0,0, .5 )
-    sceneGroup:insert( num2 )
+    
     
     -- question mark
     question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
     sceneGroup:insert( question )
     
-    sceneGroup:insert( bucket1 )
-    sceneGroup:insert( bucket2 )
-    sceneGroup:insert( bucket3 )
+    
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
@@ -400,27 +402,31 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
  	initBalls()
+    sceneGroup:insert( num1 )
+    sceneGroup:insert( num2 )
             
     numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)
 
-    local overCheck = display.newRect(_W*.8, centerY*1.75, _W*.09, _W*.09)
+    local overCheck = display.newRect(0, 0, _W*.09, _W*.09)
+    overCheck.x, overCheck.y = _W*.8, input.getCheckY() + input.y
     overCheck.alpha = .5
+    sceneGroup:insert( overCheck )
 
 
     function overCheck:tap( event )
 
-        local user = input.getNumber()
+        if (notChecked) then
+            notChecked = false
+            local user = input.getNumber()
+            check()
 
-        check()
-      
-
-
-        if result == user then
-            print ( "CORRECT")
-        else
-            print ( "NEGATIVE" )
+            if result == user then
+                print ( "CORRECT")
+            else
+                print ( "NEGATIVE" )
+            end
         end
     end
 
