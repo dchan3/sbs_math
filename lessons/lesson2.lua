@@ -43,7 +43,7 @@ local function drag( event )
         display.getCurrentStage():setFocus( t )
 
         decText.text = t.num * 10
-        local text = convertDecToTens( t.num * 10)
+        local text = convertDecToLat( t.num * 10)
         latText.text = text
         -- Spurious events can be sent to the target, e.g. the user presses
         -- elsewhere on the screen and then moves the finger over the target.
@@ -185,7 +185,7 @@ function check()
 	end             
 
 	for j=1,count do
-		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToTens(j * 10) end)
+		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j * 10) end)
 	end
 	local currScene = composer.getSceneName( "current" )
 	print(currScene)
