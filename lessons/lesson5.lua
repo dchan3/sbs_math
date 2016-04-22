@@ -15,8 +15,9 @@ physics.setDrawMode( "hybrid" )
 physics.setTimeStep( 1/10 )
 
 local scene = composer.newScene()
-
+local reNumberBalls
 local hasCollidedCircle
+local ballSize = ballR*1.75
 
 local max = 10
 local count = max -- math.random( 1, max)
@@ -31,6 +32,7 @@ end
 local total = numberOne + numberTwo
 local result = numberOne - numberTwo
 local matchCount = count
+local outsideX, outsideY = _W*.6, _H*.75
 
 local countBalls = {}
 local matchBalls = {}
@@ -59,79 +61,57 @@ local latText
 
 local selText = display
 
-local function drag( event )
-    local t = event.target
-
-    -- Print info about the event. For actual production code, you should
-    -- not call this function because it wastes CPU resources.
-    --printTouch(event)
-
-    local phase = event.phase
-    if "began" == phase then
-        -- Make target the top-most object
-        local parent = t.parent
-        parent:insert( t )
-        display.getCurrentStage():setFocus( t )
-
-        decText.text = t.num
-        local text = convertDecToLat( t.num )
-        latText.text = text
-        -- Spurious events can be sent to the target, e.g. the user presses
-        -- elsewhere on the screen and then moves the finger over the target.
-        -- To prevent this, we add this flag. Only when it's true will "move"
-        -- events be sent to the target.
-        t.isFocus = true
-
-        -- Store initial position
-        t.x0 = event.x - t.x
-        t.y0 = event.y - t.y
-    elseif t.isFocus then
-        if "moved" == phase then
-            -- Make object move (we subtract t.x0,t.y0 so that moves are
-            -- relative to initial grab point, rather than object "snapping").
-            t.x = event.x - t.x0
-            t.y = event.y - t.y0
-
-        elseif "ended" == phase or "cancelled" == phase then
-
-                print(t.cooldedWith)
-
-                if(t.collidedWith ~= nil) then
-
-                    hasCollidedCircle(t, t.collidedWith )
-
-                end
-
-            display.getCurrentStage():setFocus( nil )
-            t.isFocus = false
-        end
-    end
-
-    -- Important to return true. This tells the system that the event
-    -- should not be propagated to listeners of any objects underneath.
-    return true
-end
 
 local function onLocalCollision( self, event )
    local t = event.target
    local o = event.other
+print(event.other)
 
-    if ( event.phase == "began" ) then
-
-        if (event.other.matched == false) then
-            event.other.num = self.num
-            self.collidedWith = event.other
-
+    if event.other.name == "minus" then
+        display.remove(event.other)
+        event.other = nil
+        local x = display.newImageRect( "images/redX.png", ballSize, ballSize)
+        event.target:insert(x)
+        
+        local function onTimer( event )
+            local params = event.source.params
+            physics.removeBody( params.passedTar )
         end
 
-    elseif ( event.phase == "ended" ) or ( event.phase == "cancelled" ) then
+        local tm = timer.performWithDelay( 1, onTimer )
 
-        if (event.other.matched == false) then
-            event.other.num = self.num
-            self.collidedWith = event.other
-        end
+        tm.params = { passedTar = event.target }
+        transition.to( event.target, { time=750, x=outsideX, y=outsideY } )
+        
 
     end
+    
+end
+
+function reNumberBalls ( event )
+  local count = 0
+  local max = 1 
+
+
+  for i=1, (numberOne+numberTwo) do
+
+    local child = balls[i].ball
+    local description = (child.isVisible and "visible") or "not visible"
+    local alphaStep = .4/result
+
+    if description == "visible" then
+      count = count + 1
+      balls[i].ballText.text = count
+      balls[i].ballText.alpha = .1 + count*alphaStep
+      max = i
+    end
+
+  end 
+  if count ~= 0 then
+    balls[max].ballText:setFillColor(1,0,0)
+    balls[max].ballText.alpha = 1
+  end
+
 end
 
 
@@ -205,7 +185,7 @@ end
 
 function initBalls()
 
-        local ballSize = ballR*1.75
+        
 
             for i = 1, numberOne do
 
@@ -213,6 +193,8 @@ function initBalls()
                 matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5 , friction = .5} )
                 matchBalls[i].text.text = i
+                 matchBalls[i].collision = onLocalCollision
+                 matchBalls[i]:addEventListener( "collision", matchBalls[i] )
                 sceneGroup:insert( matchBalls[i] )
 
             end
