@@ -213,7 +213,7 @@ function reset()
     question:toFront()
     plus.y = bucketY
     question.text = "?"
-    question:setFillColor(0,0,0,.5) 
+    question:setFillColor(0,0,0,.5)
     input.x = _W*.80
     displayText.text = ""
     notChecked = true
@@ -242,27 +242,27 @@ function check()
 
 
     for i=1, (numberOne+numberTwo) do
-           
+
             transition.to( matchBalls[i], { time=1000, delay = delayTime+1000,  x =  numberLine.hash[i].x + numberLine.x, y = bucketY + 2*ballR, rotation = 0} )
 
     end
 
     for j=1,(numberOne+numberTwo) do
 
-        timer.performWithDelay((delayTime + 2000+ j * 400), function (event) 
-            displayText.text = convertDecToLat(j) 
+        timer.performWithDelay((delayTime + 2000+ j * 400), function (event)
+            displayText.text = convertDecToLat(j)
             matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
             matchBalls[j].outline.alpha = .5
             end)
     end
 
     if (numberOne+numberTwo) == input.getNumber() then
-        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event) 
-            question:setFillColor(0,1,0) 
+        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event)
+            question:setFillColor(0,1,0)
             end)
     else
-        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event) 
-            question:setFillColor(1,0,0) 
+        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event)
+            question:setFillColor(1,0,0)
             end)
     end
 
@@ -274,9 +274,9 @@ end
 function initBalls()
 
         local ballSize = ballR*1.75
-    
+
             for i = 1, numberOne do
-                
+
                 matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5 , friction = .5} )
@@ -298,8 +298,8 @@ function initBalls()
 end
 
 function clearBalls()
-    bucket1.rotation = 0 
-    bucket2.rotation = 0 
+    bucket1.rotation = 0
+    bucket2.rotation = 0
     bucket1.y = bucketY
     bucket2.y = bucketY
 
@@ -324,7 +324,7 @@ function scene:create( event )
 
     count = math.random(1,max)
     matchCount = count
-    
+
     local background = display.newImageRect( "images/bg_blue_zig.png",
             display.contentWidth, display.contentHeight )
     background.anchorX = 0
@@ -332,7 +332,7 @@ function scene:create( event )
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
 
-    
+
         displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
                 displayText:setFillColor( 0, 0, .5 )
  --   physics.setGravity(0,0)
@@ -353,16 +353,16 @@ function scene:create( event )
 
 
     bucket1 = bucket:new(ballR*8,ballR*7)
-    bucket1.x, bucket1.y = bucketX1, bucketY 
+    bucket1.x, bucket1.y = bucketX1, bucketY
     sceneGroup:insert( bucket1)
 
-    
+
     bucket2 = bucket:new(ballR*8,ballR*7)
-    bucket2.x, bucket2.y = bucketX2, bucketY 
+    bucket2.x, bucket2.y = bucketX2, bucketY
     sceneGroup:insert( bucket2)
 
-    bucket3 = bucket:new(ballR*8,ballR*8) 
-    bucket3.x, bucket3.y = bucketX3, bucketY3 
+    bucket3 = bucket:new(ballR*8,ballR*8)
+    bucket3.x, bucket3.y = bucketX3, bucketY3
     sceneGroup:insert( bucket3)
 
 
@@ -370,7 +370,7 @@ function scene:create( event )
     plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )
     plus:setFillColor( 0,0,0 )
     sceneGroup:insert( plus )
-    
+
     -- equal sign
     local equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
     equal:setFillColor( 0,0,0 )
@@ -379,19 +379,19 @@ function scene:create( event )
      -- question mark
     num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
     num1:setFillColor( 0,0,0, .5 )
-    
+
 
      -- question mark
     num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
     num2:setFillColor( 0,0,0, .5 )
-    
-    
+
+
     -- question mark
     question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
-   
-    
-    
+
+
+
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
@@ -408,7 +408,7 @@ function scene:create( event )
     sceneGroup:insert( num1 )
     sceneGroup:insert( num2 )
      sceneGroup:insert( question )
-            
+
     numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)
@@ -435,7 +435,7 @@ function scene:create( event )
     end
 
 overCheck:addEventListener( "tap", overCheck )
-    
+
 end
 
 

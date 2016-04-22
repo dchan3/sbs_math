@@ -85,10 +85,18 @@ function check()
 		end
 		if k <= count1 then
 			timer.performWithDelay(k * 1000, function (event) displayText1.text = convertDecToLat(k) end)
+                        timer.performWithDelay(k * 1000, function (event) matchBalls1[k].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B) end)
+                        timer.performWithDelay(k * 1000, function (event) matchBalls1[k].outline.alpha = 1 end)
 		end
-		if k <= count2 then
-			timer.performWithDelay(k * 1000, function (event) displayText2.text = convertDecToLat(k) end)
-		end
+                 
+                -- added extra delay to hold count for right side until left is finished
+                timer.performWithDelay( count1 * 1000, function (event)
+                    if k <= count2 then
+                            timer.performWithDelay(k * 1000, function (event) displayText2.text = convertDecToLat(k) end)
+                            timer.performWithDelay(k * 1000, function (event) matchBalls2[k].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B) end)
+                            timer.performWithDelay(k * 1000, function (event) matchBalls2[k].outline.alpha = 1 end)
+                    end
+                end)
 
 
 	end
@@ -278,7 +286,7 @@ function initBalls()
                 if map1[randomLocation] == false then
                     --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3),
                         --_H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-                    matchBalls1[i].x, matchBalls1[i].y = leftBound*.95 - math.random(_W*.3), -- _W*math.random(_W*.1), --+ _W*.1*math.floor((randomLocation-1) / 3),
+                    matchBalls1[i].x, matchBalls1[i].y = leftBound*.65 - math.random(_W*.2), -- _W*math.random(_W*.1), --+ _W*.1*math.floor((randomLocation-1) / 3),
                         _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.01
                     map1[randomLocation] = true
 
@@ -306,7 +314,7 @@ function initBalls()
                 if map2[randomLocation] == false then
                     --matchBalls[i].x, matchBalls[i].y = _W *.5 /6 +  _W *.5 /3 * (randomLocation % 3),
                         --_H*.1 + _H*.2*math.floor((randomLocation-1) / 3)
-                    matchBalls2[i].x, matchBalls2[i].y = rightBound*1.05 + math.random(_W*.3),--_W*.05 + _W*.1*math.floor((randomLocation-1) / 3),
+                    matchBalls2[i].x, matchBalls2[i].y = rightBound*1.25 + math.random(_W*.15),--_W*.05 + _W*.1*math.floor((randomLocation-1) / 3),
                         _H *.5 / 6 + _H * .5 / 3 * (randomLocation % 3) + _H *.01
                     map2[randomLocation] = true
 
@@ -344,24 +352,24 @@ function scene:create( event )
     menu:addEventListener( "tap", listener )
     sceneGroup:insert( menu )
 
-	numLine1 = numLine:new(1, 10, _H*.9, 90, 1)
+	numLine1 = numLine:new(0, 10, _H*.9, 90, 1, fontSize )
 	numLine1.anchorX, numLine1.anchorY = 0.5, 0.5
-	numLine1.x , numLine1.y = leftBound - _W*.05, _H * .05
+	numLine1.x , numLine1.y = leftBound - _W*.07, _H * .05
 
-	for p=1,10 do
-		numLine1.num[p].x = -50
+	for p=0,10 do
+		numLine1.num[p].x = -80
 	end
 
 	sceneGroup:insert(numLine1)
 
-	numLine2 =  numLine:new(1, 10, _H*.9, 90, 1)
+	numLine2 =  numLine:new(0, 10, _H*.9, 90, 1, fontSize )
 	numLine2.anchorX, numLine2.anchorY = 0.5, 0.5
-	numLine2.x , numLine2.y = rightBound + _W*.05, _H * .05
+	numLine2.x , numLine2.y = rightBound + _W*.07, _H * .05
 
 	sceneGroup:insert(numLine2)
 
-	displayText1 = display.newText("", _W * .20, _H * .125, font, _W*.05)
-	displayText2 = display.newText("", _W * .80, _H * .125, font, _W*.05)
+	displayText1 = display.newText("", _W * .15, _H * .2, font, _W*.05)
+	displayText2 = display.newText("", _W * .85, _H * .2, font, _W*.05)
 
 	displayText1:setFillColor(priColor.R,priColor.G,priColor.B)
 	displayText2:setFillColor(priColor.R,priColor.G,priColor.B)
