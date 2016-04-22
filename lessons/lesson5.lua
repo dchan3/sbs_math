@@ -220,6 +220,7 @@ function initBalls()
             for i = numberOne+1, total do
 
                 matchBalls[i] = Animal:new("images/redX.png", ballSize, ballSize, ballSize*.75)
+                matchBalls[i].name = "minus"
                 matchBalls[i].x, matchBalls[i].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5, friction = .5 } )
                 matchBalls[i].text.text = i - numberOne
@@ -315,11 +316,7 @@ function scene:create( event )
      -- question mark
     num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
     num1:setFillColor( 0,0,0, .5 )
-<<<<<<< HEAD
 
-=======
-    sceneGroup:insert(num1)
->>>>>>> 409c31dab5daba9c5ac54d1ac208c80d43993425
 
      -- question mark
     num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
@@ -352,12 +349,8 @@ function scene:create( event )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)
 
-<<<<<<< HEAD
     local overCheck = display.newRect( 0, 0, _W*.09, _W*.09)
     overCheck.x, overCheck.y = _W*.8, input.getCheckY() + input.y
-=======
-    local overCheck = display.newRect(_W*.8, centerY*1.6, _W*.09, _W*.09)
->>>>>>> 409c31dab5daba9c5ac54d1ac208c80d43993425
     overCheck.alpha = .5
     sceneGroup:insert(overCheck)
 
