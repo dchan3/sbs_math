@@ -194,7 +194,7 @@ end
 
 function initBalls()
 	    for i=1,count do
-	        countBalls[i] = AnimalBall:new(0,0, ballR*1.5, i)
+	        countBalls[i] = AnimalBall:new(0,0, ballR*1.5, i*10)
 	        countBalls[i]:addEventListener( "touch", drag )
 
 	        countBalls[i]:insert( countBalls[i].ball )
@@ -214,7 +214,7 @@ function initBalls()
 			map = { false, false, false, false, false, false, false, false, false, false,  false, false, false, false, false }
 
 	    for i=1,count do
-	        matchBalls[i] = Animal:new("images/tenDogs.png",  ballR*3, ballR*3, ballR*2)
+	        matchBalls[i] = Animal:new("images/tenPups.png",  ballR*3, ballR*3, ballR*2)
 	        matchBalls[i]:addEventListener( "touch", drag )
 	        matchBalls[i]:insert( matchBalls[i].ball )
 
@@ -258,9 +258,18 @@ function scene:create( event )
     background.anchorY = 0
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
+    
+    local menu = display.newImageRect( "images/menu.png",
+            _H*.1,  _H*.1)
+    menu.x, menu.y = _W*.9, _H*.1
+    local function listener()
+        composer.gotoScene( "menu" )
+    end
+    menu:addEventListener( "tap", listener )
+    sceneGroup:insert( menu )
 
     --local coordinates =
-    numberLine =  numLine:new(1, 10, _W*.9, 0 )
+    numberLine =  numLine:new(0, 10, _W*.85, 0 )
     numberLine.x , numberLine.y = _H*.1, _W*.2
     sceneGroup:insert(numberLine)
 
