@@ -1,7 +1,9 @@
 local composer = require( "composer" )
 local numLine = require( "objects.tenNumLine" )
 local animal = require("objects.animal")
-local animalball = require("objects.animalball")
+-- using animalBall10 in lessons that involve multiples of 10
+local animalball10 = require("objects.animalBall10")
+local tenBall = require( "objects.TenBall" )
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
@@ -138,7 +140,7 @@ function hasCollidedCircle(obj1, obj2)
                         onComplete = listener
                     })
 
-                   obj2.text = display.newText(obj1.num*10, 0, 0, font, ballR*2 )
+                   obj2.text = display.newText(obj1.num * 10, 0, 0, font, ballR*2 )
                     obj2.text:setFillColor(0,0,0)
                     obj2.text.alpha = 0
                     obj2.num = obj1.num
@@ -176,25 +178,42 @@ function reset()
 end
 
 function check()
+
 	for i=1, count do
 			local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
 			local time = distance/maxSpeed*1000
 			--print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
-			transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y*1.25, time=1000})
-			--transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x, numberLine.hash[matchBalls[i].num].y + numberLine.y, time )
-	end             
+                        -- "-30" in transition below sets the offset from numberline when dogs move to line
+                        --transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y -30, time=1000})
+                        -- line below does slower 3D effect transision
+                        transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x,  numberLine.y + 2*ballR, time )
+                        --numberLine.hash[matchBalls[i].num].y +
+	end
 
 	for j=1,count do
-		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToTens(j * 10) end)
+		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j * 10) end)
+
+        for i = 1, count do
+            if matchBalls[i].num == j then
+                timer.performWithDelay(j * 1000,
+                    function (event)
+                    matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
+                    matchBalls[i].outline.alpha = 1
+                end)
+            end
+        end
 	end
+
 	local currScene = composer.getSceneName( "current" )
 	print(currScene)
 	timer.performWithDelay((count + 1) * 1000, function (event) reset() end)
+
 end
 
 function initBalls()
 	    for i=1,count do
-	        countBalls[i] = AnimalBall:new(0,0, ballR*1.5, i*10)
+                --countBalls[i] = tenBall:new(0,0, ballR*1.5, i ) 
+                countBalls[i] = AnimalBall10:new(0,0, ballR*1.5, i ) 
 	        countBalls[i]:addEventListener( "touch", drag )
 
 	        countBalls[i]:insert( countBalls[i].ball )
