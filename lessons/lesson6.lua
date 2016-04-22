@@ -338,7 +338,8 @@ function scene:create( event )
     bucket2 = bucket:new(200,200) 
     bucket2.x, bucket2.y = bucketX2, bucketY 
     
-    bucket3 = bucketObject:new( bucketX3, bucketY3 )
+    bucket3 = bucket:new(200,200)
+    bucket3.x, bucket3.y = bucketX3, bucketY3 
     
     -- plus sign
     plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )

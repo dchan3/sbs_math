@@ -179,23 +179,21 @@ end
 
 function check()
 
+    local stepTime = 750
+
 	for i=1, count do
 			local distance = math.pow( (math.pow( matchBalls[i].x - numberLine.x, 2 ) + math.pow( matchBalls[i].y, 2 )), .5  )
-			local time = distance/maxSpeed*1000
-			--print( numberLine.num[i].text .. " : ".. distance .. " : ".. time)
-                        -- "-30" in transition below sets the offset from numberline when dogs move to line
-                        --transition.moveTo( matchBalls[i], {x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = numberLine.hash[matchBalls[i].num].y + numberLine.y -30, time=1000})
-                        -- line below does slower 3D effect transision
-                        transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x,  numberLine.y + 2*ballR, time )
-                        --numberLine.hash[matchBalls[i].num].y +
+			local time = distance/maxSpeed*stepTime
+            transition.matTrans( matchBalls[i], numberLine.hash[matchBalls[i].num].x + numberLine.x,  numberLine.y + 2*ballR, time )
+
 	end
 
 	for j=1,count do
-		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j) end)
+		timer.performWithDelay(j * stepTime, function (event) displayText.text = convertDecToLat(j) end)
 
         for i = 1, count do
             if matchBalls[i].num == j then
-                timer.performWithDelay(j * 1000,
+                timer.performWithDelay(j * stepTime,
                     function (event)
                     matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
                     matchBalls[i].outline.alpha = 1
@@ -298,8 +296,8 @@ function scene:create( event )
 
 
     --local coordinates =
-    numberLine =  numLine:new(0, 10, _W*.9, 0 )
-    numberLine.x , numberLine.y = _H*.1, _W*.2
+    numberLine =  numLine:new(0, 10, _W*.85, 0, 1, fontSize )
+    numberLine.x , numberLine.y = _H*.125, _W*.2
     sceneGroup:insert(numberLine)
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )

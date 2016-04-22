@@ -45,7 +45,7 @@ local function drag( event )
         display.getCurrentStage():setFocus( t )
 
         decText.text = t.num * 10
-        local text = convertDecToTens( t.num * 10)
+        local text = convertDecToLat( t.num * 10)
         latText.text = text
         -- Spurious events can be sent to the target, e.g. the user presses
         -- elsewhere on the screen and then moves the finger over the target.
