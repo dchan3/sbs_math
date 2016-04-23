@@ -43,10 +43,12 @@ local bucketX2 = _W*.5
 local bucketX3 = _W*.32
 local num1
 local num2
+local num3
 local plus
 local input
 local numberLine
 local question
+local ballCount = 0
 
 local sceneGroup
 
@@ -206,6 +208,7 @@ function reset()
     numberLine.y = -bucketY
     num1.y = bucketY
     num2.y = bucketY
+    num3.y = bucketY
     plus.y = bucketY
     question.text = "?"
     displayText.text = ""
@@ -225,6 +228,7 @@ function check()
 
     transition.to( bucket1, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( bucket2, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( question, {delay = delayTime, time=1000, y = -bucketY } )
     transition.to( num1, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( num2, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( plus, { delay = delayTime, time=1000, y = -bucketY } )
@@ -277,6 +281,22 @@ function initBalls()
 
             end  ]]--
 
+end
+
+function addBalls()
+    
+    ballCount = ballCount + 1
+    
+    local ballSize = ballR*1.75
+        
+   -- for i = 0,  ballCount do
+
+                matchBalls[numberOne + ballCount] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
+                matchBalls[numberOne + ballCount].x, matchBalls[numberOne + ballCount].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*(numberOne + ballCount)
+                physics.addBody( matchBalls[numberOne + ballCount], { radius=ballSize*.5, friction = .5 } )
+                 matchBalls[numberOne + ballCount].text.text = numberOne + ballCount
+                sceneGroup:insert( matchBalls[numberOne + ballCount] )
+  --  end  
 end
 
 function clearBalls()
@@ -333,13 +353,13 @@ function scene:create( event )
     input = numInput:new(2, _W*.80,centerY)
 
 
-    bucket1 = bucket:new(200,200)
+    bucket1 = bucket:new(ballR*8,ballR*7)
     bucket1.x, bucket1.y = bucketX1, bucketY 
     
-    bucket2 = bucket:new(200,200) 
+    bucket2 = bucket:new(ballR*8,ballR*7) 
     bucket2.x, bucket2.y = bucketX2, bucketY 
     
-    bucket3 = bucket:new(200,200)
+    bucket3 = bucket:new(ballR*8,ballR*7)
     bucket3.x, bucket3.y = bucketX3, bucketY3 
     
     -- plus sign
@@ -354,9 +374,9 @@ function scene:create( event )
     --num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
     --num1:setFillColor( 0,0,0, .5 )
 
-     -- right number
-    num2 = display.newText( result, bucketX3, bucketY3, font, _W*.15 )
-    num2:setFillColor( 0,0,0, .5 )
+     -- total number
+    num3 = display.newText( result, bucketX3, bucketY3, font, _W*.15 )
+    num3:setFillColor( 0,0,0, .5 )
     
     -- question mark
     question = display.newText( "?", bucketX2, bucketY, font, _W*.15 )
@@ -383,26 +403,41 @@ function scene:create( event )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)
 
-    local overCheck = display.newRect(_W*.8, centerY*1.75, _W*.09, _W*.09)
+    local overCheck = display.newRect(_W*.8, centerY*1.47, _W*.09, _W*.09)
     overCheck.alpha = .5
+    
+    local inputCheck = display.newRect(_W*.8, centerY, _W*.15, _W*.22)
+    inputCheck.alpha = .5
 
 
     function overCheck:tap( event )
 
         local user = input.getNumber()
-
+        
+        print ("overCheck: " .. user)
         check()
       
-
-
         if result == user then
             print ( "CORRECT")
         else
             print ( "NEGATIVE" )
         end
     end
+    
+    function inputCheck:tap( event )
+        
+        local userCount = input.getNumber()
+        print ("userCount: " .. userCount)
+        print ("ballCount: " .. ballCount)
+        
+        if ballCount < userCount then
+            addBalls()
+        end
+        
+    end
 
 overCheck:addEventListener( "tap", overCheck )
+inputCheck:addEventListener( "tap", inputCheck )
     
 end
 
