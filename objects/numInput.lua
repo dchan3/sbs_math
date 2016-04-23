@@ -77,6 +77,7 @@ function numInput:new( leftMax, x, y ) -- constructor
     -- paremeters: parent, x, y, width, height
     local boxW = _W*0.15
     local boxH = _W*0.32
+    local checkY = boxH*.55
 
     -- invisible box for containing other elements
     local box = display.newRect(countBox, 0, 0, boxW, boxH )
@@ -136,7 +137,7 @@ function numInput:new( leftMax, x, y ) -- constructor
                     --onPress = onCheck,
             }
         checkButton.x = 0
-        checkButton.y = boxH*.55
+        checkButton.y = checkY
         
     -- grey shadow behind left number
     local leftShadow = display.newRect (countBox, 0, 0, boxW*.45, boxH*.4)
@@ -176,6 +177,10 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     function countBox.getNumber()
         return leftNum * 10 + rightNum
+    end
+
+    function countBox.getCheckY()
+        return checkY
     end
 
     function countBox.reset()

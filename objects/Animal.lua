@@ -4,7 +4,7 @@ function Animal:new(file, w, h, fontsize)
 	local animal = display.newGroup()
 	animal.name = "animal"
 	animal.ball = display.newImageRect(file, w, h)
-	animal.outline = display.newCircle(0 , 0, w/2*1.25)--display.newImageRect("images/highlight.png", w, h)
+	animal.outline = display.newCircle(0 , 0, w/2*1.15)--display.newImageRect("images/highlight.png", w, h)
 	animal.outline:setFillColor(225/225,193/225,102/225)
 	animal.outline.alpha = 0 
 	animal.outline.rotation = math.random(360)

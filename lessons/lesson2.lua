@@ -192,7 +192,6 @@ function check()
 
 	for j=1,count do
 		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j * 10) end)
-
         for i = 1, count do
             if matchBalls[i].num == j then
                 timer.performWithDelay(j * 1000,
@@ -212,8 +211,8 @@ end
 
 function initBalls()
 	    for i=1,count do
-                --countBalls[i] = tenBall:new(0,0, ballR*1.5, i ) 
-                countBalls[i] = AnimalBall10:new(0,0, ballR*1.5, i ) 
+                --countBalls[i] = tenBall:new(0,0, ballR*1.5, i )
+                countBalls[i] = AnimalBall10:new(0,0, ballR*1.5, i )
 	        countBalls[i]:addEventListener( "touch", drag )
 
 	        countBalls[i]:insert( countBalls[i].ball )
@@ -270,14 +269,14 @@ function scene:create( event )
 		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
 		displayText:setFillColor(Blue.R, Blue.G, Blue.B)
     physics.setGravity(0,0)
-    
+
     local background = display.newImageRect( "images/bg_pink_stripes.png",
             display.contentWidth, display.contentHeight )
     background.anchorX = 0
     background.anchorY = 0
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
-    
+
     local menu = display.newImageRect( "images/menu.png",
             _H*.1,  _H*.1)
     menu.x, menu.y = _W*.9, _H*.1

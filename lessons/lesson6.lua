@@ -14,7 +14,8 @@ local widget = require "widget"
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
-physics.setTimeStep( 1/20 )
+physics.setGravity( 0, 9.8 )
+physics.setTimeStep( 1/15 )
 
 local scene = composer.newScene()
 

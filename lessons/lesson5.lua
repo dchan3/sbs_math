@@ -12,11 +12,12 @@ local widget = require "widget"
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
-physics.setTimeStep( 1/20 )
+physics.setTimeStep( 1/10 )
 
 local scene = composer.newScene()
-
+local reNumberBalls
 local hasCollidedCircle
+local ballSize = ballR*1.75
 
 local max = 10
 local count = max -- math.random( 1, max)
@@ -31,6 +32,7 @@ end
 local total = numberOne + numberTwo
 local result = numberOne - numberTwo
 local matchCount = count
+local outsideX, outsideY = _W*.6, _H*.75
 
 local countBalls = {}
 local matchBalls = {}
@@ -59,146 +61,60 @@ local latText
 
 local selText = display
 
-local function drag( event )
-    local t = event.target
-
-    -- Print info about the event. For actual production code, you should
-    -- not call this function because it wastes CPU resources.
-    --printTouch(event)
-
-    local phase = event.phase
-    if "began" == phase then
-        -- Make target the top-most object
-        local parent = t.parent
-        parent:insert( t )
-        display.getCurrentStage():setFocus( t )
-
-        decText.text = t.num
-        local text = convertDecToLat( t.num )
-        latText.text = text
-        -- Spurious events can be sent to the target, e.g. the user presses
-        -- elsewhere on the screen and then moves the finger over the target.
-        -- To prevent this, we add this flag. Only when it's true will "move"
-        -- events be sent to the target.
-        t.isFocus = true
-
-        -- Store initial position
-        t.x0 = event.x - t.x
-        t.y0 = event.y - t.y
-    elseif t.isFocus then
-        if "moved" == phase then
-            -- Make object move (we subtract t.x0,t.y0 so that moves are
-            -- relative to initial grab point, rather than object "snapping").
-            t.x = event.x - t.x0
-            t.y = event.y - t.y0
-
-        elseif "ended" == phase or "cancelled" == phase then
-
-                print(t.cooldedWith)
-
-                if(t.collidedWith ~= nil) then
-
-                    hasCollidedCircle(t, t.collidedWith )
-
-                end
-
-            display.getCurrentStage():setFocus( nil )
-            t.isFocus = false
-        end
-    end
-
-    -- Important to return true. This tells the system that the event
-    -- should not be propagated to listeners of any objects underneath.
-    return true
-end
 
 local function onLocalCollision( self, event )
    local t = event.target
    local o = event.other
+print(event.other)
 
-    if ( event.phase == "began" ) then
-
-        if (event.other.matched == false) then
-            event.other.num = self.num
-            self.collidedWith = event.other
-
+    if event.other.name == "minus" then
+        display.remove(event.other)
+        event.other = nil
+        local x = display.newImageRect( "images/redX.png", ballSize, ballSize)
+        event.target:insert(x)
+        
+        local function onTimer( event )
+            local params = event.source.params
+            physics.removeBody( params.passedTar )
         end
 
-    elseif ( event.phase == "ended" ) or ( event.phase == "cancelled" ) then
+        local tm = timer.performWithDelay( 1, onTimer )
 
-        if (event.other.matched == false) then
-            event.other.num = self.num
-            self.collidedWith = event.other
-        end
+        tm.params = { passedTar = event.target }
+        transition.to( event.target, { time=750, x=outsideX, y=outsideY } )
+        
 
     end
+    
+end
+
+function reNumberBalls ( event )
+  local count = 0
+  local max = 1 
+
+
+  for i=1, (numberOne+numberTwo) do
+
+    local child = balls[i].ball
+    local description = (child.isVisible and "visible") or "not visible"
+    local alphaStep = .4/result
+
+    if description == "visible" then
+      count = count + 1
+      balls[i].ballText.text = count
+      balls[i].ballText.alpha = .1 + count*alphaStep
+      max = i
+    end
+
+  end 
+  if count ~= 0 then
+    balls[max].ballText:setFillColor(1,0,0)
+    balls[max].ballText.alpha = 1
+  end
+
 end
 
 
-function hasCollidedCircle(obj1, obj2)
-
-    if obj1 == nil then
-        return false
-    end
-
-    if obj2 == nil then
-        return false
-    end
-
-    local sqrt = math.sqrt
-    local dx =  obj1.x - obj2.x;
-    local dy =  obj1.y - obj2.y;
-    local distance = sqrt(dx*dx + dy*dy);
-    local objectSize = (obj2.contentWidth/2) + (obj1.contentWidth/2)
-
-    if distance < objectSize then
-
-                    local function listener( event )
-                        display.remove(obj1)
-                    end
-
-
-                    local transitionTime = 100
-
-
-                    transition.to(obj1,
-                    {
-                        time=transitionTime,
-                        x = obj2.x,
-                        y= obj2.y,
-                        onComplete = listener
-                    })
-
-                   obj2.text.text = obj1.num--= display.newText( obj1.num, 0, 0, font, ballR*2 )
-                    obj2.text:setFillColor(0,0,0)
-                    obj2.text.alpha = 0
-                    obj2.num = obj1.num
-                    obj2:insert( obj2.text )
-                    obj2.matched = true
-
-
-                    local function listener( event )
-                        transition.to(obj2.text,
-                        {
-                        time=500,
-                        alpha =.75
-                        })
-                    end
-                    timer.performWithDelay( transitionTime, listener )
-
-                    matchCount = matchCount - 1
-
-                    if matchCount <= 0 then
-                        decText.text = ""
-                        latText.text = ""
-                      check()
-                        matchCount = count
-                    end
-        print("true")
-        return true
-    end
-    return false
-end
 
 function reset()
 
@@ -210,6 +126,8 @@ function reset()
     numberLine.y = -bucketY
     num1.y = bucketY
     num2.y = bucketY
+    num1:toFront()
+    num2:toFront()
     subtract.y = bucketY
     question.text = "?"
     question.y = bucketY3
@@ -219,13 +137,11 @@ end
 
 function check()
 
-
-
     local delayTime = 5000
-
-   -- transition.to( bucket1, { time=1000, rotation = 90 } )
-   -- transition.to( bucket2, { time=1000, rotation = -90 } )
+     transition.to( bucket1, { time=500, rotation = 90 } )
+    transition.to( bucket2, { time=500, rotation = -90 } )
     transition.to( input, { time=1000, x = _W*1.25} )
+    question.text = input.getNumber()
     question.text = input.getNumber()
 
 
@@ -242,24 +158,24 @@ function check()
 
 
     for i=1, (numberOne+numberTwo) do
-           
+
             transition.to( matchBalls[i], { time=1000, delay = delayTime+1000,  x =  numberLine.hash[i].x + numberLine.x, y = bucketY + 2*ballR, rotation = 0} )
 
     end
 
     for j=1,(numberOne-numberTwo) do
 
-        timer.performWithDelay((delayTime + 2000+ j * 400), function (event) 
-            displayText.text = convertDecToLat(j) 
+        timer.performWithDelay((delayTime + 2000+ j * 400), function (event)
+            displayText.text = convertDecToLat(j)
             matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
             matchBalls[j].outline.alpha = .5
             end)
     end
-    
+
     for k=(numberOne-numberTwo+1), (numberOne+numberTwo) do
-        
-       transition.to( matchBalls[k], { time=2000, delay = delayTime+2000,  x = numberLine.hash[k].x + numberLine.x, y = -bucketY + 2*ballR, rotation = 0} ) 
-        
+
+       transition.to( matchBalls[k], { time=2000, delay = delayTime+2000,  x = numberLine.hash[k].x + numberLine.x, y = -bucketY + 2*ballR, rotation = 0} )
+
     end
 
 	timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo) * 400), function (event) reset() end)
@@ -269,24 +185,27 @@ end
 
 function initBalls()
 
-        local ballSize = ballR*1.75
-    
+        
+
             for i = 1, numberOne do
-                
+
                 matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5 , friction = .5} )
                 matchBalls[i].text.text = i
+                 matchBalls[i].collision = onLocalCollision
+                 matchBalls[i]:addEventListener( "collision", matchBalls[i] )
                 sceneGroup:insert( matchBalls[i] )
 
             end
 
             for i = numberOne+1, total do
 
-                matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
+                matchBalls[i] = Animal:new("images/redX.png", ballSize, ballSize, ballSize*.75)
+                matchBalls[i].name = "minus"
                 matchBalls[i].x, matchBalls[i].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5, friction = .5 } )
-                 matchBalls[i].text.text = i - numberOne
+                matchBalls[i].text.text = i - numberOne
                 sceneGroup:insert( matchBalls[i] )
 
             end
@@ -294,8 +213,8 @@ function initBalls()
 end
 
 function clearBalls()
-    bucket1.rotation = 0 
-    bucket2.rotation = 0 
+    bucket1.rotation = 0
+    bucket2.rotation = 0
     bucket1.y = bucketY
     bucket2.y = bucketY
 
@@ -312,7 +231,7 @@ function clearBalls()
     while ( numberTwo >= numberOne ) do
         print( "negative result" )
         numberTwo = math.random( 0, max )
-    end 
+    end
     total = numberOne + numberTwo
     result = numberOne - numberTwo
     num1.text = numberOne
@@ -327,7 +246,7 @@ function scene:create( event )
     physics.start()
     count = math.random(1,max)
     matchCount = count
-    
+
     local background = display.newImageRect( "images/bg_blue_zig.png",
             display.contentWidth, display.contentHeight )
     background.anchorX = 0
@@ -335,7 +254,7 @@ function scene:create( event )
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
 
-    
+
     displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
     displayText:setFillColor( 0, 0, .5 )
 
@@ -354,40 +273,44 @@ function scene:create( event )
     input = numInput:new(2, _W*.80,centerY)
     sceneGroup:insert( input )
 
+    bucket1 = bucket:new(ballR*8,ballR*8)
+    bucket1.x, bucket1.y = bucketX1, bucketY
+    sceneGroup:insert( bucket1)
 
-    bucket1 = bucket:new(ballR*10,ballR*10)
-    bucket1.x, bucket1.y = bucketX1, bucketY 
-    
-    bucket2 = bucket:new(200,200) 
-    bucket2.x, bucket2.y = bucketX2, bucketY 
-    
+    bucket2 = bucket:new(ballR*8,ballR*8)
+    bucket2.x, bucket2.y = bucketX2, bucketY
+    sceneGroup:insert( bucket2)
+
+    bucket3 = bucket:new(ballR*8,ballR*8)
+    bucket3.x, bucket3.y = bucketX3, bucketY3
+    sceneGroup:insert( bucket3)
+
     -- subtraction sign
     subtract = display.newText( "-", _W*.32, _H*.25, font, _W*.15 )
     subtract:setFillColor( 0,0,0 )
     sceneGroup:insert(subtract)
-    
+
     -- equal sign
     equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
-    equal:setFillColor( 0,0,0 ) 
+    equal:setFillColor( 0,0,0 )
     sceneGroup:insert(equal)
 
      -- question mark
     num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
     num1:setFillColor( 0,0,0, .5 )
-    sceneGroup:insert(num1)
+
 
      -- question mark
     num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
     num2:setFillColor( 0,0,0, .5 )
     sceneGroup:insert(num2)
-    
+
+
     -- question mark
     question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
     sceneGroup:insert(question)
-    
-    sceneGroup:insert( bucket1 )
-    sceneGroup:insert( bucket2 )
+
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
@@ -401,12 +324,15 @@ function scene:create( event )
     -- Initialize the scene here.
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
  	initBalls()
-            
+    sceneGroup:insert( num1 )
+    sceneGroup:insert( num2 )
+
     numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)
 
-    local overCheck = display.newRect(_W*.8, centerY*1.6, _W*.09, _W*.09)
+    local overCheck = display.newRect( 0, 0, _W*.09, _W*.09)
+    overCheck.x, overCheck.y = _W*.8, input.getCheckY() + input.y
     overCheck.alpha = .5
     sceneGroup:insert(overCheck)
 
@@ -416,7 +342,7 @@ function scene:create( event )
         local user = input.getNumber()
 
         check()
-      
+
 
 
         if result == user then
@@ -427,7 +353,7 @@ function scene:create( event )
     end
 
 overCheck:addEventListener( "tap", overCheck )
-    
+
 end
 
 
@@ -486,5 +412,3 @@ scene:addEventListener( "destroy", scene )
 -- -------------------------------------------------------------------------------
 
 return scene
-
-
