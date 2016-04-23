@@ -48,7 +48,7 @@ local plus
 local input
 local numberLine
 local question
-local ballCount
+local ballCount = 0
 
 local sceneGroup
 
@@ -283,6 +283,22 @@ function initBalls()
 
 end
 
+function addBalls()
+    
+    ballCount = ballCount + 1
+    
+    local ballSize = ballR*1.75
+        
+   -- for i = 0,  ballCount do
+
+                matchBalls[numberOne + ballCount] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
+                matchBalls[numberOne + ballCount].x, matchBalls[numberOne + ballCount].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*(numberOne + ballCount)
+                physics.addBody( matchBalls[numberOne + ballCount], { radius=ballSize*.5, friction = .5 } )
+                 matchBalls[numberOne + ballCount].text.text = numberOne + ballCount
+                sceneGroup:insert( matchBalls[numberOne + ballCount] )
+  --  end  
+end
+
 function clearBalls()
     bucket1.rotation = 0 
     bucket2.rotation = 0 
@@ -412,6 +428,12 @@ function scene:create( event )
         
         local userCount = input.getNumber()
         print ("userCount: " .. userCount)
+        print ("ballCount: " .. ballCount)
+        
+        if ballCount < userCount then
+            addBalls()
+        end
+        
     end
 
 overCheck:addEventListener( "tap", overCheck )
