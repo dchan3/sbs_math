@@ -1,5 +1,6 @@
 local composer = require( "composer" )
 local clockA = require("objects.aclock")
+local clockD = require("objects.dclock")
 local physics = require "physics"
 physics.start()
 physics.setDrawMode("hybrid")
@@ -7,10 +8,12 @@ physics.setDrawMode("hybrid")
 local scene = composer.newScene()
 
 local analog = {}
+local digital = {}
 
 function scene:create( event )
 	sceneGroup = self.view
-	analog = aClock:new(250,250)
+	analog = aClock:new(250, 250)
+	digital = dClock:new(1000, 250)
 	sceneGroup:insert(analog)
 end
 
