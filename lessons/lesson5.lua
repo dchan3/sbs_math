@@ -82,7 +82,8 @@ print(event.other)
 
         tm.params = { passedTar = event.target }
         transition.to( event.target, { time=750, x=outsideX, y=outsideY } )
-        
+         event.target.name = "minus"
+        reNumberBalls()
 
     end
     
@@ -96,21 +97,16 @@ function reNumberBalls ( event )
   for i=1, (numberOne+numberTwo) do
 
     local child = balls[i].ball
-    local description = (child.isVisible and "visible") or "not visible"
-    local alphaStep = .4/result
 
-    if description == "visible" then
+    if matchBalls[i].name ~= "minus" then
       count = count + 1
-      balls[i].ballText.text = count
-      balls[i].ballText.alpha = .1 + count*alphaStep
+      matchBalls[i].text.text = count
+      matchBalls[i].num = count
       max = i
     end
 
   end 
-  if count ~= 0 then
-    balls[max].ballText:setFillColor(1,0,0)
-    balls[max].ballText.alpha = 1
-  end
+
 
 end
 

@@ -350,7 +350,6 @@ function scene:create( event )
 
     input = numInput:new(2, _W*.80,centerY)
     sceneGroup:insert( input )
-<<<<<<< HEAD
 
 
     bucket1 = bucket:new(ballR*8,ballR*7)
@@ -367,33 +366,12 @@ function scene:create( event )
     sceneGroup:insert( bucket3)
 
 
-=======
 
-
-    bucket1 = bucket:new(ballR*8,ballR*7)
-    bucket1.x, bucket1.y = bucketX1, bucketY
-    sceneGroup:insert( bucket1)
-
-
-    bucket2 = bucket:new(ballR*8,ballR*7)
-    bucket2.x, bucket2.y = bucketX2, bucketY
-    sceneGroup:insert( bucket2)
-
-    bucket3 = bucket:new(ballR*8,ballR*8)
-    bucket3.x, bucket3.y = bucketX3, bucketY3
-    sceneGroup:insert( bucket3)
-
-
->>>>>>> 7301144474094d8d957b0e33bdff9add1ad73795
     -- plus sign
     plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )
     plus:setFillColor( 0,0,0 )
     sceneGroup:insert( plus )
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> 7301144474094d8d957b0e33bdff9add1ad73795
     -- equal sign
     local equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
     equal:setFillColor( 0,0,0 )
@@ -408,7 +386,7 @@ function scene:create( event )
      -- question mark
     num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
     num2:setFillColor( 0,0,0, .5 )
-<<<<<<< HEAD
+
     
     
     -- question mark
@@ -416,17 +394,7 @@ function scene:create( event )
     question:setFillColor( 0,0,0, .5 )
    
     
-    
-=======
 
-
-    -- question mark
-    question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
-    question:setFillColor( 0,0,0, .5 )
-
-
-
->>>>>>> 7301144474094d8d957b0e33bdff9add1ad73795
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
@@ -443,11 +411,7 @@ function scene:create( event )
     sceneGroup:insert( num1 )
     sceneGroup:insert( num2 )
      sceneGroup:insert( question )
-<<<<<<< HEAD
-            
-=======
 
->>>>>>> 7301144474094d8d957b0e33bdff9add1ad73795
     numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)

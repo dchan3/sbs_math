@@ -1,4 +1,4 @@
-require "CiderDebugger";---------------------------------------------------------------------------------
+--require "CiderDebugger";---------------------------------------------------------------------------------
 --
 -- main.lua
 --
@@ -277,8 +277,8 @@ composer.recycleOnSceneChange = true
 --composer.gotoScene( "lessons.lesson1" )
 --composer.gotoScene( "lessons.lesson2" )
 --composer.gotoScene( "lessons.lesson3" )
-composer.gotoScene( "lessons.lesson4" )
+--composer.gotoScene( "lessons.lesson4" )
 --composer.gotoScene( "lessons.lesson5" )
 --composer.gotoScene( "lessons.lesson6" )
 --composer.gotoScene( "lessons.lesson7" )
---composer.gotoScene( "menu" )
+composer.gotoScene( "menu" )
