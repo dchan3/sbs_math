@@ -237,6 +237,14 @@ local function convertDecToLat( number )
     elseif number == 18 then text = "Eighteen"
     elseif number == 19 then text = "Nineteen"
     elseif number == 20 then text = "Twenty"
+    elseif number == 30 then text = "Thirty"
+    elseif number == 40 then text = "Forty"
+    elseif number == 50 then text = "Fifty"
+    elseif number == 60 then text = "Sixty"
+    elseif number == 70 then text = "Seventy"
+    elseif number == 80 then text = "Eighty"
+    elseif number == 90 then text = "Ninety"
+    elseif number == 100 then text = "One Hundred"
     elseif number == 0 then text = "Zero"
     else                    text = " "
     end
@@ -258,28 +266,6 @@ local function createGrid(w, h, size)
 	end
 end
 
-local function convertDecToTens( number )
-
-    local text = "zero"
-
-    if     number == 10 then text = "Ten"
-    elseif number == 20 then text = "Twenty"
-    elseif number == 30 then text = "Thirty"
-    elseif number == 40 then text = "Forty"
-    elseif number == 50 then text = "Fifty"
-    elseif number == 60 then text = "Sixty"
-    elseif number == 70 then text = "Seventy"
-    elseif number == 80 then text = "Eighty"
-    elseif number == 90 then text = "Ninety"
-    elseif number == 100 then text = "One Hundred"
-    elseif number == 0 then text = "Zero"
-    else                    text = " "
-    end
-
-    return text
-
-end
-_G.convertDecToTens = convertDecToTens
 
 local composer = require( "composer" )
 composer.recycleOnSceneChange = true
@@ -289,8 +275,10 @@ composer.recycleOnSceneChange = true
 --composer.gotoScene( "lessons.kCount_03" )
 --composer.gotoScene( "lessons.intro1" )
 --composer.gotoScene( "lessons.lesson1" )
-composer.gotoScene( "lessons.lesson2" )
---composer.gotoScene( "lessons.lesson4" )
+--composer.gotoScene( "lessons.lesson2" )
+--composer.gotoScene( "lessons.lesson3" )
+composer.gotoScene( "lessons.lesson4" )
 --composer.gotoScene( "lessons.lesson5" )
 --composer.gotoScene( "lessons.lesson6" )
+--composer.gotoScene( "lessons.lesson7" )
 --composer.gotoScene( "menu" )
