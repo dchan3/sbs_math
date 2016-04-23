@@ -300,6 +300,16 @@ function addBalls()
   --  end  
 end
 
+function subBalls()
+    
+    transition.to( matchBalls[numberOne + ballCount], { time=1000, delay = 500,  x =  bucketX2, y = -bucketY, rotation = 0} )
+    --transition.to( display.remove(matchBalls[numberOne + ballCount]), { time=1000, delay = 1000,  x =  bucketX2, y = -bucketY, rotation = 0} )   
+    timer.performWithDelay(750, function (event) display.remove(matchBalls[numberOne + ballCount]) end)
+    --matchBalls[numberOne + ballCount] = nil
+    
+    ballCount = ballCount -1 
+end
+
 function clearBalls()
     bucket1.rotation = 0 
     bucket2.rotation = 0 
@@ -316,8 +326,8 @@ function clearBalls()
     numberOne = math.random( 0, max )
     numberTwo = math.random( 0, max )
     result = numberOne + numberTwo
-    num1.text = numberOne
-    num2.text = numberTwo
+ --   num1.text = numberOne
+ --   num2.text = numberTwo
 
 end
 -- "scene:create()"
@@ -434,6 +444,8 @@ function scene:create( event )
         
         if ballCount < userCount then
             addBalls()
+        elseif ballCount > userCount then
+            subBalls()      
         end
         
     end
