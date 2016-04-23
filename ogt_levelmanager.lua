@@ -385,7 +385,7 @@ function k.makeGrid(pageNum)
 					local levelNumText
 					local dispText = tostring(levelNum)
 					if k.showLevelNum then
-						print("k.levelLocked[levelNum]", k.levelLocked[levelNum])
+					
 						if not k.levelLocked[levelNum] or (k.levelLocked[levelNum] and k.showLevelNumTextWhenLocked) then	
 							if k.tileNums and k.tileNums[levelNum] then
 								dispText = k.tileNums[levelNum]
