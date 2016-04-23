@@ -282,6 +282,6 @@ composer.recycleOnSceneChange = true
 --composer.gotoScene( "lessons.lesson6" )
 --composer.gotoScene( "lessons.lesson7" )
 --composer.gotoScene( "lessons.lesson8" )
---composer.gotoScene( "lessons.lesson9" )
+composer.gotoScene( "lessons.lesson9" )
 
-composer.gotoScene( "menu" )
+--composer.gotoScene( "menu" )
