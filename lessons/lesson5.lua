@@ -32,7 +32,8 @@ end
 local total = numberOne + numberTwo
 local result = numberOne - numberTwo
 local matchCount = count
-local outsideX, outsideY = _W*.6, _H*.75
+local outsideX, outsideY = _W*.5, _H*.75
+local outsideStep = 0
 
 local countBalls = {}
 local matchBalls = {}
@@ -53,6 +54,7 @@ local input
 local numberLine
 local question
 local equal
+
 
 local sceneGroup
 
@@ -82,8 +84,8 @@ local function onLocalCollision( self, event )
         local tm = timer.performWithDelay( 1, onTimer )
 
         tm.params = { passedTar = event.target }
-        transition.to( event.target, { time=750, x=outsideX, y=outsideY } )
-        
+        transition.to( event.target, { time=750, x=outsideX  + outsideStep, y=outsideY } )
+        outsideStep = outsideStep + ballR*2
 
     end
     
@@ -108,6 +110,8 @@ function reset()
     question.y = bucketY3
     equal.y = _H*.7
     displayText.text = ""
+    question:setFillColor(0,0,0)
+    outsideStep = 0
 end
 
 function check()
@@ -121,14 +125,12 @@ function check()
     question.text = input.getNumber()
 
 
-    transition.to( bucket1, { delay = delayTime, time=1000, y = bucketY*3 } )
-    transition.to( bucket2, { delay = delayTime, time=1000, y = bucketY*3 } )
+    transition.to( bucket1, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( bucket2, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( num1, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( num2, { delay = delayTime, time=1000, y = -bucketY } )
-    transition.to( subtract, { delay = delayTime, time=1000, y = bucketY*3 } )
+    transition.to( subtract, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( numberLine, { delay = delayTime, time=1000, y = bucketY } )
-    transition.to( question, { delay = delayTime, time=1000, y = bucketY*5 } )
-    transition.to( equal, { delay = delayTime, time=1000, y = bucketY*5 } )
 
     local function reNumberBalls ( event )
         local count = 0
@@ -178,6 +180,15 @@ function check()
         
     end)
 
+    if (numberOne-numberTwo) == input.getNumber() then
+        timer.performWithDelay( (delayTime + 1000 + (numberOne-numberTwo) * stepTime), function (event)
+            question:setFillColor(0,1,0)
+            end)
+    else
+        timer.performWithDelay( (delayTime + 1000 + (numberOne-numberTwo) * stepTime), function (event)
+            question:setFillColor(1,0,0)
+            end)
+    end
 
 
     
@@ -337,7 +348,7 @@ function scene:create( event )
 
     local overCheck = display.newRect( 0, 0, _W*.09, _W*.09)
     overCheck.x, overCheck.y = _W*.8, input.getCheckY() + input.y
-    overCheck.alpha = .5
+    overCheck.alpha = .01
     sceneGroup:insert(overCheck)
 
 
