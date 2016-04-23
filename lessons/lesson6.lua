@@ -3,13 +3,14 @@
 ----------------------------------------------------------
 
 local composer = require( "composer" )
-local numLine = require( "objects.numLine" )
+--local numLine = require( "objects.numLine" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local bucketObject = require( "objects.bucketObject")
 local numLine = require( "objects.numLine" )
 local bucket = require( "objects.bucket")
 local numInput = require( "objects.numInput")
+local singleInput = require( "objects.singleInput")
 local widget = require "widget"
 local physics = require "physics"
 physics.start()
@@ -350,7 +351,8 @@ function scene:create( event )
     menu:addEventListener( "tap", listener )
     sceneGroup:insert( menu )
 
-    input = numInput:new(2, _W*.80,centerY)
+    --input = numInput:new(2, _W*.80,centerY)
+    input = singleInput:new( _W*.76, centerY )
 
 
     bucket1 = bucket:new(ballR*8,ballR*7)
@@ -406,7 +408,7 @@ function scene:create( event )
     local overCheck = display.newRect(_W*.8, centerY*1.47, _W*.09, _W*.09)
     overCheck.alpha = .5
     
-    local inputCheck = display.newRect(_W*.8, centerY, _W*.15, _W*.22)
+    local inputCheck = display.newRect(_W*.8, centerY, _W*.09, _W*.23)
     inputCheck.alpha = .5
 
 
