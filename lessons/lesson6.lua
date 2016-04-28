@@ -3,13 +3,14 @@
 ----------------------------------------------------------
 
 local composer = require( "composer" )
-local numLine = require( "objects.numLine" )
+--local numLine = require( "objects.numLine" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local bucketObject = require( "objects.bucketObject")
 local numLine = require( "objects.numLine" )
 local bucket = require( "objects.bucket")
 local numInput = require( "objects.numInput")
+local singleInput = require( "objects.singleInput")
 local widget = require "widget"
 local physics = require "physics"
 physics.start()
@@ -299,6 +300,16 @@ function addBalls()
   --  end  
 end
 
+function subBalls()
+    
+    transition.to( matchBalls[numberOne + ballCount], { time=1000, delay = 500,  x =  bucketX2, y = -bucketY, rotation = 0} )
+    --transition.to( display.remove(matchBalls[numberOne + ballCount]), { time=1000, delay = 1000,  x =  bucketX2, y = -bucketY, rotation = 0} )   
+    timer.performWithDelay(750, function (event) display.remove(matchBalls[numberOne + ballCount]) end)
+    --matchBalls[numberOne + ballCount] = nil
+    
+    ballCount = ballCount -1 
+end
+
 function clearBalls()
     bucket1.rotation = 0 
     bucket2.rotation = 0 
@@ -315,8 +326,8 @@ function clearBalls()
     numberOne = math.random( 0, max )
     numberTwo = math.random( 0, max )
     result = numberOne + numberTwo
-    num1.text = numberOne
-    num2.text = numberTwo
+ --   num1.text = numberOne
+ --   num2.text = numberTwo
 
 end
 -- "scene:create()"
@@ -350,7 +361,8 @@ function scene:create( event )
     menu:addEventListener( "tap", listener )
     sceneGroup:insert( menu )
 
-    input = numInput:new(2, _W*.80,centerY)
+    --input = numInput:new(2, _W*.80,centerY)
+    input = singleInput:new( _W*.76, centerY )
 
 
     bucket1 = bucket:new(ballR*8,ballR*7)
@@ -406,7 +418,7 @@ function scene:create( event )
     local overCheck = display.newRect(_W*.8, centerY*1.47, _W*.09, _W*.09)
     overCheck.alpha = .5
     
-    local inputCheck = display.newRect(_W*.8, centerY, _W*.15, _W*.22)
+    local inputCheck = display.newRect(_W*.8, centerY, _W*.09, _W*.23)
     inputCheck.alpha = .5
 
 
@@ -432,6 +444,8 @@ function scene:create( event )
         
         if ballCount < userCount then
             addBalls()
+        elseif ballCount > userCount then
+            subBalls()      
         end
         
     end
