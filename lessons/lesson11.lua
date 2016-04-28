@@ -1,10 +1,8 @@
--- addition_01
--- currently just a test scene
--- needs a lot of work
+-- tens version of lesson 4
 ----------------------------------------------------------
 
 local composer = require( "composer" )
-local numLine = require( "objects.numLine" )
+local numLine = require( "objects.tenNumLine" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local bucketObject = require( "objects.bucketObject")
@@ -24,8 +22,8 @@ local hasCollidedCircle
 local max = 10
 local count = max -- math.random( 1, max)
 math.randomseed(os.time())
-local numberOne = math.random( 0, max )
-local numberTwo = math.random( 0, max )
+local numberOne = (math.random( 0, max ))*10
+local numberTwo = (math.random( 0, max ))*10
 local result = numberOne + numberTwo
 local matchCount = count
 local notChecked = true
@@ -240,16 +238,16 @@ function check()
     timer.performWithDelay( delayTime, function (event) physics.pause() end)
 
 
-    for i=1, (numberOne+numberTwo) do
+    for i=1, ((numberOne+numberTwo)/10) do
 
             transition.to( matchBalls[i], { time=1000, delay = delayTime+1000,  x =  numberLine.hash[i].x + numberLine.x, y = bucketY + 2*ballR, rotation = 0} )
 
     end
 
-    for j=1,(numberOne+numberTwo) do
+    for j=1,((numberOne+numberTwo)/10) do
 
         timer.performWithDelay((delayTime + 2000+ j * 400), function (event)
-            displayText.text = convertDecToLat(j)
+            displayText.text = convertDecToLat(j * 10)
             matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
             matchBalls[j].outline.alpha = .5
             end)
@@ -274,22 +272,22 @@ function initBalls()
 
         local ballSize = ballR*1.75
 
-            for i = 1, numberOne do
+            for i = 1, numberOne/10 do
 
-                matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
+                matchBalls[i] = Animal:new("images/tenPups.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5 , friction = .5} )
-                matchBalls[i].text.text = i
+                matchBalls[i].text.text = i*10
                 sceneGroup:insert( matchBalls[i] )
 
             end
 
-            for i = numberOne+1, result do
+            for i = numberOne/10 + 1, result/10 do
 
-                matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
+                matchBalls[i] = Animal:new("images/tensCats.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5, friction = .5 } )
-                 matchBalls[i].text.text = i - numberOne
+                 matchBalls[i].text.text = i*10 - numberOne
                 sceneGroup:insert( matchBalls[i] )
 
             end
@@ -496,3 +494,5 @@ scene:addEventListener( "destroy", scene )
 -- -------------------------------------------------------------------------------
 
 return scene
+
+
