@@ -7,7 +7,7 @@ local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local bucketObject = require( "objects.bucketObject")
 local bucket = require( "objects.bucket")
-local numInput = require( "objects.numInput")
+local numInput = require( "objects.tripleInput")
 local widget = require "widget"
 local physics = require "physics"
 physics.start()
@@ -345,7 +345,7 @@ function scene:create( event )
     menu:addEventListener( "tap", listener )
     sceneGroup:insert( menu )
 
-    input = numInput:new(2, _W*.80,centerY)
+    input = numInput:new(1, _W*.80,centerY)
     sceneGroup:insert( input )
 
 
@@ -378,27 +378,21 @@ function scene:create( event )
     num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
     num1:setFillColor( 0,0,0, .5 )
     
-
-
      -- question mark
     num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
     num2:setFillColor( 0,0,0, .5 )
 
-    
-    
     -- question mark
     question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
    
-    
 
-
-    decText  = display.newText( "", 0, 0, font, _W*.1 )
+    decText  = display.newText( "", 0, 0, font, _W*.08 )
     decText.x, decText.y = _W*.833, _H*.6
     decText:setFillColor( 0, 0, 0 )
     sceneGroup:insert( decText )
 
-    latText = display.newText( "", 0, 0, font, _W*.1 )
+    latText = display.newText( "", 0, 0, font, _W*.08 )
     latText.x, latText.y = _W*.833, _H*.75
     latText:setFillColor( 0, 0, 0 )
     sceneGroup:insert( latText )
@@ -409,13 +403,14 @@ function scene:create( event )
     sceneGroup:insert( num2 )
      sceneGroup:insert( question )
 
+    -- font size not working 
     numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
-    numberLine.x , numberLine.y = _H*.1, -bucketY
+    numberLine.x , numberLine.y = _H*.07, -bucketY*.07
     sceneGroup:insert(numberLine)
 
     local overCheck = display.newRect(0, 0, _W*.09, _W*.09)
     overCheck.x, overCheck.y = _W*.8, input.getCheckY() + input.y
-    overCheck.alpha = .5
+    overCheck.alpha = .05
     sceneGroup:insert( overCheck )
 
 
