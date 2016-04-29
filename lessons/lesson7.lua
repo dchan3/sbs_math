@@ -8,6 +8,7 @@ local physics = require "physics"
 physics.start()
 --physics.setDrawMode( "hybrid" )
 
+
 local hasCollidedCircle
 
 local scene = composer.newScene()
@@ -84,10 +85,10 @@ function check()
 			displayText2:setFillColor(Red.R, Red.B, Red.G)
 		end
 		if k <= count1 then
-			timer.performWithDelay(k * 1000, function (event) displayText1.text = convertDecToTens(k * 10) end)
+			timer.performWithDelay(k * 1000, function (event) displayText1.text = convertDecToLat(k * 10) end)
 		end
 		if k <= count2 then
-			timer.performWithDelay(k * 1000, function (event) displayText2.text = convertDecToTens(k * 10) end)
+			timer.performWithDelay(k * 1000, function (event) displayText2.text = convertDecToLat(k * 10) end)
 		end
 
 

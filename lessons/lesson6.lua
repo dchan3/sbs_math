@@ -15,7 +15,7 @@ local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )
 physics.setGravity( 0, 9.8 )
-physics.setTimeStep( 1/15 )
+physics.setTimeStep( 1/10 )
 
 local scene = composer.newScene()
 
@@ -25,7 +25,7 @@ local max = 10
 local count = max -- math.random( 1, max)
 math.randomseed(os.time())
 local numberOne = math.random( 0, max )
-local numberTwo = math.random( 0, max-1 )
+local numberTwo = math.random( 0, (max-1) )
 local result = numberOne + numberTwo
 local matchCount = count
 
