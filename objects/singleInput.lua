@@ -58,7 +58,7 @@ function singleInput:new( x, y ) -- constructor
                     overFile="images/plus.png", -- not needed
                     onPress = onStepperPress,
             }
-        plusButtonR.x = boxW*.25
+        plusButtonR.x = 0
         plusButtonR.y = -boxH*.25
 
     local minusButtonR = widget.newButton{
@@ -69,7 +69,7 @@ function singleInput:new( x, y ) -- constructor
                     overFile="images/minus.png", -- not needed
                     onPress = onStepperPress,
             }
-        minusButtonR.x = boxW*.25
+        minusButtonR.x = 0
         minusButtonR.y = boxH*.25
 
     local checkButton = widget.newButton{
@@ -80,14 +80,14 @@ function singleInput:new( x, y ) -- constructor
                     overFile="images/check.png" -- not needed
                     --onPress = onCheck,
             }
-        checkButton.x = boxW*.25
+        checkButton.x = 0
         checkButton.y = checkY
         
     -- grey shadow behind right number    
     local rightShadow = display.newRect (countBox, 0, 0, boxW*.45, boxH*.4)
         rightShadow:setFillColor( 0, 0, 0 )
         rightShadow.alpha = 0.5
-        rightShadow.x = boxW*.25
+        rightShadow.x = 0
 
     countBox:insert( plusButtonR )
     countBox:insert( minusButtonR )
@@ -96,7 +96,7 @@ function singleInput:new( x, y ) -- constructor
 
     numTxtR = display.newText( rightNum, 0, 0, default, _W*.07 )
             numTxtR:setFillColor( 0 )
-            numTxtR.x = boxW*.25
+            numTxtR.x = 0
             numTxtR.y = 0
 
     countBox:insert ( numTxtR )

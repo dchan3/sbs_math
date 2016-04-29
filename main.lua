@@ -26,12 +26,12 @@ _G.font = "Dyslexie Regular"
 --_G.font = "data\Dyslexie Regular LP129383 (1)"
 
 --Colors    { R = ,   G = ,     B = }
-_G.Red =      { R = 244/255,  G = 067/255,  B = 054/255 }
+_G.Red =      { R = 244/255,  G = 060/255,  B = 039/255 }
 _G.Red100 =   { R = 255/255,  G = 205/255,  B = 210/255 }
 _G.Red300 =   { R = 229/255,  G = 115/255,  B = 115/255 }
 _G.Red700 =   { R = 211/255,  G = 047/255,  B = 047/255 }
 _G.Yellow =   { R = 225/255,  G = 196/255,  B = 000/255 }
-_G.Green =    { R = 076/255,  G = 175/255,  B = 080/255 }
+_G.Green =    { R = 000/255,  G = 148/255,  B = 076/255 }
 _G.Blue =     { R = 000/255,  G = 191/255,  B = 165/255 }--{ R = 033/255,  G = 150/255,  B = 243/255 }
 _G.Blue100 =  { R = 187/255,  G = 222/255,  B = 251/255 }
 _G.Blue300 =  { R = 100/255,  G = 181/255,  B = 246/255 }
@@ -282,6 +282,6 @@ composer.recycleOnSceneChange = true
 --composer.gotoScene( "lessons.lesson6" )
 --composer.gotoScene( "lessons.lesson7" )
 --composer.gotoScene( "lessons.lesson8" )
-composer.gotoScene( "lessons.lesson9" )
+--composer.gotoScene( "lessons.lesson9" )
 
---composer.gotoScene( "menu" )
+composer.gotoScene( "menu" )
