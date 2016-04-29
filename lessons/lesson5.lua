@@ -11,7 +11,7 @@ local numInput = require( "objects.numInput")
 local widget = require "widget"
 local physics = require "physics"
 physics.start()
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 physics.setTimeStep( 1/10 )
 
 local scene = composer.newScene()
@@ -54,6 +54,7 @@ local input
 local numberLine
 local question
 local equal
+local notChecked = true
 
 
 local sceneGroup
@@ -112,6 +113,7 @@ function reset()
     displayText.text = ""
     question:setFillColor(0,0,0)
     outsideStep = 0
+    notChecked = true
 end
 
 function check()
@@ -182,11 +184,11 @@ function check()
 
     if (numberOne-numberTwo) == input.getNumber() then
         timer.performWithDelay( (delayTime + 1000 + (numberOne-numberTwo) * stepTime), function (event)
-            question:setFillColor(0,1,0)
+            question:setFillColor(Green.R,Green.G,Green.B)
             end)
     else
         timer.performWithDelay( (delayTime + 1000 + (numberOne-numberTwo) * stepTime), function (event)
-            question:setFillColor(1,0,0)
+            question:setFillColor(Red.R,Red.G,Red.B)
             end)
     end
 
@@ -205,8 +207,8 @@ function initBalls()
                 matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5 , friction = .5} )
                 matchBalls[i].text.text = i
-                 matchBalls[i].collision = onLocalCollision
-                 matchBalls[i]:addEventListener( "collision", matchBalls[i] )
+                matchBalls[i].collision = onLocalCollision
+                matchBalls[i]:addEventListener( "collision", matchBalls[i] )
                 sceneGroup:insert( matchBalls[i] )
 
             end
@@ -351,20 +353,19 @@ function scene:create( event )
 
     function overCheck:tap( event )
 
-        local user = input.getNumber()
-
-        check()
-
-
-
-        if result == user then
-            print ( "CORRECT")
-        else
-            print ( "NEGATIVE" )
+        if (notChecked) then
+            notChecked = false
+            local user = input.getNumber()
+            check()
+            if result == user then
+                print ( "CORRECT")
+            else
+                print ( "NEGATIVE" )
+            end
         end
     end
 
-overCheck:addEventListener( "tap", overCheck )
+    overCheck:addEventListener( "tap", overCheck )
 
 end
 
