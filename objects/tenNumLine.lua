@@ -2,7 +2,14 @@ TenNumLine = {}
 
 --:new( minumum number, max number, total length of line, angle of line )
 
-function TenNumLine:new( min, max, length, angle )
+function TenNumLine:new( min, max, length, angle, textSize )
+    
+  local size
+  if textSize == nil then
+    size = fontSize
+  else
+    size = textSize
+  end
 
   local line = display.newGroup()
   local range = max - min

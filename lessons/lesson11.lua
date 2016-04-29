@@ -218,8 +218,6 @@ end
 
 function check()
 
-
-
     local delayTime = 4000
 
     transition.to( bucket1, { time=500, rotation = 90 } )
@@ -307,8 +305,8 @@ function clearBalls()
         i=i + 1
     end
 
-    numberOne = math.random( 0, max )
-    numberTwo = math.random( 0, max )
+    numberOne = math.random( 0, max )*10
+    numberTwo = math.random( 0, max )*10
     result = numberOne + numberTwo
     num1.text = numberOne
     num2.text = numberTwo
@@ -401,7 +399,7 @@ function scene:create( event )
  	initBalls()
     sceneGroup:insert( num1 )
     sceneGroup:insert( num2 )
-     sceneGroup:insert( question )
+    sceneGroup:insert( question )
 
     -- font size not working 
     numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
