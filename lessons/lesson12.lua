@@ -335,7 +335,7 @@ function scene:create( event )
     sceneGroup:insert( num1 )
     sceneGroup:insert( num2 )
 
-    numberLine =  numLine:new(0, 20, _W*.9, 0, fontSize*.01 )
+    numberLine =  numLine:new(0, 20, _W*.9, 0, fontSize*.5 )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)
 

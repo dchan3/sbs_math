@@ -31,7 +31,7 @@ function TenNumLine:new( min, max, length, angle, textSize )
 
   for i=min,max do
     line.num[i] = display.newText( i*10 , step*(i - min)*math.cos(math.rad(angle)) - 3*hashW*math.cos(anglePerp),
-                step*(i-min)*math.sin(math.rad(angle) ) - 3*hashW*math.sin(anglePerp), font, fontSize  )
+                step*(i-min)*math.sin(math.rad(angle) ) - 3*hashW*math.sin(anglePerp), font, size  )
     line.num[i]:setFillColor( Blue.R,Blue.G,Blue.B )
     line.hash[i] = display.newLine(   step*(i -min)*math.cos(math.rad(angle)) - hashW*math.cos(anglePerp), step*(i - min)*math.sin(math.rad(angle)) - hashW*math.sin(anglePerp),
                step*(i-min)*math.cos(math.rad(angle)) + hashW*math.cos(anglePerp), step*(i - min)*math.sin(math.rad(angle)) + hashW*math.sin(anglePerp)    )

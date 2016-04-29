@@ -219,7 +219,8 @@ end
 function check()
 
     local delayTime = 4000
-
+    local checkStep = 250
+    
     transition.to( bucket1, { time=500, rotation = 90 } )
     transition.to( bucket2, { time=500, rotation = -90 } )
     transition.to( input, { time=1000, x = _W*1.25} )
@@ -244,7 +245,7 @@ function check()
 
     for j=1,((numberOne+numberTwo)/10) do
 
-        timer.performWithDelay((delayTime + 2000+ j * 400), function (event)
+        timer.performWithDelay((delayTime + 2000+ j * checkStep), function (event)
             displayText.text = convertDecToLat(j * 10)
             matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
             matchBalls[j].outline.alpha = .5
@@ -252,16 +253,16 @@ function check()
     end
 
     if (numberOne+numberTwo) == input.getNumber() then
-        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event)
+        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo)/10 * checkStep), function (event)
             question:setFillColor(0,1,0)
             end)
     else
-        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event)
+        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo)/10 * checkStep), function (event)
             question:setFillColor(1,0,0)
             end)
     end
 
-	timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo) * 400), function (event) reset() end)
+	timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo)/10 * checkStep), function (event) reset() end)
 
 end
 
@@ -402,7 +403,7 @@ function scene:create( event )
     sceneGroup:insert( question )
 
     -- font size not working 
-    numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
+    numberLine =  numLine:new(0, 20, _W*.9, 0, fontSize*.5 )
     numberLine.x , numberLine.y = _H*.07, -bucketY*.07
     sceneGroup:insert(numberLine)
 
