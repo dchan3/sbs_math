@@ -39,7 +39,9 @@ function numInput:new( leftMax, x, y ) -- constructor
         elseif id == "RightPlus" and rightNum == 9 then
             rightNum = 0
             numTxtR.text = rightNum
-            leftNum = leftNum + 1
+            if leftNum < leftMax then
+                leftNum = leftNum + 1
+            end
             numTxtL.text = leftNum
             print( rightNum )
             print( leftNum )
