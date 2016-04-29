@@ -417,7 +417,7 @@ function scene:create( event )
 
     local overCheck = display.newRect(0, 0, _W*.09, _W*.09)
     overCheck.x, overCheck.y = _W*.8, input.getCheckY() + input.y
-    overCheck.alpha = .5
+    overCheck.alpha = .01
     sceneGroup:insert( overCheck )
 
 

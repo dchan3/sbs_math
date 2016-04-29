@@ -17,7 +17,7 @@ function numInput:new( leftMax, x, y ) -- constructor
 
     local countBox = display.newGroup()
     countBox.num = 0
-    
+
     leftMax = leftMax or 9
     x = x or 0
     y = y or 0
@@ -30,14 +30,12 @@ function numInput:new( leftMax, x, y ) -- constructor
         if id == "LeftPlus" and leftNum < leftMax then
             leftNum = leftNum + 1
             numTxtL.text = leftNum
-            print( leftNum ) -- can remove this line
         end
 
         --increments on right plus press
         if id == "RightPlus" and rightNum < 9 then
             rightNum = rightNum + 1
             numTxtR.text = rightNum
-            print( rightNum ) -- can remove this line
         elseif id == "RightPlus" and rightNum == 9 then
             rightNum = 0
             numTxtR.text = rightNum
@@ -61,7 +59,7 @@ function numInput:new( leftMax, x, y ) -- constructor
             numTxtR.text = rightNum
             print( rightNum ) -- can remove this line
         elseif id == "RightMinus" and rightNum == 0 then
-            if leftNum > 0 then 
+            if leftNum > 0 then
                 rightNum = 9
                 numTxtR.text = rightNum
                 leftNum = leftNum - 1
@@ -82,7 +80,7 @@ function numInput:new( leftMax, x, y ) -- constructor
     -- invisible box for containing other elements
     local box = display.newRect(countBox, 0, 0, boxW, boxH )
         box.alpha = 0
-        
+
     -- buttons, adjust looks as needed for final draft
     local plusButtonL = widget.newButton{
                     id = "LeftPlus",
@@ -138,14 +136,14 @@ function numInput:new( leftMax, x, y ) -- constructor
             }
         checkButton.x = 0
         checkButton.y = checkY
-        
+
     -- grey shadow behind left number
     local leftShadow = display.newRect (countBox, 0, 0, boxW*.45, boxH*.4)
         leftShadow:setFillColor( 0, 0, 0 )
         leftShadow.alpha = 0.5
         leftShadow.x = -boxW*.25
-        
-    -- grey shadow behind right number    
+
+    -- grey shadow behind right number
     local rightShadow = display.newRect (countBox, 0, 0, boxW*.45, boxH*.4)
         rightShadow:setFillColor( 0, 0, 0 )
         rightShadow.alpha = 0.5
@@ -186,7 +184,7 @@ function numInput:new( leftMax, x, y ) -- constructor
     function countBox.reset()
          numTxtL.text = 0
          numTxtR.text = 0
-         rightNum = 0 
+         rightNum = 0
          leftNum  = 0
         --return leftNum * 10 + rightNum
     end

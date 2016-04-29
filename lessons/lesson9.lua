@@ -13,7 +13,7 @@ local digital = {}
 function scene:create( event )
 	sceneGroup = self.view
 	analog = aClock:new(250, 250)
-	digital = dClock:new(1000, 250)
+	digital = dClock:new(1200, 1000, true, 1, 30)
 	sceneGroup:insert(analog)
 end
 

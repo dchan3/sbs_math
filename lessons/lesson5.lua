@@ -15,7 +15,7 @@ physics.setDrawMode( "hybrid" )
 physics.setTimeStep( 1/10 )
 
 local scene = composer.newScene()
-local reNumberBalls
+
 local hasCollidedCircle
 local ballSize = ballR*1.75
 
@@ -32,7 +32,8 @@ end
 local total = numberOne + numberTwo
 local result = numberOne - numberTwo
 local matchCount = count
-local outsideX, outsideY = _W*.6, _H*.75
+local outsideX, outsideY = _W*.5, _H*.75
+local outsideStep = 0
 
 local countBalls = {}
 local matchBalls = {}
@@ -54,6 +55,7 @@ local numberLine
 local question
 local equal
 
+
 local sceneGroup
 
 local decText
@@ -65,7 +67,7 @@ local selText = display
 local function onLocalCollision( self, event )
    local t = event.target
    local o = event.other
-print(event.other)
+
 
     if event.other.name == "minus" then
         display.remove(event.other)
@@ -76,38 +78,17 @@ print(event.other)
         local function onTimer( event )
             local params = event.source.params
             physics.removeBody( params.passedTar )
+            params.passedTar.name =  "minus"
         end
 
         local tm = timer.performWithDelay( 1, onTimer )
 
         tm.params = { passedTar = event.target }
-        transition.to( event.target, { time=750, x=outsideX, y=outsideY } )
-         event.target.name = "minus"
-        reNumberBalls()
+        transition.to( event.target, { time=750, x=outsideX  + outsideStep, y=outsideY } )
+        outsideStep = outsideStep + ballR*2
 
     end
     
-end
-
-function reNumberBalls ( event )
-  local count = 0
-  local max = 1 
-
-
-  for i=1, (numberOne+numberTwo) do
-
-    local child = balls[i].ball
-
-    if matchBalls[i].name ~= "minus" then
-      count = count + 1
-      matchBalls[i].text.text = count
-      matchBalls[i].num = count
-      max = i
-    end
-
-  end 
-
-
 end
 
 
@@ -129,11 +110,14 @@ function reset()
     question.y = bucketY3
     equal.y = _H*.7
     displayText.text = ""
+    question:setFillColor(0,0,0)
+    outsideStep = 0
 end
 
 function check()
 
     local delayTime = 5000
+    local stepTime = 250
      transition.to( bucket1, { time=500, rotation = 90 } )
     transition.to( bucket2, { time=500, rotation = -90 } )
     transition.to( input, { time=1000, x = _W*1.25} )
@@ -141,38 +125,73 @@ function check()
     question.text = input.getNumber()
 
 
-    transition.to( bucket1, { delay = delayTime, time=1000, y = bucketY*3 } )
-    transition.to( bucket2, { delay = delayTime, time=1000, y = bucketY*3 } )
+    transition.to( bucket1, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( bucket2, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( num1, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( num2, { delay = delayTime, time=1000, y = -bucketY } )
-    transition.to( subtract, { delay = delayTime, time=1000, y = bucketY*3 } )
+    transition.to( subtract, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( numberLine, { delay = delayTime, time=1000, y = bucketY } )
-    transition.to( question, { delay = delayTime, time=1000, y = bucketY*5 } )
-    transition.to( equal, { delay = delayTime, time=1000, y = bucketY*5 } )
 
-    timer.performWithDelay( delayTime, function (event) physics.pause() end)
+    local function reNumberBalls ( event )
+        local count = 0
+        local mCount = numberOne - numberTwo
+        local max = 1 
+        for i=1, (numberOne+numberTwo) do
 
+            if matchBalls[i].name ~= "minus" then
+                count = count + 1
+                matchBalls[i].text.text = count
+                matchBalls[i].num = count
+                print(matchBalls[i].num)
+                max = i
+            else 
+                mCount = mCount + 1
+                matchBalls[i].text.text = mCount
+                matchBalls[i].num = mCount
+            end
 
-    for i=1, (numberOne+numberTwo) do
-
-            transition.to( matchBalls[i], { time=1000, delay = delayTime+1000,  x =  numberLine.hash[i].x + numberLine.x, y = bucketY + 2*ballR, rotation = 0} )
-
+        end 
     end
 
-    for j=1,(numberOne-numberTwo) do
+    timer.performWithDelay( delayTime*.75, function (event) reNumberBalls() end)
+    timer.performWithDelay( delayTime, function (event) physics.pause() end)
 
-        timer.performWithDelay((delayTime + 2000+ j * 400), function (event)
-            displayText.text = convertDecToLat(j)
-            matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
-            matchBalls[j].outline.alpha = .5
+    timer.performWithDelay( delayTime, function (event)
+        for i=1, (numberOne+numberTwo) do
+            transition.to( matchBalls[i], { time=1000,  x =  numberLine.hash[matchBalls[i].num].x + numberLine.x, y = bucketY + 2*ballR, rotation = 0} )
+        end
+    end)
+    
+
+    timer.performWithDelay( delayTime + 1000,  function (event)
+            for j=1,(numberOne - numberTwo) do
+            timer.performWithDelay(j * stepTime, function (event) displayText.text = convertDecToLat(j) end)
+
+            for i = 1, (numberOne+numberTwo) do
+                if matchBalls[i].num == j then
+                    timer.performWithDelay(j * stepTime,
+                        function (event)
+                        matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
+                        matchBalls[i].outline.alpha = 1
+                    end)
+                end
+            end
+        end
+        
+    end)
+
+    if (numberOne-numberTwo) == input.getNumber() then
+        timer.performWithDelay( (delayTime + 1000 + (numberOne-numberTwo) * stepTime), function (event)
+            question:setFillColor(0,1,0)
+            end)
+    else
+        timer.performWithDelay( (delayTime + 1000 + (numberOne-numberTwo) * stepTime), function (event)
+            question:setFillColor(1,0,0)
             end)
     end
 
-    for k=(numberOne-numberTwo+1), (numberOne+numberTwo) do
 
-       transition.to( matchBalls[k], { time=2000, delay = delayTime+2000,  x = numberLine.hash[k].x + numberLine.x, y = -bucketY + 2*ballR, rotation = 0} )
-
-    end
+    
 
 	timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo) * 400), function (event) reset() end)
 
@@ -329,7 +348,7 @@ function scene:create( event )
 
     local overCheck = display.newRect( 0, 0, _W*.09, _W*.09)
     overCheck.x, overCheck.y = _W*.8, input.getCheckY() + input.y
-    overCheck.alpha = .5
+    overCheck.alpha = .01
     sceneGroup:insert(overCheck)
 
 
