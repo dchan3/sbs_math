@@ -190,9 +190,6 @@ function check()
             end)
     end
 
-
-    
-
 	timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo) * 400), function (event) reset() end)
 
 end
