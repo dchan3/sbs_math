@@ -322,7 +322,7 @@ function subBalls()
     display.remove(matchBalls[numberOne + ballCount])
     matchBalls[numberOne + ballCount] = nil
     
-    ballCount = ballCount -1 
+    ballCount = ballCount - 1 
 end
 
 function clearBalls()

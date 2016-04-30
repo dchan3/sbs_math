@@ -7,13 +7,33 @@ physics.setDrawMode("hybrid")
 
 local scene = composer.newScene()
 
+local playY = _H*.25
+local askY = _H*.75
+local aW = _W*.25
+local dW = _W*.75
+
 local analog = {}
 local digital = {}
 
 function scene:create( event )
 	sceneGroup = self.view
-	analog = aClock:new(250, 250)
-	digital = dClock:new(1200, 1000, true, 1, 30)
+	analog = aClock:new(aW, playY, 0, true)
+	digital = dClock:new(dW, playY, false, 0, 0)
+    analog = aClock:new(aW, askY, false)
+
+
+    local checkPad = display.newCircle( analog.x, analog.y, 160 )
+       checkPad:setFillColor(0,0,0,.01)
+
+    local function padTouched(self, event)
+
+        digital.setTime(analog.getTime())
+    end
+
+
+    checkPad.touch = padTouched
+    checkPad:addEventListener("touch", checkPad)
+
 	sceneGroup:insert(analog)
 end
 

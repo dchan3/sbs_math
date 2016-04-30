@@ -7,6 +7,7 @@ function dClock:new(x, y, movable, hours, mins)
 
 	clock.nums = {}
 	clock.text = {}
+
 	for i=1,4 do
 		if i == 1 then
 			clock.nums[i] = math.floor(hours / 10)
@@ -69,5 +70,15 @@ function dClock:new(x, y, movable, hours, mins)
 			clock.minusButtons[i].x, clock.minusButtons[i].y = x - 240 + 160 * (i - 1), y + 180
 		end
 	end
+
+	function clock.setTime( time )
+		
+		clock.text[1].text = time:sub( 1,1 )
+		clock.text[2].text = time:sub( 2,2 )
+		clock.text[3].text = time:sub( 3,3 )
+		clock.text[4].text = time:sub( 4,4 )
+        
+    end
+
 	return clock
 end

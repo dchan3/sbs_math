@@ -14,51 +14,85 @@ function aClock:new(x,y, time, movable)
 	clock.padX, clock.padY = x, y
 	clock.bgImg = display.newImage("images/clock.png", x, y);
 
-		clock.controlPad2 = display.newCircle( clock.padX,clock.padY, 160 )
-		clock.controlPad2:setFillColor(1,0,0)
-		clock.controlPad2.x, clock.controlPad2.y = clock.padX, clock.padY
-		clock.controlPad2.alpha = 0.5
+	for i = 1,60 do 
+		local line = display.newLine( 0, 0, 0, 16 )
+		line.x, line.y = 160*math.cos(math.rad( i*6) )  + x, 160*math.sin(math.rad(i*6)) + y
+		line.strokeWidth = 4
+		line.alpha = .5
+		line.rotation = i*6 + 90
+	end
+
+	for i = 1,12 do 
+		local line = display.newLine( 0, 0, 0, 16 )
+		line.x, line.y = 80*math.cos(math.rad( i*30) )  + x, 80*math.sin(math.rad(i*30)) + y
+		line.strokeWidth = 4
+		line.alpha = .5
+		line.rotation = i*30 + 90
+	end
+
+	clock.controlPad2 = display.newCircle( clock.padX,clock.padY, 160 )
+	clock.controlPad2:setFillColor(0,0,0)
+	clock.controlPad2.x, clock.controlPad2.y = clock.padX, clock.padY
+	clock.controlPad2.alpha = 0.01
+	clock.controlPad2:setStrokeColor(0,0,0)
+	clock.controlPad2.strokeWidth = 8
 
 	clock.controlPad = display.newCircle( clock.padX,clock.padY, 80 )
 	clock.controlPad.x, clock.controlPad.y = clock.padX, clock.padY
-	clock.controlPad:setFillColor(0,1,0)
-	clock.controlPad.alpha = 0.5
+	clock.controlPad:setFillColor(0,0,0,.01)
+	--clock.controlPad.alpha = 0.01
+	clock.controlPad:setStrokeColor(0,0,0,.2)
+		clock.controlPad.strokeWidth = 8
 
 	clock.shorthand = display.newLine(clock.x, clock.y, clock.x, clock.y - 80)
 	clock.shorthand:setStrokeColor(0,0,0)
 	clock.shorthand.strokeWidth = 8
 	clock.shorthand.anchorX = 0
 
-	clock.longhand = display.newLine(clock.x, clock.y, clock.x, clock.y - 100)
+	clock.longhand = display.newLine(clock.x, clock.y, clock.x, clock.y - 160)
 	clock.longhand:setStrokeColor(0,0,0)
 	clock.longhand.strokeWidth = 8
 	clock.longhand.anchorX = 0
 
+	clock.shorthand.crotation = 0 
+	clock.longhand.crotation = 0
+
 
 	local function padTouched(self, event)
-			print(self.path.radius)
+
 			if self.path.radius == 80 then
 				clock.shorthand.rotation = angleBetween(self.x, self.y, event.x, event.y)
+				clock.shorthand.crotation = angleBetween(self.x, self.y, event.x, event.y)
 			end
 			if self.path.radius == 160 then
 				clock.longhand.rotation = angleBetween(self.x, self.y, event.x, event.y)
+				clock.longhand.crotation = angleBetween(self.x, self.y, event.x, event.y)
 			end
 
-			if(event.phase == "began") then
-			elseif (event.phase == "moved" ) then
-				print(angleBetween(self.x, self.y, event.x, event.y))
-			elseif(event.phase == "ended" ) then
-
-			end
 			return true
 	end
 
-
+	if movable == true then
 	clock.controlPad2.touch = padTouched
 	clock.controlPad2:addEventListener("touch", clock.controlPad2)
 
 	clock.controlPad.touch = padTouched
 	clock.controlPad:addEventListener("touch", clock.controlPad)
+
+	end
+
+	function clock.getTime()
+
+		return string.format( "%04d",  tostring( math.floor( clock.longhand.crotation/6)   + math.floor(clock.shorthand.crotation/30) *100) ) 
+
+	end
+
+	function clock.setTime(time)
+
+		local mins = time:sub(1,2)
+		local hours = time:sub(3,4)
+
+	end
 
 
 	return clock
