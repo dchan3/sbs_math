@@ -245,6 +245,16 @@ local function convertDecToLat( number )
     elseif number == 80 then text = "Eighty"
     elseif number == 90 then text = "Ninety"
     elseif number == 100 then text = "One Hundred"
+    elseif number == 110 then text = "One Hundred Ten"
+    elseif number == 120 then text = "One Hundred Twenty"
+    elseif number == 130 then text = "One Hundred Thirty"
+    elseif number == 140 then text = "One Hundred Forty"
+    elseif number == 150 then text = "One Hundred Fifty"
+    elseif number == 160 then text = "One Hundred Sixty"
+    elseif number == 170 then text = "One Hundred Seventy"
+    elseif number == 180 then text = "One Hundred Eighty"
+    elseif number == 190 then text = "One Hundred Ninety"
+    elseif number == 200 then text = "Two Hundred"
     elseif number == 0 then text = "Zero"
     else                    text = " "
     end
@@ -278,10 +288,13 @@ composer.recycleOnSceneChange = true
 --composer.gotoScene( "lessons.lesson2" )
 --composer.gotoScene( "lessons.lesson3" )
 --composer.gotoScene( "lessons.lesson4" )
---composer.gotoScene( "lessons.lesson5" )
+composer.gotoScene( "lessons.lesson5" )
 --composer.gotoScene( "lessons.lesson6" )
 --composer.gotoScene( "lessons.lesson7" )
 --composer.gotoScene( "lessons.lesson8" )
 --composer.gotoScene( "lessons.lesson9" )
+--composer.gotoScene( "lessons.lesson11" )
+--composer.gotoScene( "lessons.lesson12" )
+--composer.gotoScene( "lessons.lesson13" )
 
 composer.gotoScene( "menu" )
