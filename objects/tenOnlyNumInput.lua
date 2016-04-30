@@ -1,11 +1,11 @@
--- num input.lua
+-- ten only num input.lua
 -- two digit number box for allowing user to select a number
 -- max of leftmost digit, x, and y can be set during instanciation
 -- example:
 -- local numInput = require( "objects.numInput" )
 -- local boxTest = numInput.new( 6, -190, 40 )
 ------------------------------------------------------------
-local numInput = {}
+local tenOnlyNumInput = {}
 local widget = require( "widget" )
 
 local leftNum = 0
@@ -13,7 +13,7 @@ local rightNum = 0
 local strokeC = { 1, 0, 0.5 } --RGB, change or remove for final draft
 _G.finalNumber = 0
 
-function numInput:new( leftMax, x, y ) -- constructor
+function tenOnlyNumInput:new( leftMax, x, y ) -- constructor
 
     local countBox = display.newGroup()
     countBox.num = 0
@@ -39,9 +39,7 @@ function numInput:new( leftMax, x, y ) -- constructor
         elseif id == "RightPlus" and rightNum == 9 then
             rightNum = 0
             numTxtR.text = rightNum
-            if leftNum < leftMax then
-                leftNum = leftNum + 1
-            end
+            leftNum = leftNum + 1
             numTxtL.text = leftNum
             print( rightNum )
             print( leftNum )
@@ -95,7 +93,7 @@ function numInput:new( leftMax, x, y ) -- constructor
         plusButtonL.x = -boxW*.25
         plusButtonL.y = -boxH*.25
 
-    local plusButtonR = widget.newButton{
+--[[    local plusButtonR = widget.newButton{
                     id = "RightPlus",
                     width = _W*.07,
                     height = _W*.07,
@@ -105,6 +103,7 @@ function numInput:new( leftMax, x, y ) -- constructor
             }
         plusButtonR.x = boxW*.25
         plusButtonR.y = -boxH*.25
+]]--
 
     local minusButtonL = widget.newButton{
                     id = "LeftMinus",
@@ -117,7 +116,7 @@ function numInput:new( leftMax, x, y ) -- constructor
         minusButtonL.x = -boxW*.25
         minusButtonL.y = boxH*.25
 
-    local minusButtonR = widget.newButton{
+ --[[   local minusButtonR = widget.newButton{
                     id = "RightMinus",
                     width = _W*.07,
                     height = _W*.07,
@@ -126,7 +125,8 @@ function numInput:new( leftMax, x, y ) -- constructor
                     onPress = onStepperPress,
             }
         minusButtonR.x = boxW*.25
-        minusButtonR.y = boxH*.25
+        minusButtonR.y = boxH*.25  
+]]--
 
     local checkButton = widget.newButton{
                     id = "CheckButton",
@@ -152,9 +152,9 @@ function numInput:new( leftMax, x, y ) -- constructor
         rightShadow.x = boxW*.25
 
     countBox:insert( plusButtonL )
-    countBox:insert( plusButtonR )
+    --countBox:insert( plusButtonR )
     countBox:insert( minusButtonL )
-    countBox:insert( minusButtonR )
+    --countBox:insert( minusButtonR )
     countBox:insert( checkButton )
     countBox:insert( leftShadow )
     countBox:insert( rightShadow )
@@ -196,4 +196,6 @@ end
 
 
 
-return numInput
+return tenOnlyNumInput
+
+

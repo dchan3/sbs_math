@@ -2,7 +2,14 @@ TenNumLine = {}
 
 --:new( minumum number, max number, total length of line, angle of line )
 
-function TenNumLine:new( min, max, length, angle )
+function TenNumLine:new( min, max, length, angle, textSize )
+    
+  local size
+  if textSize == nil then
+    size = fontSize
+  else
+    size = textSize
+  end
 
   local line = display.newGroup()
   local range = max - min
@@ -24,7 +31,7 @@ function TenNumLine:new( min, max, length, angle )
 
   for i=min,max do
     line.num[i] = display.newText( i*10 , step*(i - min)*math.cos(math.rad(angle)) - 3*hashW*math.cos(anglePerp),
-                step*(i-min)*math.sin(math.rad(angle) ) - 3*hashW*math.sin(anglePerp), font, fontSize  )
+                step*(i-min)*math.sin(math.rad(angle) ) - 3*hashW*math.sin(anglePerp), font, size  )
     line.num[i]:setFillColor( Blue.R,Blue.G,Blue.B )
     line.hash[i] = display.newLine(   step*(i -min)*math.cos(math.rad(angle)) - hashW*math.cos(anglePerp), step*(i - min)*math.sin(math.rad(angle)) - hashW*math.sin(anglePerp),
                step*(i-min)*math.cos(math.rad(angle)) + hashW*math.cos(anglePerp), step*(i - min)*math.sin(math.rad(angle)) + hashW*math.sin(anglePerp)    )

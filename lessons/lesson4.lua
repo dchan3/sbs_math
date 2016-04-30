@@ -8,7 +8,6 @@ local numLine = require( "objects.numLine" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local bucketObject = require( "objects.bucketObject")
-local numLine = require( "objects.numLine" )
 local bucket = require( "objects.bucket")
 local numInput = require( "objects.numInput")
 local widget = require "widget"

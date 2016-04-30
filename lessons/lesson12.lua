@@ -1,38 +1,37 @@
+-- tens version of lesson 5
 -- subtraction lesson
 
 local composer = require( "composer" )
-local numLine = require( "objects.numLine" )
+local numLine = require( "objects.tenNumLine" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local bucketObject = require( "objects.bucketObject")
-local numLine = require( "objects.numLine" )
 local bucket = require( "objects.bucket")
-local numInput = require( "objects.numInput")
+local numInput = require( "objects.tripleInput")
 local widget = require "widget"
 local physics = require "physics"
 physics.start()
---physics.setDrawMode( "hybrid" )
+physics.setDrawMode( "hybrid" )
 physics.setTimeStep( 1/10 )
 
 local scene = composer.newScene()
-
 local hasCollidedCircle
 local ballSize = ballR*1.75
 
 local max = 10
 local count = max -- math.random( 1, max)
 math.randomseed(os.time())
-local numberOne = math.random( 1, max )
-local numberTwo = math.random( 0, max )
+local numberOne = math.random( 1, max )*10
+local numberTwo = math.random( 0, max )*10
 -- preventing negative result
 while ( numberTwo >= numberOne ) do
     print( "negative result" )
-    numberTwo = math.random( 0, max )
+    numberTwo = math.random( 0, max ) *10
 end
 local total = numberOne + numberTwo
 local result = numberOne - numberTwo
 local matchCount = count
-local outsideX, outsideY = _W*.5, _H*.75
+local outsideX, outsideY = _W*.6, _H*.75
 local outsideStep = 0
 
 local countBalls = {}
@@ -54,8 +53,6 @@ local input
 local numberLine
 local question
 local equal
-local notChecked = true
-
 
 local sceneGroup
 
@@ -68,7 +65,6 @@ local selText = display
 local function onLocalCollision( self, event )
    local t = event.target
    local o = event.other
-
 
     if event.other.name == "minus" then
         display.remove(event.other)
@@ -85,14 +81,11 @@ local function onLocalCollision( self, event )
         local tm = timer.performWithDelay( 1, onTimer )
 
         tm.params = { passedTar = event.target }
-        transition.to( event.target, { time=750, x=outsideX  + outsideStep, y=outsideY } )
+        transition.to( event.target, { time=750, x=outsideX + outsideStep, y=outsideY } )
         outsideStep = outsideStep + ballR*2
-
     end
     
 end
-
-
 
 function reset()
 
@@ -113,7 +106,7 @@ function reset()
     displayText.text = ""
     question:setFillColor(0,0,0)
     outsideStep = 0
-    notChecked = true
+    
 end
 
 function check()
@@ -127,39 +120,40 @@ function check()
     question.text = input.getNumber()
 
 
-    transition.to( bucket1, { delay = delayTime, time=1000, y = -bucketY } )
-    transition.to( bucket2, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( bucket1, { delay = delayTime, time=1000, y = bucketY3*2 } )
+    transition.to( bucket2, { delay = delayTime, time=1000, y = bucketY3*2 } )
     transition.to( num1, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( num2, { delay = delayTime, time=1000, y = -bucketY } )
-    transition.to( subtract, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( subtract, { delay = delayTime, time=1000, y = bucketY*5 } )
     transition.to( numberLine, { delay = delayTime, time=1000, y = bucketY } )
-
+   
     local function reNumberBalls ( event )
         local count = 0
         local mCount = numberOne - numberTwo
         local max = 1 
-        for i=1, (numberOne+numberTwo) do
+        for i=1, (numberOne+numberTwo)/10 do
 
             if matchBalls[i].name ~= "minus" then
                 count = count + 1
-                matchBalls[i].text.text = count
+                matchBalls[i].text.text = count * 10
                 matchBalls[i].num = count
                 print(matchBalls[i].num)
                 max = i
             else 
                 mCount = mCount + 1
-                matchBalls[i].text.text = mCount
+                matchBalls[i].text.text = mCount * 10
                 matchBalls[i].num = mCount
             end
 
         end 
+
     end
 
     timer.performWithDelay( delayTime*.75, function (event) reNumberBalls() end)
     timer.performWithDelay( delayTime, function (event) physics.pause() end)
 
     timer.performWithDelay( delayTime, function (event)
-        for i=1, (numberOne+numberTwo) do
+        for i=1, (numberOne+numberTwo)/10 do
             transition.to( matchBalls[i], { time=1000,  x =  numberLine.hash[matchBalls[i].num].x + numberLine.x, y = bucketY + 2*ballR, rotation = 0} )
         end
     end)
@@ -167,9 +161,9 @@ function check()
 
     timer.performWithDelay( delayTime + 1000,  function (event)
             for j=1,(numberOne - numberTwo) do
-            timer.performWithDelay(j * stepTime, function (event) displayText.text = convertDecToLat(j) end)
+            timer.performWithDelay(j * stepTime, function (event) displayText.text = convertDecToLat(j *10) end)
 
-            for i = 1, (numberOne+numberTwo) do
+            for i = 1, (numberOne+numberTwo)/10 do
                 if matchBalls[i].num == j then
                     timer.performWithDelay(j * stepTime,
                         function (event)
@@ -184,13 +178,13 @@ function check()
 
     if (numberOne-numberTwo) == input.getNumber() then
         timer.performWithDelay( (delayTime + 1000 + (numberOne-numberTwo) * stepTime), function (event)
-            question:setFillColor(Green.R,Green.G,Green.B)
+            question:setFillColor(0,1,0)
             end)
     else
         timer.performWithDelay( (delayTime + 1000 + (numberOne-numberTwo) * stepTime), function (event)
-            question:setFillColor(Red.R,Red.G,Red.B)
+            question:setFillColor(1,0,0)
             end)
-    end
+    end 
 
 	timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo) * 400), function (event) reset() end)
 
@@ -201,25 +195,25 @@ function initBalls()
 
         
 
-            for i = 1, numberOne do
+            for i = 1, numberOne/10 do
 
                 matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5 , friction = .5} )
-                matchBalls[i].text.text = i
-                matchBalls[i].collision = onLocalCollision
-                matchBalls[i]:addEventListener( "collision", matchBalls[i] )
+                matchBalls[i].text.text = i * 10
+                 matchBalls[i].collision = onLocalCollision
+                 matchBalls[i]:addEventListener( "collision", matchBalls[i] )
                 sceneGroup:insert( matchBalls[i] )
 
             end
 
-            for i = numberOne+1, total do
+            for i = numberOne/10 + 1, total/10 do
 
                 matchBalls[i] = Animal:new("images/redX.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].name = "minus"
                 matchBalls[i].x, matchBalls[i].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5, friction = .5 } )
-                matchBalls[i].text.text = i - numberOne
+                matchBalls[i].text.text = i *10 - numberOne
                 sceneGroup:insert( matchBalls[i] )
 
             end
@@ -239,12 +233,12 @@ function clearBalls()
         i=i + 1
     end
 
-    numberOne = math.random( 1, max )
-    numberTwo = math.random( 0, max )
+    numberOne = math.random( 1, max )*10
+    numberTwo = math.random( 0, max )*10
     -- preventing negative result
     while ( numberTwo >= numberOne ) do
         print( "negative result" )
-        numberTwo = math.random( 0, max )
+        numberTwo = math.random( 0, max )*10
     end
     total = numberOne + numberTwo
     result = numberOne - numberTwo
@@ -341,31 +335,32 @@ function scene:create( event )
     sceneGroup:insert( num1 )
     sceneGroup:insert( num2 )
 
-    numberLine =  numLine:new(0, 20, _W*.9, 0, 1, fontSize*.5 )
+    numberLine =  numLine:new(0, 20, _W*.9, 0, fontSize*.5 )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)
 
     local overCheck = display.newRect( 0, 0, _W*.09, _W*.09)
     overCheck.x, overCheck.y = _W*.8, input.getCheckY() + input.y
-    overCheck.alpha = .01
+    overCheck.alpha = .005
     sceneGroup:insert(overCheck)
 
 
     function overCheck:tap( event )
 
-        if (notChecked) then
-            notChecked = false
-            local user = input.getNumber()
-            check()
-            if result == user then
-                print ( "CORRECT")
-            else
-                print ( "NEGATIVE" )
-            end
+        local user = input.getNumber()
+
+        check()
+
+
+
+        if result == user then
+            print ( "CORRECT")
+        else
+            print ( "NEGATIVE" )
         end
     end
 
-    overCheck:addEventListener( "tap", overCheck )
+overCheck:addEventListener( "tap", overCheck )
 
 end
 
@@ -425,3 +420,4 @@ scene:addEventListener( "destroy", scene )
 -- -------------------------------------------------------------------------------
 
 return scene
+
