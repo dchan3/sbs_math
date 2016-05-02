@@ -321,14 +321,9 @@ function subBalls()
 
     display.remove(matchBalls[numberOne + ballCount])
     matchBalls[numberOne + ballCount] = nil
-<<<<<<< HEAD
     
     ballCount = ballCount - 1 
-=======
 
-    ballCount = ballCount -1
->>>>>>> origin/master
-end
 
 function clearBalls()
     bucket1.rotation = 0

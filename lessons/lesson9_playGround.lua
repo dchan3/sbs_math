@@ -7,33 +7,53 @@ physics.setDrawMode("hybrid")
 
 local scene = composer.newScene()
 
-
-local askY = centerY
+local playY = centerY
 local aW = _W*.25
 local dW = _W*.75
 
+
+
 function scene:create( event )
 	local sceneGroup = self.view
-
-	local digital = dClock:new(dW, askY, true, 0, 0)
-    local analog = aClock:new(aW, askY, 0, false)
-    analog.setTime("1130")
+	local analog = aClock:new(aW, playY, 0, true)
     sceneGroup:insert( analog )
-    sceneGroup:insert( digital )
-
-
-    local text = display.newText("What Time Is It?", centerX, _H*.25, font, fontSize)
-    text:setFillColor(0,0,0)
-     sceneGroup:insert( text )
+	local digital = dClock:new(dW, playY, true, 0, 0)
+    sceneGroup:insert( digital )    
 
 
     local checkPad = display.newCircle( analog.x, analog.y, 160 )
     checkPad:setFillColor(0,0,0,.01)
     sceneGroup:insert( checkPad )
 
+    local checkPad2 = display.newRect( dW, playY, 600, 500 )
+    checkPad2:setFillColor(0,0,0,.5)
+    sceneGroup:insert( checkPad2 )
 
-	sceneGroup:insert(analog)
-    sceneGroup:insert(text)
+    
+
+    local function padTouched(self, event)
+
+        digital.setTime(analog.getTime())
+        
+    end
+
+
+    checkPad.touch = padTouched
+    checkPad:addEventListener("touch", checkPad)
+
+    local function padTouched(self, event)
+        local function listener( event )
+             analog.setTime(digital.getTime())
+        end
+
+        timer.performWithDelay( 1, listener )
+
+
+    end
+
+
+    checkPad2.touch = padTouched
+    checkPad2:addEventListener("touch", checkPad2)
 
 
     local menu = display.newImageRect( "images/menu.png",
@@ -45,15 +65,15 @@ function scene:create( event )
     menu:addEventListener( "tap", listener )
     sceneGroup:insert( menu )
 
-    local play = display.newImageRect( "images/change_page.png",
+    local menu = display.newImageRect( "images/change_page.png",
             _H*.1,  _H*.1)
-    play.x, play.y = _W*.1, _H*.9
-    play.rotation = 180
+    menu.x, menu.y = _W*.9, _H*.9
     local function listener()
-        composer.gotoScene( "lessons.lesson9_playGround" )
+        composer.gotoScene( "lessons.lesson9" )
     end
-    play:addEventListener( "tap", listener )
-    sceneGroup:insert( play )
+    menu:addEventListener( "tap", listener )
+    sceneGroup:insert( menu )
+  
     
 end
 

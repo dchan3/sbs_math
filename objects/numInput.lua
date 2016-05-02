@@ -43,8 +43,6 @@ function numInput:new( leftMax, x, y ) -- constructor
                 leftNum = leftNum + 1
             end
             numTxtL.text = leftNum
-            print( rightNum )
-            print( leftNum )
 
         end
 
@@ -52,14 +50,13 @@ function numInput:new( leftMax, x, y ) -- constructor
         if id == "LeftMinus" and leftNum > 0 then
             leftNum = leftNum - 1
             numTxtL.text = leftNum
-            print( leftNum ) -- can remove this line
+
         end
 
         --increments on right plus press
         if id == "RightMinus" and rightNum > 0 then
             rightNum = rightNum - 1
             numTxtR.text = rightNum
-            print( rightNum ) -- can remove this line
         elseif id == "RightMinus" and rightNum == 0 then
             if leftNum > 0 then
                 rightNum = 9
