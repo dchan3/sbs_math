@@ -1,7 +1,7 @@
 local composer = require( "composer" )
-local numLine = require( "objects.numLine" )
-local animal = require("objects.animal")
-local animalball = require("objects.animalball")
+local numLine = require( 'objects.numline' )
+local animal = require('objects.animal')
+local animalball = require('objects.animalball')
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )

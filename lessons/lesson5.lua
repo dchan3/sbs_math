@@ -1,13 +1,11 @@
 -- subtraction lesson
 
 local composer = require( "composer" )
-local numLine = require( "objects.numLine" )
+local numLine = require( "objects.numline" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
-local bucketObject = require( "objects.bucketObject")
-local numLine = require( "objects.numLine" )
 local bucket = require( "objects.bucket")
-local numInput = require( "objects.numInput")
+local numInput = require( "objects.numinput")
 local widget = require "widget"
 local physics = require "physics"
 physics.start()

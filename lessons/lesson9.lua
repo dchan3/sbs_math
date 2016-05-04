@@ -7,7 +7,6 @@ physics.setDrawMode("hybrid")
 
 local scene = composer.newScene()
 
-
 local askY = centerY
 local aW = _W*.25
 local dW = _W*.75
@@ -15,14 +14,11 @@ local dW = _W*.75
 function scene:create( event )
 
 	local sceneGroup = self.view
-	local analog = aClock:new(aW, playY, 0, true)
-	local digital = dClock:new(dW, playY, false, 0, 0)
-    local analog2 = aClock:new(aW, askY, false)
-
 
 	local digital = dClock:new(dW, askY, true, 0, 0)
     local analog = aClock:new(aW, askY, 0, false)
     analog.setTime("1130")
+    analog.alpha = .75
     sceneGroup:insert( analog )
     sceneGroup:insert( digital )
 

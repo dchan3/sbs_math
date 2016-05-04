@@ -1,9 +1,9 @@
 local composer = require( "composer" )
-local numLine = require( "objects.tenNumLine" )
+local numLine = require( "objects.tennumline" )
 local animal = require("objects.animal")
 -- using animalBall10 in lessons that involve multiples of 10
-local animalball10 = require("objects.animalBall10")
-local tenBall = require( "objects.TenBall" )
+local animalball10 = require("objects.animalball10")
+local tenBall = require( "objects.tenball" )
 local physics = require "physics"
 physics.start()
 physics.setDrawMode( "hybrid" )

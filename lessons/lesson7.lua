@@ -1,5 +1,5 @@
 local composer = require( "composer" )
-local numLine = require( "objects.tenNumLine" )
+local numLine = require( "objects.tennumline" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
 local compball = require("objects.compball")

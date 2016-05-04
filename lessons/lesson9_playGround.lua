@@ -26,7 +26,7 @@ function scene:create( event )
     sceneGroup:insert( checkPad )
 
     local checkPad2 = display.newRect( dW, playY, 600, 500 )
-    checkPad2:setFillColor(0,0,0,.5)
+    checkPad2:setFillColor(0,0,0,.01)
     sceneGroup:insert( checkPad2 )
 
     

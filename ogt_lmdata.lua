@@ -62,9 +62,9 @@ k.nextImage = nil--"next-white.png" -- optional unless you need paging, define a
 --==============================================================
 -- filenames for the images used in the level manager
 
-k.selectSoundFile = "levelselect.wav" -- sound when level selected, define as nil if not used
-k.nextPageSoundFile = "changepage.wav"-- sound when next page clicked, define as nil if not used
-k.prevPageSoundFile = "changepage.wav"-- sound when previous page clicked, define as nil if not used
+k.selectSoundFile = nil --"levelselect.wav" -- sound when level selected, define as nil if not used
+k.nextPageSoundFile = nil --"changepage.wav"-- sound when next page clicked, define as nil if not used
+k.prevPageSoundFile = nil --"changepage.wav"-- sound when previous page clicked, define as nil if not used
 
 k.audioOn = true
 

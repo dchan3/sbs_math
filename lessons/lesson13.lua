@@ -7,10 +7,9 @@
 local composer = require( "composer" )
 local animal = require("objects.animal")
 local animalball = require("objects.animalball")
-local bucketObject = require( "objects.bucketObject")
-local numLine = require( "objects.tenNumLine" )
+local numLine = require( "objects.tennumline" )
 local bucket = require( "objects.bucket")
-local numInput = require( "objects.tenOnlyNumInput")
+local numInput = require( "objects.tenonlynuminput")
 local widget = require "widget"
 local physics = require "physics"
 physics.start()
