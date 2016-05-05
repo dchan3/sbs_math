@@ -112,7 +112,7 @@ end
 function check()
 
     local delayTime = 5000
-    local stepTime = 250
+    local stepTime = 400
      transition.to( bucket1, { time=500, rotation = 90 } )
     transition.to( bucket2, { time=500, rotation = -90 } )
     transition.to( input, { time=1000, x = _W*1.25} )
@@ -120,16 +120,16 @@ function check()
     question.text = input.getNumber()
 
 
-    transition.to( bucket1, { delay = delayTime, time=1000, y = bucketY3*2 } )
-    transition.to( bucket2, { delay = delayTime, time=1000, y = bucketY3*2 } )
+    transition.to( bucket1, { delay = delayTime, time=1000, y = -bucketY } )
+    transition.to( bucket2, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( num1, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( num2, { delay = delayTime, time=1000, y = -bucketY } )
-    transition.to( subtract, { delay = delayTime, time=1000, y = bucketY*5 } )
+    transition.to( subtract, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( numberLine, { delay = delayTime, time=1000, y = bucketY } )
    
     local function reNumberBalls ( event )
         local count = 0
-        local mCount = numberOne - numberTwo
+        local mCount = (numberOne - numberTwo)/10
         local max = 1 
         for i=1, (numberOne+numberTwo)/10 do
 
@@ -153,14 +153,14 @@ function check()
     timer.performWithDelay( delayTime, function (event) physics.pause() end)
 
     timer.performWithDelay( delayTime, function (event)
-        for i=1, (numberOne+numberTwo)/10 do
-            transition.to( matchBalls[i], { time=1000,  x =  numberLine.hash[matchBalls[i].num].x + numberLine.x, y = bucketY + 2*ballR, rotation = 0} )
+        for i=1, (numberOne+numberTwo)/10 do       
+            transition.to( matchBalls[i], { time=1000,  x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = bucketY + ballR, rotation = 0} )
         end
     end)
     
 
     timer.performWithDelay( delayTime + 1000,  function (event)
-            for j=1,(numberOne - numberTwo) do
+            for j=1,(numberOne - numberTwo)/10 do
             timer.performWithDelay(j * stepTime, function (event) displayText.text = convertDecToLat(j *10) end)
 
             for i = 1, (numberOne+numberTwo)/10 do
@@ -177,16 +177,16 @@ function check()
     end)
 
     if (numberOne-numberTwo) == input.getNumber() then
-        timer.performWithDelay( (delayTime + 1000 + (numberOne-numberTwo) * stepTime), function (event)
-            question:setFillColor(0,1,0)
+        timer.performWithDelay( (delayTime + 1000 + ((numberOne-numberTwo)/10) * stepTime), function (event)
+            question:setFillColor(Green.R,Green.G,Green.B)
             end)
     else
-        timer.performWithDelay( (delayTime + 1000 + (numberOne-numberTwo) * stepTime), function (event)
-            question:setFillColor(1,0,0)
+        timer.performWithDelay( (delayTime + 1000 + ((numberOne-numberTwo)/10) * stepTime), function (event)
+            question:setFillColor(Red.R,Red.G,Red.B)
             end)
     end 
 
-	timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo) * 400), function (event) reset() end)
+	timer.performWithDelay( (delayTime + 3000+ ((numberOne-numberTwo)/10) * stepTime), function (event) reset() end)
 
 end
 
@@ -263,7 +263,7 @@ function scene:create( event )
     sceneGroup:insert( background )
 
 
-    displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
+    displayText = display.newText("", _W * .5, _H * .125, font, _W*.07)
     displayText:setFillColor( 0, 0, .5 )
 
     sceneGroup:insert(displayText)

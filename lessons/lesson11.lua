@@ -219,7 +219,7 @@ end
 function check()
 
     local delayTime = 4000
-    local checkStep = 250
+    local checkStep = 400
     
     transition.to( bucket1, { time=500, rotation = 90 } )
     transition.to( bucket2, { time=500, rotation = -90 } )
@@ -344,7 +344,7 @@ function scene:create( event )
     menu:addEventListener( "tap", listener )
     sceneGroup:insert( menu )
 
-    input = numInput:new(1, _W*.80,centerY)
+    input = numInput:new(2, _W*.80,centerY)
     sceneGroup:insert( input )
 
 
@@ -364,7 +364,7 @@ function scene:create( event )
 
 
     -- plus sign
-    plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )
+    plus = display.newText( "+", _W*.32, _H*.25, font, _W*.07 )
     plus:setFillColor( 0,0,0 )
     sceneGroup:insert( plus )
 
