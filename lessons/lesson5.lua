@@ -117,7 +117,7 @@ end
 function check()
 
     local delayTime = 5000
-    local stepTime = 250
+    local stepTime = 400
      transition.to( bucket1, { time=500, rotation = 90 } )
     transition.to( bucket2, { time=500, rotation = -90 } )
     transition.to( input, { time=1000, x = _W*1.25} )

@@ -227,7 +227,7 @@ function check()
     print ("result: " .. result )
 
     local delayTime = 5000
-    local stepTime = 250
+    local stepTime = 400
 
     transition.to( bucket1, { time=1000, rotation = 90 } )
     transition.to( bucket2, { time=1000, rotation = -90 } )
@@ -396,7 +396,7 @@ function scene:create( event )
     sceneGroup:insert( bucket3 )
     
     -- plus sign
-    plus = display.newText( "+", _W*.32, _H*.25, font, _W*.15 )
+    plus = display.newText( "+", _W*.32, _H*.25, font, _W*.07 )
     plus:setFillColor( 0,0,0 )
     sceneGroup:insert( plus )
     
