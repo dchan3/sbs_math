@@ -3,7 +3,7 @@ local clockA = require("objects.aclock")
 local clockD = require("objects.dclock")
 local physics = require "physics"
 physics.start()
-physics.setDrawMode("hybrid")
+--physics.setDrawMode("hybrid")
 
 local scene = composer.newScene()
 
@@ -15,6 +15,10 @@ local dW = _W*.75
 
 function scene:create( event )
 	local sceneGroup = self.view
+     local background = display.newImageRect( sceneGroup,"images/bg_blue_zig.png",
+            display.contentWidth, display.contentHeight )
+     background.x, background.y = centerX, centerY
+
 	local analog = aClock:new(aW, playY, 0, true)
     sceneGroup:insert( analog )
 	local digital = dClock:new(dW, playY, true, 0, 0)

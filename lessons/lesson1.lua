@@ -4,7 +4,7 @@ local animal = require('objects.animal')
 local animalball = require('objects.animalball')
 local physics = require "physics"
 physics.start()
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 
 
 local scene = composer.newScene()

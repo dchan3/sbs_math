@@ -16,10 +16,11 @@ local centerObject
 local currCenterObject = 0
 local moved
 local cancelTouch = false
-local leftText = display.newText(  " ", _W*.2, _H*.9, font, 36 )
-leftText:setFillColor(0,0,0)
-local rightText = display.newText(  "LEVEL SELECT >", _W*.8, _H*.90, font, 36 )
-rightText:setFillColor(0,0,0)
+local textY = centerY
+local leftText = display.newText(  " ", _W*.2, textY, font, 36 )
+leftText:setFillColor(1,1,1)
+local rightText = display.newText(  "SUPPORT US >", _W*.8, textY, font, 36 )
+rightText:setFillColor(1,1,1)
 
 local function swipe( event, params )
     local body = event.target
@@ -53,8 +54,8 @@ local function swipe( event, params )
                     transition.to( centerObject, {time =1000,  x=centerX, transition = easing.outBack })
 
                     local function listener()
-                        transition.to( leftText, {time =400,  y=_H*.9, transition = easing.outBack })
-                        transition.to( rightText, {time =500,  y=_H*.9, transition = easing.outBack })
+                        transition.to( leftText, {time =400,  y=textY, transition = easing.outBack })
+                        transition.to( rightText, {time =500,  y=textY, transition = easing.outBack })
                         leftText.text = menuScreens[currCenterObject].leftText
                         rightText.text = menuScreens[currCenterObject].rightText
                     end
@@ -66,7 +67,7 @@ local function swipe( event, params )
                 end
             elseif ( event.x<= event.xStart-_W*.4 ) then
 
-                    if currCenterObject ~= 3 then
+                    if currCenterObject ~= 2 then
                     transition.to( centerObject, {time =1000,  x =1.5*-_W, transition = easing.outBack, onComplete = canTouch })
                     cancelTouch = true
                     currCenterObject = currCenterObject + 1
@@ -74,8 +75,8 @@ local function swipe( event, params )
                     transition.to( centerObject, {time =1000,  x=centerX, transition = easing.outBack })
 
                     local function listener()
-                        transition.to( leftText, {time =400,  y=_H*.9, transition = easing.outBack })
-                        transition.to( rightText, {time =500,  y=_H*.9, transition = easing.outBack })
+                        transition.to( leftText, {time =400,  y=textY, transition = easing.outBack })
+                        transition.to( rightText, {time =500,  y=textY, transition = easing.outBack })
                         leftText.text = menuScreens[currCenterObject].leftText
                         rightText.text = menuScreens[currCenterObject].rightText
                     end
@@ -112,67 +113,82 @@ end
 function scene:create( event )
     
     local sceneGroup = self.view
-    local background = display.newRect(sceneGroup, centerX,centerY, _W,_H)
-    background:setFillColor(1,.5,0,.25)
+    local topText = display.newText(  "STEP-BY-STEP MATHEMATICS", centerX, _H*.15, font, 72 )
+    local background = display.newImageRect( "images/bg_chalkboard.png",
+            _W, _H )
+    background.x, background.y = centerX, centerY
+    sceneGroup:insert(background)
+
     background:addEventListener("touch", swipe) -- CHANGE TO background
 
     local contNav = display.newGroup()
+    sceneGroup:insert(contNav)
     contNav.x,contNav.y = centerX, centerY
-    contNav.main = display.newCircle( contNav, 0,0, _W*.4)
-    contNav.text = display.newText( contNav, "Continue", 0, 0, font, 36 )
-    contNav.text:setFillColor(0,0,0)
+    contNav.main = display.newImageRect( contNav, "images/puppy.png",
+            _W*.4, _W*.4 )--display.newCircle( contNav, 0,0, _W*.4)
+    contNav.main.y = -_H*.1
+    contNav.text = display.newText( contNav, "Continue", 0, _H*.20, font, 36*2 )
+    contNav.text:setFillColor(1,1,1)
 
     local function listener()
         lm.loadCurrLevel()
     end
     contNav:addEventListener("tap", listener)
 
-
+--[[
     local levelSelNav = display.newGroup()
     levelSelNav.x,levelSelNav.y = centerX + _W, centerY
     levelSelNav.main = display.newCircle( levelSelNav , 0,0, _W*.4)
     levelSelNav.main:setFillColor(1,.5,.5,.25)
     levelSelNav.text = display.newText( levelSelNav , "Level Select", 0, 0, font, 36 )
-    levelSelNav.text:setFillColor(0,0,0)
-    lm.init(levelSelNav)
+    levelSelNav.text:setFillColor(0,0,0)]]
+    lm.init(sceneGroup)
 
 
     local supportNav = display.newGroup()
     supportNav.x,supportNav.y = centerX + _W, centerY
     supportNav.main = display.newCircle( supportNav , 0,0, _W*.4)
-    supportNav.main:setFillColor(1,.5,.5,.25)
-    supportNav.text = display.newText( supportNav , "SUPPORT US", 0, 0, font, 36 )
-    levelSelNav.text:setFillColor(0,0,0)
+    supportNav.main:setFillColor(1,.5,.5,0)
+    supportNav.text = display.newText( supportNav , "THANK YOU", 0,-_H*.25, font, 56 )
+    --supportNav.text:setFillColor(0,0,0)
+    supportNav.text1 = display.newText( supportNav , "Project Mentor:", 0, -_H*.2,  font, 36 )
+    supportNav.text2 = display.newText( supportNav , "Ravi Narayan", 0, -_H*.15,  font, 36 )
+    supportNav.text3 = display.newText( supportNav , "Project Sponsors:", 0, -_H*.05,  font, 36 )
+    supportNav.text4 = display.newText( supportNav , "UROP UH Manoa", 0, 0,  font, 36 )
+    supportNav.text5 = display.newText( supportNav , "Other:", 0, _H*.1,  font, 36 )
+    supportNav.text6 = display.newText( supportNav , "Daniel Suthers", 0,  _H*.15,  font, 36 )
+    
 
     local settingsNav = display.newGroup()
     settingsNav.x,settingsNav.y = centerX + _W, centerY
     settingsNav.main = display.newCircle( settingsNav , 0,0, _W*.4)
-    settingsNav.main:setFillColor(0,1,0,.25)
-    settingsNav.text = display.newText( settingsNav , "Settings", 0, 0, font, 36 )
-    settingsNav.text:setFillColor(0,0,0)
+    settingsNav.main:setFillColor(0,1,0,0)
+    settingsNav.text = display.newText( settingsNav , "Settings Coming Soon", 0, 0, font, 36 )
+    --settingsNav.text:setFillColor(0,0,0)
     
     menuScreens[0] = contNav
     menuScreens[0].leftText = " "
-    menuScreens[0].rightText = "LEVEL SELECT >"
-    menuScreens[1] = levelSelNav
-    menuScreens[1].leftText = "< CONTINUE "
-    menuScreens[1].rightText = "SUPPORT US >"
-    menuScreens[2] = supportNav
-    menuScreens[2].leftText = "< LEVEL SELECT"
-    menuScreens[2].rightText = "SETTINGS >"
-    menuScreens[3] = settingsNav
-    menuScreens[3].leftText = "< SUPPORT US"
-    menuScreens[3].rightText = " "
+   -- menuScreens[0].rightText = "LEVEL SELECT >"
+    --menuScreens[1] = levelSelNav
+    --menuScreens[1].leftText = "< CONTINUE "
+    menuScreens[0].rightText = "SUPPORT US >"
+    menuScreens[1] = supportNav
+    menuScreens[1].leftText = "< CONTINUE"
+    menuScreens[1].rightText = "SETTINGS >"
+    menuScreens[2] = settingsNav
+    menuScreens[2].leftText = "< SUPPORT US"
+    menuScreens[2].rightText = " "
 
     centerObject = contNav
     currCenterObject = 0
 
     sceneGroup:insert(contNav)
-    sceneGroup:insert(levelSelNav)
+    --sceneGroup:insert(levelSelNav)
     sceneGroup:insert(supportNav)
     sceneGroup:insert(settingsNav)
     sceneGroup:insert(leftText)
     sceneGroup:insert(rightText)
+    sceneGroup:insert(topText)
     -- Initialize the scene here
     -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end

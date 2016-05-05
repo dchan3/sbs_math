@@ -3,7 +3,7 @@ local clockA = require("objects.aclock")
 local clockD = require("objects.dclock")
 local physics = require "physics"
 physics.start()
-physics.setDrawMode("hybrid")
+--physics.setDrawMode("hybrid")
 
 local scene = composer.newScene()
 

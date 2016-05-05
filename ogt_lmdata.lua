@@ -53,7 +53,7 @@ k.audioPrefix = "audio/"
 
 k.backgroundImage = nil--"background.png" -- optional, define as nil if not used
 k.customLevel = nil -- get level image from function rather than next var
-k.levelSquareImage = "level-wood.png" -- required
+k.levelSquareImage = "level-round.png" -- required
 k.lockImage = nil--"lock.png" -- optional, define as nil if not used
 k.starImage = nil--"staryellow.png" -- optional, nil if not using stars
 k.prevImage = nil--"prev-white.png" -- optional unless you need paging, define as nil if not used
@@ -70,13 +70,13 @@ k.audioOn = true
 
 --==============================================================
 -- the default font to be used for level number and score
-k.fontName = "Helvetica" -- required
+k.fontName = font -- required
 
 --==============================================================
 -- info about the level number (or text) being displayed
 k.showLevelNum = true
 k.levelNumFontName = nil -- optional, use instead of default font for level num
-k.levelNumFontSize = 44
+k.levelNumFontSize = 56
 k.levelNumFontColor = {1,1,1}
 k.levelNumEmbossedFont = true
 k.levelNumTextXOffset = 0 	-- horizontal offset for the level number text
@@ -99,16 +99,15 @@ k.showScoreWhenLocked = false
 
 --==============================================================
 -- Info about the grid itself
-k.totalLevels = 15	-- total number of levels in the game. should equal (numCols * numRows) * numPages
-k.numCols = 5		 -- how many columns on each page of levels
-k.numRows = 3		-- how many rows on each page of levels
+k.totalLevels = 12	-- total number of levels in the game. should equal (numCols * numRows) * numPages
+k.numCols = 12		 -- how many columns on each page of levels
+k.numRows = 1		-- how many rows on each page of levels
 k.colSpace = 10 	  -- extra spacing between each column
 k.rowSpace = 40 	  -- extra spacing between each row
-k.gridOffsetX = -_W*.5 	-- horizontal offset for the entire grid on the page
-k.gridOffsetY = -_H*.5 	-- vertical offset for the entire grid on the page
+k.gridOffsetX = 0	-- horizontal offset for the entire grid on the page
+k.gridOffsetY = _H*.30 	-- vertical offset for the entire grid on the page
 
 -- misc variables
-
 k.numUnlocked = 15 -- how many of the first levels are unlocked (minimum 1)
 
 k.rememberPage = true -- if true, shows page from last selected level

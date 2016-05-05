@@ -10,7 +10,7 @@ local numInput = require( "objects.tripleinput")
 local widget = require "widget"
 local physics = require "physics"
 physics.start()
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 physics.setTimeStep( 1/10 )
 
 local scene = composer.newScene()

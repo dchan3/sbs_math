@@ -13,7 +13,7 @@ local numInput = require( "objects.tenonlynuminput")
 local widget = require "widget"
 local physics = require "physics"
 physics.start()
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 physics.setGravity( 0, 9.8 )
 physics.setTimeStep( 1/15 )
 
