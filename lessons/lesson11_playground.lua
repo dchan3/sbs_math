@@ -73,7 +73,7 @@ function scene:create( event )
             _H*.1,  _H*.1)
     menu.x, menu.y = _W*.9, _H*.9
     local function listener()
-        composer.gotoScene( "lessons.lesson9" )
+        composer.gotoScene( "lessons.lesson11" )
     end
     menu:addEventListener( "tap", listener )
     sceneGroup:insert( menu )

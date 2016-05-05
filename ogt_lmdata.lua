@@ -99,8 +99,8 @@ k.showScoreWhenLocked = false
 
 --==============================================================
 -- Info about the grid itself
-k.totalLevels = 12	-- total number of levels in the game. should equal (numCols * numRows) * numPages
-k.numCols = 12		 -- how many columns on each page of levels
+k.totalLevels = 11	-- total number of levels in the game. should equal (numCols * numRows) * numPages
+k.numCols = 11		 -- how many columns on each page of levels
 k.numRows = 1		-- how many rows on each page of levels
 k.colSpace = 10 	  -- extra spacing between each column
 k.rowSpace = 40 	  -- extra spacing between each row
