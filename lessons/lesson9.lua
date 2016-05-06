@@ -57,6 +57,15 @@ local latText
 
 local selText = display
 
+local timers = {}
+
+local function cancelAll()
+	for k, v in pairs(timers) do
+		timer.cancel(v);
+	end
+	transition.cancel();
+end
+
 local function drag( event )
     local t = event.target
 
@@ -182,7 +191,7 @@ function hasCollidedCircle(obj1, obj2)
                         alpha =.75
                         })
                     end
-                    timer.performWithDelay( transitionTime, listener )
+                    timers[#timers + 1] = timer.performWithDelay( transitionTime, listener )
 
                     matchCount = matchCount - 1
 
@@ -240,7 +249,7 @@ function check()
     transition.to( plus, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( numberLine, { delay = delayTime, time=1000, y = bucketY } )
 
-    timer.performWithDelay( delayTime, function (event) physics.pause() end)
+    timers[#timers + 1] = timer.performWithDelay( delayTime, function (event) physics.pause() end)
 
 
     for i=1, (numberOne+ballCount) do
@@ -251,21 +260,21 @@ function check()
 
     for j=1,(numberOne+ballCount) do
 
-        timer.performWithDelay((delayTime + 2000+ j * stepTime), function (event)
+        timers[#timers + 1] = timer.performWithDelay((delayTime + 2000+ j * stepTime), function (event)
             displayText.text = convertDecToLat(j)
             matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
             matchBalls[j].outline.alpha = .5
             end)
     end
 
-	timer.performWithDelay( (delayTime + 3000+ (numberOne+ballCount) * stepTime), function (event) reset() end)
+	timers[#timers + 1] = timer.performWithDelay( (delayTime + 3000+ (numberOne+ballCount) * stepTime), function (event) reset() end)
 
 	if (numberOne+ballCount) == result then
-        timer.performWithDelay( (delayTime + 2500+ (numberOne+ballCount) * stepTime), function (event)
+        timers[#timers + 1] = timer.performWithDelay( (delayTime + 2500+ (numberOne+ballCount) * stepTime), function (event)
             num3:setFillColor(Green.R,Green.G,Green.B)
             end)
     else
-        timer.performWithDelay( (delayTime + 2500+ (numberOne+ballCount) * stepTime), function (event)
+        timers[#timers + 1] = timer.performWithDelay( (delayTime + 2500+ (numberOne+ballCount) * stepTime), function (event)
             num3:setFillColor(Red.R,Red.G,Red.B)
             end)
     end
@@ -319,9 +328,9 @@ function subBalls()
 
     display.remove(matchBalls[numberOne + ballCount])
     matchBalls[numberOne + ballCount] = nil
-    
-    ballCount = ballCount - 1 
-    
+
+    ballCount = ballCount - 1
+
 end
 
 
@@ -371,6 +380,8 @@ function scene:create( event )
             _H*.1,  _H*.1)
     menu.x, menu.y = _W*.9, _H*.1
     local function listener()
+				cancelAll()
+				sceneGroup:removeSelf()
         composer.gotoScene( "menu" )
     end
     menu:addEventListener( "tap", listener )

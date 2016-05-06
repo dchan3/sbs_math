@@ -55,6 +55,15 @@ local latText
 
 local selText = display
 
+local timers = {}
+
+local function cancelAll()
+	for k, v in pairs(timers) do
+		timer.cancel(v);
+	end
+	transition.cancel();
+end
+
 local function drag( event )
     local t = event.target
 
@@ -180,7 +189,7 @@ function hasCollidedCircle(obj1, obj2)
                         alpha =.75
                         })
                     end
-                    timer.performWithDelay( transitionTime, listener )
+                    timers[#timers + 1] = timer.performWithDelay( transitionTime, listener )
 
                     matchCount = matchCount - 1
 
@@ -236,7 +245,7 @@ function check()
     transition.to( plus, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( numberLine, { delay = delayTime, time=1000, y = bucketY } )
 
-    timer.performWithDelay( delayTime, function (event) physics.pause() end)
+    timers[#timers + 1] = timer.performWithDelay( delayTime, function (event) physics.pause() end)
 
 
     for i=1, (numberOne+numberTwo) do
@@ -247,7 +256,7 @@ function check()
 
     for j=1,(numberOne+numberTwo) do
 
-        timer.performWithDelay((delayTime + 2000+ j * 400), function (event)
+        timers[#timers + 1] = timer.performWithDelay((delayTime + 2000+ j * 400), function (event)
             displayText.text = convertDecToLat(j)
             matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
             matchBalls[j].outline.alpha = .5
@@ -255,16 +264,16 @@ function check()
     end
 
     if (numberOne+numberTwo) == input.getNumber() then
-        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event)
+        timers[#timers + 1] = timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event)
             question:setFillColor(0,1,0)
             end)
     else
-        timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event)
+        timers[#timers + 1] = timer.performWithDelay( (delayTime + 2000+ (numberOne+numberTwo) * 400), function (event)
             question:setFillColor(1,0,0)
             end)
     end
 
-	timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo) * 400), function (event) reset() end)
+	timers[#timers + 1] = timer.performWithDelay( (delayTime + 3000+ (numberOne+numberTwo) * 400), function (event) reset() end)
 
 end
 
@@ -341,6 +350,8 @@ function scene:create( event )
             _H*.1,  _H*.1)
     menu.x, menu.y = _W*.9, _H*.1
     local function listener()
+				cancelAll()
+				sceneGroup:removeSelf()
         composer.gotoScene( "menu" )
     end
     menu:addEventListener( "tap", listener )
@@ -351,16 +362,16 @@ function scene:create( event )
 
 
     bucket1 = bucket:new(ballR*8,ballR*7)
-    bucket1.x, bucket1.y = bucketX1, bucketY 
+    bucket1.x, bucket1.y = bucketX1, bucketY
     sceneGroup:insert( bucket1)
 
-    
+
     bucket2 = bucket:new(ballR*8,ballR*7)
-    bucket2.x, bucket2.y = bucketX2, bucketY 
+    bucket2.x, bucket2.y = bucketX2, bucketY
     sceneGroup:insert( bucket2)
 
-    bucket3 = bucket:new(ballR*8,ballR*8) 
-    bucket3.x, bucket3.y = bucketX3, bucketY3 
+    bucket3 = bucket:new(ballR*8,ballR*8)
+    bucket3.x, bucket3.y = bucketX3, bucketY3
     sceneGroup:insert( bucket3)
 
 
@@ -378,20 +389,20 @@ function scene:create( event )
      -- question mark
     num1 = display.newText( numberOne, bucketX1, bucketY, font, _W*.15 )
     num1:setFillColor( 0,0,0, .5 )
-    
+
 
 
      -- question mark
     num2 = display.newText( numberTwo, bucketX2, bucketY, font, _W*.15 )
     num2:setFillColor( 0,0,0, .5 )
 
-    
-    
+
+
     -- question mark
     question = display.newText( "?", bucketX3, bucketY3, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
-   
-    
+
+
 
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )

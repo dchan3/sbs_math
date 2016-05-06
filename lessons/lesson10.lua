@@ -59,6 +59,15 @@ local latText
 
 local selText = display
 
+local timers = {}
+
+local function cancelAll()
+	for k, v in pairs(timers) do
+		timer.cancel(v);
+	end
+	transition.cancel();
+end
+
 local function drag( event )
     local t = event.target
 
@@ -184,7 +193,7 @@ function hasCollidedCircle(obj1, obj2)
                         alpha =.75
                         })
                     end
-                    timer.performWithDelay( transitionTime, listener )
+                    timers[#timers + 1] = timer.performWithDelay( transitionTime, listener )
 
                     matchCount = matchCount - 1
 
@@ -243,33 +252,33 @@ function check()
     transition.to( plus, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( numberLine, { delay = delayTime, time=1000, y = bucketY } )
 
-    timer.performWithDelay( delayTime, function (event) physics.pause() end)
+    timers[#timers + 1] = timer.performWithDelay( delayTime, function (event) physics.pause() end)
 
 
     for i=1, numberOne/10 + ballCount do
-           
+
             transition.to( matchBalls[i], { time=1000, delay = delayTime+1000,  x =  numberLine.hash[i].x + numberLine.x, y = bucketY + 2*ballR, rotation = 0} )
 
     end
 
     for j=1, numberOne/10 + ballCount do
             print(convertDecToLat(j * 10) )
-        timer.performWithDelay((delayTime + 2000+ j * stepTime), function (event) 
-            displayText.text = convertDecToLat(j * 10) 
+        timers[#timers + 1] = timer.performWithDelay((delayTime + 2000+ j * stepTime), function (event)
+            displayText.text = convertDecToLat(j * 10)
             matchBalls[j].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
             matchBalls[j].outline.alpha = .5
             end)
     end
 
-	timer.performWithDelay( (delayTime + 3000+ (numberOne/10+ballCount) * stepTime), function (event) reset() end)
+	timers[#timers + 1] = timer.performWithDelay( (delayTime + 3000+ (numberOne/10+ballCount) * stepTime), function (event) reset() end)
 
 	if (numberOne+ballCount*10) == result then
             print ("inside if match")
-        timer.performWithDelay( (delayTime + 2500+ (numberOne/10+ballCount) * stepTime), function (event)
+        timers[#timers + 1] = timer.performWithDelay( (delayTime + 2500+ (numberOne/10+ballCount) * stepTime), function (event)
             num3:setFillColor(Green.R,Green.G,Green.B)
             end)
     else
-        timer.performWithDelay( (delayTime + 2500+ (numberOne/10+ballCount) * stepTime), function (event)
+        timers[#timers + 1] = timer.performWithDelay( (delayTime + 2500+ (numberOne/10+ballCount) * stepTime), function (event)
             num3:setFillColor(Red.R,Red.G,Red.B)
             end)
     end
@@ -280,16 +289,16 @@ end
 function initBalls()
 
         local ballSize = ballR*1.75
-    
+
             for i = 1, numberOne/10 do
-                
+
                 matchBalls[i] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[i].x, matchBalls[i].y = bucketX1 + math.random(-50, 50), bucketY - 2 * ballR*i
                 physics.addBody( matchBalls[i], { radius=ballSize*.5 , friction = .5} )
                 matchBalls[i].text.text = i *10
                 sceneGroup:insert( matchBalls[i] )
 
-            end 
+            end
 
         --[[    for i = numberOne+1, result do
 
@@ -304,11 +313,11 @@ function initBalls()
 end
 
 function addBalls()
-    
+
     ballCount = ballCount + 1
-    
+
     local ballSize = ballR*1.75
-        
+
 
                 matchBalls[numberOne/10 + ballCount] = Animal:new("images/ball.png", ballSize, ballSize, ballSize*.75)
                 matchBalls[numberOne/10 + ballCount].x, matchBalls[numberOne/10 + ballCount].y = bucketX2 + math.random(-50, 50), bucketY - 2 * ballR
@@ -319,17 +328,17 @@ function addBalls()
 end
 
 function subBalls()
-    
+
 
     display.remove(matchBalls[numberOne/10 + ballCount])
     matchBalls[numberOne/10 + ballCount] = nil
-    
-    ballCount = ballCount -1 
+
+    ballCount = ballCount -1
 end
 
 function clearBalls()
-    bucket1.rotation = 0 
-    bucket2.rotation = 0 
+    bucket1.rotation = 0
+    bucket2.rotation = 0
     bucket1.y = bucketY
     bucket2.y = bucketY
 
@@ -354,7 +363,7 @@ function scene:create( event )
 
     count = math.random(1,max)
     matchCount = count
-    
+
     local background = display.newImageRect( "images/bg_blue_zig.png",
             display.contentWidth, display.contentHeight )
     background.anchorX = 0
@@ -362,7 +371,7 @@ function scene:create( event )
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
 
-    
+
     displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
     displayText:setFillColor( 0, 0, .5 )
  --   physics.setGravity(0,0)
@@ -373,6 +382,8 @@ function scene:create( event )
             _H*.1,  _H*.1)
     menu.x, menu.y = _W*.9, _H*.1
     local function listener()
+				cancelAll()
+				sceneGroup:removeSelf()
         composer.gotoScene( "menu" )
     end
     menu:addEventListener( "tap", listener )
@@ -384,22 +395,22 @@ function scene:create( event )
 
 
     bucket1 = bucket:new(ballR*8,ballR*7)
-    bucket1.x, bucket1.y = bucketX1, bucketY 
-    
-    bucket2 = bucket:new(ballR*8,ballR*7) 
-    bucket2.x, bucket2.y = bucketX2, bucketY 
-    
+    bucket1.x, bucket1.y = bucketX1, bucketY
+
+    bucket2 = bucket:new(ballR*8,ballR*7)
+    bucket2.x, bucket2.y = bucketX2, bucketY
+
     bucket3 = bucket:new(ballR*8,ballR*7)
-    bucket3.x, bucket3.y = bucketX3, bucketY3 
+    bucket3.x, bucket3.y = bucketX3, bucketY3
     sceneGroup:insert( bucket1 )
     sceneGroup:insert( bucket2 )
     sceneGroup:insert( bucket3 )
-    
+
     -- plus sign
     plus = display.newText( "+", _W*.32, _H*.25, font, _W*.07 )
     plus:setFillColor( 0,0,0 )
     sceneGroup:insert( plus )
-    
+
     -- equal sign
     local equal = display.newText( "=", _W*.15, _H*.7, font, _W*.15 )
     equal:setFillColor( 0,0,0 )
@@ -419,8 +430,8 @@ function scene:create( event )
     question = display.newText( "?", bucketX2, bucketY, font, _W*.15 )
     question:setFillColor( 0,0,0, .5 )
     sceneGroup:insert( question )
-    
-    
+
+
 
     decText  = display.newText( "", 0, 0, font, _W*.1 )
     decText.x, decText.y = _W*.833, _H*.6
@@ -436,7 +447,7 @@ function scene:create( event )
 
 
  	initBalls()
-            
+
     numberLine =  numLine:new(0, 20, _W*.9, 0, fontSize*.5 )
     numberLine.x , numberLine.y = _H*.1, -bucketY
     sceneGroup:insert(numberLine)
@@ -444,7 +455,7 @@ function scene:create( event )
     local overCheck = display.newRect(checkX, centerY*1.47, _W*.09, _W*.09)
     overCheck.alpha = .05
     sceneGroup:insert( overCheck )
-    
+
     local inputCheck = display.newRect(checkX, centerY, _W*.09, _W*.23)
     inputCheck.alpha = .05
     sceneGroup:insert( inputCheck )
@@ -456,10 +467,10 @@ function scene:create( event )
             notChecked = false
 
         local user = input.getNumber()
-        
+
         print ("overCheck: " .. user)
         check()
-      
+
         if result == user then
             print ( "CORRECT")
         else
@@ -467,29 +478,29 @@ function scene:create( event )
         end
     	end
     end
-    
+
     function inputCheck:tap( event )
     	if (notChecked) then
 
-        
+
         local userCount = input.getNumber()/10
         print ("userCount: " .. userCount)
         print ("ballCount: " .. ballCount)
-        
+
         question.text = input.getNumber()
 
         if ballCount < userCount then
             addBalls()
         elseif ballCount > userCount then
-            subBalls()      
+            subBalls()
         end
     end
-        
+
     end
 
 overCheck:addEventListener( "tap", overCheck )
 inputCheck:addEventListener( "tap", inputCheck )
-    
+
 end
 
 
@@ -548,7 +559,3 @@ scene:addEventListener( "destroy", scene )
 -- -------------------------------------------------------------------------------
 
 return scene
-
-
-
-

@@ -28,6 +28,15 @@ local latText
 
 local selText = display
 
+local timers = {}
+
+local function cancelAll()
+	for k, v in pairs(timers) do
+		timer.cancel(v);
+	end
+	transition.cancel();
+end
+
 local function drag( event )
     local t = event.target
 
@@ -153,7 +162,7 @@ function hasCollidedCircle(obj1, obj2)
                         alpha =.75
                         })
                     end
-                    timer.performWithDelay( transitionTime, listener )
+                    timers[#timers + 1] = timer.performWithDelay( transitionTime, listener )
 
                     matchCount = matchCount - 1
 
@@ -189,11 +198,11 @@ function check()
 	end
 
 	for j=1,count do
-		timer.performWithDelay(j * stepTime, function (event) displayText.text = convertDecToLat(j) end)
+		timers[#timers + 1] = timer.performWithDelay(j * stepTime, function (event) displayText.text = convertDecToLat(j) end)
 
         for i = 1, count do
             if matchBalls[i].num == j then
-                timer.performWithDelay(j * stepTime,
+                timers[#timers + 1] = timer.performWithDelay(j * stepTime,
                     function (event)
                     matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
                     matchBalls[i].outline.alpha = 1
@@ -204,7 +213,7 @@ function check()
 
 	local currScene = composer.getSceneName( "current" )
 	print(currScene)
-	timer.performWithDelay((count + 1) * 1000, function (event) reset() end)
+	timers[#timers + 1] = timer.performWithDelay((count + 1) * 1000, function (event) reset() end)
 
 end
 
@@ -217,7 +226,7 @@ function initBalls()
 	        countBalls[i]:insert( countBalls[i].text )
 
 
-	        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y 
+	        countBalls[i].x, countBalls[i].y = numberLine.num[i].x + numberLine.x, numberLine.num[i].y + numberLine.y
 
 	        physics.addBody( countBalls[i], { radius=ballR*1.5 } )
 	        countBalls[i].isSensor = true
@@ -270,7 +279,7 @@ function scene:create( event )
 
     count = math.random(1,max)
     matchCount = count
-    
+
     local background = display.newImageRect( "images/bg_blue_zig.png",
             display.contentWidth, display.contentHeight )
     background.anchorX = 0
@@ -278,7 +287,7 @@ function scene:create( event )
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
 
-    
+
         displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
                 displayText:setFillColor( 0, 0, .5 )
     physics.setGravity(0,0)
@@ -289,6 +298,8 @@ function scene:create( event )
             _H*.1,  _H*.1)
     menu.x, menu.y = _W*.9, _H*.1
     local function listener()
+				cancelAll()
+				sceneGroup:removeSelf()
         composer.gotoScene( "menu" )
     end
     menu:addEventListener( "tap", listener )

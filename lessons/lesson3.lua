@@ -49,6 +49,15 @@ local latText2
 
 local area
 
+local timers = {}
+
+local function cancelAll()
+	for k, v in pairs(timers) do
+		timer.cancel(v);
+	end
+	transition.cancel();
+end
+
 function check()
 
 	local correct
@@ -84,30 +93,30 @@ function check()
 			displayText2:setFillColor(Red.R, Red.B, Red.G)
 		end
 		if k <= count1 then
-			timer.performWithDelay(k * 1000, function (event) displayText1.text = convertDecToLat(k) end)
-                        timer.performWithDelay(k * 1000, function (event) matchBalls1[k].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B) end)
-                        timer.performWithDelay(k * 1000, function (event) matchBalls1[k].outline.alpha = 1 end)
+			timers[#timers + 1] = timer.performWithDelay(k * 1000, function (event) displayText1.text = convertDecToLat(k) end)
+                        timers[#timers + 1] = timer.performWithDelay(k * 1000, function (event) matchBalls1[k].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B) end)
+                        timers[#timers + 1] = timer.performWithDelay(k * 1000, function (event) matchBalls1[k].outline.alpha = 1 end)
 		end
-                 
+
                 -- added extra delay to hold count for right side until left is finished
-                timer.performWithDelay( count1 * 1000, function (event)
+                timers[#timers + 1] = timer.performWithDelay( count1 * 1000, function (event)
                     if k <= count2 then
-                            timer.performWithDelay(k * 1000, function (event) displayText2.text = convertDecToLat(k) end)
-                            timer.performWithDelay(k * 1000, function (event) matchBalls2[k].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B) end)
-                            timer.performWithDelay(k * 1000, function (event) matchBalls2[k].outline.alpha = 1 end)
+                            timers[#timers + 1] = timer.performWithDelay(k * 1000, function (event) displayText2.text = convertDecToLat(k) end)
+                            timers[#timers + 1] = timer.performWithDelay(k * 1000, function (event) matchBalls2[k].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B) end)
+                            timers[#timers + 1] = timer.performWithDelay(k * 1000, function (event) matchBalls2[k].outline.alpha = 1 end)
                     end
                 end)
 
 
 	end
-	timer.performWithDelay((count1 + count2 - 1) * 1000, function (event)
+	timers[#timers + 1] = timer.performWithDelay((count1 + count2 - 1) * 1000, function (event)
 		if (count1 < count2 and put.operator == "<") or (count1 == count2 and put.operator == "=") or (count1 > count2 and put.operator == ">") then
 			put.ball:setFillColor(Green.R, Green.G, Green.B);
 		else
 			put.ball:setFillColor(Red.R, Red.G, Red.B);
 		end
 	end)
-	timer.performWithDelay((count1 + count2 + 2) * 1000 + 500, function (event) clearBalls() initBalls() end)
+	timers[#timers + 1] = timer.performWithDelay((count1 + count2 + 2) * 1000 + 500, function (event) clearBalls() initBalls() end)
 end
 
 
@@ -160,7 +169,7 @@ local function drag( event )
             else
                 t.x = event.x - t.x0
             end
-            			-- Causing issues 
+            			-- Causing issues
 						if t.hovered == false and t.x - put.x <= 1 and t.y - put.y <= 1 then
 							t.hovered = true
 						end
@@ -347,6 +356,8 @@ function scene:create( event )
             _H*.1,  _H*.1)
     menu.x, menu.y = _W*.9, _H*.1
     local function listener()
+				cancelAll()
+				sceneGroup:removeSelf()
         composer.gotoScene( "menu" )
     end
     menu:addEventListener( "tap", listener )
@@ -373,6 +384,9 @@ function scene:create( event )
 
 	displayText1:setFillColor(priColor.R,priColor.G,priColor.B)
 	displayText2:setFillColor(priColor.R,priColor.G,priColor.B)
+
+	sceneGroup:insert(displayText1)
+	sceneGroup:insert(displayText2)
 
 local options =
 {

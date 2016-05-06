@@ -60,6 +60,14 @@ local latText
 
 local selText = display
 
+local timers = {}
+
+local function cancelAll()
+	for k, v in pairs(timers) do
+		timer.cancel(v);
+	end
+	transition.cancel();
+end
 
 local function onLocalCollision( self, event )
    local t = event.target
@@ -70,7 +78,7 @@ local function onLocalCollision( self, event )
         event.other = nil
         local x = display.newImageRect( "images/redX.png", ballSize, ballSize)
         event.target:insert(x)
-        
+
         local function onTimer( event )
             local params = event.source.params
             physics.removeBody( params.passedTar )
@@ -83,7 +91,7 @@ local function onLocalCollision( self, event )
         transition.to( event.target, { time=750, x=outsideX + outsideStep, y=outsideY } )
         outsideStep = outsideStep + ballR*2
     end
-    
+
 end
 
 function reset()
@@ -105,7 +113,7 @@ function reset()
     displayText.text = ""
     question:setFillColor(0,0,0)
     outsideStep = 0
-    
+
 end
 
 function check()
@@ -125,11 +133,11 @@ function check()
     transition.to( num2, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( subtract, { delay = delayTime, time=1000, y = -bucketY } )
     transition.to( numberLine, { delay = delayTime, time=1000, y = bucketY } )
-   
+
     local function reNumberBalls ( event )
         local count = 0
         local mCount = (numberOne - numberTwo)/10
-        local max = 1 
+        local max = 1
         for i=1, (numberOne+numberTwo)/10 do
 
             if matchBalls[i].name ~= "minus" then
@@ -138,33 +146,33 @@ function check()
                 matchBalls[i].num = count
                 print(matchBalls[i].num)
                 max = i
-            else 
+            else
                 mCount = mCount + 1
                 matchBalls[i].text.text = mCount * 10
                 matchBalls[i].num = mCount
             end
 
-        end 
+        end
 
     end
 
-    timer.performWithDelay( delayTime*.75, function (event) reNumberBalls() end)
-    timer.performWithDelay( delayTime, function (event) physics.pause() end)
+    timers[#timers + 1] = timer.performWithDelay( delayTime*.75, function (event) reNumberBalls() end)
+    timers[#timers + 1] = timer.performWithDelay( delayTime, function (event) physics.pause() end)
 
-    timer.performWithDelay( delayTime, function (event)
-        for i=1, (numberOne+numberTwo)/10 do       
+    timers[#timers + 1] = timer.performWithDelay( delayTime, function (event)
+        for i=1, (numberOne+numberTwo)/10 do
             transition.to( matchBalls[i], { time=1000,  x = numberLine.hash[matchBalls[i].num].x + numberLine.x, y = bucketY + ballR, rotation = 0} )
         end
     end)
-    
 
-    timer.performWithDelay( delayTime + 1000,  function (event)
+
+    timers[#timers + 1] = timer.performWithDelay( delayTime + 1000,  function (event)
             for j=1,(numberOne - numberTwo)/10 do
-            timer.performWithDelay(j * stepTime, function (event) displayText.text = convertDecToLat(j *10) end)
+            timers[#timers + 1] = timer.performWithDelay(j * stepTime, function (event) displayText.text = convertDecToLat(j *10) end)
 
             for i = 1, (numberOne+numberTwo)/10 do
                 if matchBalls[i].num == j then
-                    timer.performWithDelay(j * stepTime,
+                    timers[#timers + 1] = timer.performWithDelay(j * stepTime,
                         function (event)
                         matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
                         matchBalls[i].outline.alpha = 1
@@ -172,27 +180,27 @@ function check()
                 end
             end
         end
-        
+
     end)
 
     if (numberOne-numberTwo) == input.getNumber() then
-        timer.performWithDelay( (delayTime + 1000 + ((numberOne-numberTwo)/10) * stepTime), function (event)
+        timers[#timers + 1] = timer.performWithDelay( (delayTime + 1000 + ((numberOne-numberTwo)/10) * stepTime), function (event)
             question:setFillColor(Green.R,Green.G,Green.B)
             end)
     else
-        timer.performWithDelay( (delayTime + 1000 + ((numberOne-numberTwo)/10) * stepTime), function (event)
+        timers[#timers + 1] = timer.performWithDelay( (delayTime + 1000 + ((numberOne-numberTwo)/10) * stepTime), function (event)
             question:setFillColor(Red.R,Red.G,Red.B)
             end)
-    end 
+    end
 
-	timer.performWithDelay( (delayTime + 3000+ ((numberOne-numberTwo)/10) * stepTime), function (event) reset() end)
+	timers[#timers + 1] = timer.performWithDelay( (delayTime + 3000+ ((numberOne-numberTwo)/10) * stepTime), function (event) reset() end)
 
 end
 
 
 function initBalls()
 
-        
+
 
             for i = 1, numberOne/10 do
 
@@ -272,6 +280,8 @@ function scene:create( event )
             _H*.1,  _H*.1)
     menu.x, menu.y = _W*.9, _H*.1
     local function listener()
+				cancelAll()
+				sceneGroup:removeSelf()
         composer.gotoScene( "menu" )
     end
     menu:addEventListener( "tap", listener )
@@ -419,4 +429,3 @@ scene:addEventListener( "destroy", scene )
 -- -------------------------------------------------------------------------------
 
 return scene
-

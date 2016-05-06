@@ -30,6 +30,15 @@ local latText
 
 local selText = display
 
+local timers = {}
+
+local function cancelAll()
+	for k, v in pairs(timers) do
+		timer.cancel(v);
+	end
+	transition.cancel();
+end
+
 local function drag( event )
     local t = event.target
 
@@ -155,7 +164,7 @@ function hasCollidedCircle(obj1, obj2)
                         alpha =.75
                         })
                     end
-                    timer.performWithDelay( transitionTime, listener )
+                    timers[#timers + 1] = timer.performWithDelay( transitionTime, listener )
 
                     matchCount = matchCount - 1
 
@@ -191,10 +200,10 @@ function check()
 	end
 
 	for j=1,count do
-		timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j * 10) end)
+		timers[#timers + 1] = timer.performWithDelay(j * 1000, function (event) displayText.text = convertDecToLat(j * 10) end)
         for i = 1, count do
             if matchBalls[i].num == j then
-                timer.performWithDelay(j * 1000,
+                timers[#timers + 1] = timer.performWithDelay(j * 1000,
                     function (event)
                     matchBalls[i].outline:setFillColor(hlColor.R, hlColor.G, hlColor.B)
                     matchBalls[i].outline.alpha = 1
@@ -205,7 +214,7 @@ function check()
 
 	local currScene = composer.getSceneName( "current" )
 	print(currScene)
-	timer.performWithDelay((count + 1) * 1000, function (event) reset() end)
+	timers[#timers + 1] = timer.performWithDelay((count + 1) * 1000, function (event) reset() end)
 
 end
 
@@ -266,9 +275,6 @@ end
 function scene:create( event )
 
     sceneGroup = self.view
-		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
-		displayText:setFillColor(Blue.R, Blue.G, Blue.B)
-    physics.setGravity(0,0)
 
     local background = display.newImageRect( "images/bg_pink_stripes.png",
             display.contentWidth, display.contentHeight )
@@ -277,10 +283,17 @@ function scene:create( event )
     background.x, background.y = 0, 0
     sceneGroup:insert( background )
 
+		displayText = display.newText("", _W * .5, _H * .125, font, _W*.1)
+		displayText:setFillColor(Blue.R, Blue.G, Blue.B)
+    physics.setGravity(0,0)
+		sceneGroup:insert(displayText)
+
     local menu = display.newImageRect( "images/menu.png",
             _H*.1,  _H*.1)
     menu.x, menu.y = _W*.9, _H*.1
     local function listener()
+				cancelAll()
+				sceneGroup:removeSelf()
         composer.gotoScene( "menu" )
     end
     menu:addEventListener( "tap", listener )
