@@ -55,7 +55,6 @@ function scene:create( event )
 	digital = dClock:new(dW, askY, true, 0, 0)
     analog = aClock:new(aW, askY, 0, false)
     analog.setTime( timeString  )
-    analog.alpha = .75
     sceneGroup:insert( analog )
     sceneGroup:insert( digital )
 
