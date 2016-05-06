@@ -12,7 +12,6 @@ local aW = _W*.25
 local dW = _W*.75
 
 
-
 function scene:create( event )
 	local sceneGroup = self.view
      local background = display.newImageRect( sceneGroup,"images/bg_blue_zig.png",
